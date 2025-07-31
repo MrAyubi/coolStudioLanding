@@ -1,0 +1,141 @@
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 99;
+    background: orange;
+    display: grid;
+    place-items: center;
+    // display: none;
+
+    &__box {
+        position: relative;
+        width: 500px;
+        height: 200px;
+        border: 4px solid wheat;
+
+        @media (max-width: 600px) {
+            & {
+                width: 90vw;
+            }
+        }
+    }
+
+    &__bar {
+        width: 90%;
+        height: 10px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #ccc;
+        border-radius: 2px;
+
+        &--inner {
+            height: 100%;
+            width: 0%;
+            border-radius: 2px;
+            background: red;
+        }
+    }
+
+    &__text {
+        position: relative;
+        columns: #fff;
+        padding: 1rem;
+        font-size: 20px;
+        font-weight: 700;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &--dot {
+            width: 15px;
+            height: 15px;
+            margin: 0 3px;
+            border-radius: 50%;
+            background: #89a25b;
+            animation: pulse 1s infinite;
+
+            @keyframes pulse {
+                from {
+                    opacity: 0;
+                    transform: scale(10%);
+
+                }
+
+                to {
+                    opacity: 1;
+                    transform: scale(120%);
+
+                }
+            }
+        }
+
+        &--dot--2 {
+            width: 20px;
+            height: 20px;
+            margin: 0 3px;
+            border-radius: 50%;
+            background: #fff;
+            animation: jump 0.6s infinite;
+
+            @keyframes jump {
+                from {
+                    transform: translateY(0%);
+
+                }
+
+                to {
+                    transform: translateY(-104%);
+                }
+            }
+        }
+
+        &--boarder {
+            width: 85%;
+            height: 2px;
+            background: #89a25b;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+    }
+
+    &__counter {
+        position: absolute;
+        top: 70%;
+        left: 0;
+        color: wheat;
+        font-size: 20px;
+        font-weight: 700;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+
+        &--number {
+            color: #89a25b;
+
+        }
+
+    }
+    &__width_animation {
+        animation: width_animation 2s forwards;
+        @keyframes width_animation {
+            0%{
+                width: 85%;
+            }
+            100% {
+                width: 150px;
+            }
+        }
+    }
+}

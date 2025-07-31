@@ -1,0 +1,20 @@
+{
+  "name": "website",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx parcel src/index.html --open",
+    "build": "npx parcel src/build index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5",
+    "sass": "^1.89.2"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0"
+  }
+}

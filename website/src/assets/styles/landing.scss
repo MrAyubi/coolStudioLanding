@@ -1,0 +1,224 @@
+ @import 'base.scss';
+
+ .landing {
+     position: relative;
+     width: 100%;
+     height: 100vh;
+     background: $orange-bg;
+     color: $font-dark;
+     overflow: hidden;
+
+
+     .header {
+         position: absolute;
+         top: 1rem;
+         left: 50%;
+         transform: translateX(-50%);
+
+         &__wrap {
+             padding: 10px;
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             width: 60vw;
+         }
+
+         &__left {
+             display: flex;
+             align-items: center;
+             gap: 2rem;
+             width: 100%;
+             color: $font-dark;
+
+             & li {
+                 font-size: 18px;
+                 font-weight: 500;
+             }
+         }
+
+         @media (max-width: 1200px) {
+             &__wrap {
+                 width: 100vw;
+             }
+         }
+
+         @media (max-width: 650px) {
+             &__left {
+                 gap: 1rem;
+             }
+
+             &__sm {
+                 display: none;
+             }
+         }
+
+         @media (max-width: 370px) {
+             & {
+                 left: 36%;
+             }
+
+             &__wrap {
+                 gap: 20%;
+             }
+
+             .cool-link[data-text="Home"] {
+                 display: none;
+             }
+         }
+     }
+
+     .socials {
+         position: absolute;
+         left: 50%;
+         transform: translateX(-50%);
+         bottom: 10rem;
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+     }
+
+     .scroll-down {
+         position: absolute;
+         bottom: 3rem;
+         left: 50%;
+         transform: translateX(-50%);
+
+         &__wheel {
+             height: 42px;
+             width: 24px;
+             border-radius: 10px;
+             border: 2px solid $font-light;
+
+             &--inner {
+                 position: absolute;
+                 left: 10px;
+                 margin-top: 5px;
+                 width: 4px;
+                 height: 4px;
+                 background: $font-light;
+                 border-radius: 50%;
+                 animation: movingwheel 0.5s linear infinite;
+
+                 @keyframes movingwheel {
+                     0% {
+                         top: 1px;
+                     }
+
+                     25% {
+                         top: 3px;
+                     }
+
+                     50% {
+                         top: 5px;
+                     }
+
+                     75% {
+                         top: 3px;
+                     }
+
+                     100% {
+                         top: 1px;
+                     }
+
+
+                 }
+             }
+         }
+
+         .scroll-down__arrows {
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+
+             .scroll-down__arrow {
+                 width: 15px;
+                 height: 15px;
+                 border-right: 2px solid $font-light;
+                 border-bottom: 2px solid $font-light;
+                 transform: rotate(45deg);
+                 animation: scrollAnim 1s infinite;
+                 animation-direction: alternate;
+
+                 &:nth-child(1) {
+                     animation-delay: 0.1s;
+                 }
+
+                 &:nth-child(2) {
+                     animation-delay: 0.2s;
+                 }
+
+                 &:nth-child(3) {
+                     animation-delay: 0.3s;
+                 }
+
+                 @keyframes scrollAnim {
+                     0% {
+                         opacity: 0;
+                     }
+
+                     50% {
+                         opacity: 0.5;
+                     }
+
+                     100% {
+                         opacity: 1;
+                     }
+
+                 }
+             }
+         }
+     }
+
+     .hero-text {
+         position: absolute;
+         left: 5rem;
+         top: 20%;
+         color: $font-light;
+         text-shadow: 5px 5px $font-dark;
+
+         h1 {
+             font-size: 64px;
+         }
+
+         &__changer {
+             position: relative;
+             display: grid;
+             place-items: start;
+             overflow: hidden;
+             width: 18rem;
+
+             
+
+             &::after {
+                @keyframes harekat {
+                 0% {
+                    transform: translate3d(0, 87%, 0);
+                 }
+                 25% {
+                    transform: translate3d(0, 58%, 0);
+                 }
+                 50% {
+                    transform: translate3d(0, 29%, 0);
+                 }
+                 75% {
+                    transform: translate3d(0, 0, 0);  
+                    
+                 }
+                 100% {
+                    transform: translate3d(0, 0%, 0);  
+                 }
+             }
+                
+                 animation: harekat  linear infinite ;
+                 content: attr(data-text);
+                 position: absolute;
+                 height: 100%;
+                 left: 0;
+                 transform: translate3d(0, 85%, 0);
+             }
+
+         }
+     }
+
+
+ }
