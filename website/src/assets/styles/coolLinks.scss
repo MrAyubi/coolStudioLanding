@@ -49,26 +49,26 @@
 }
 .colored-icon {
     color: #fff;
-    font-size: 35px;
+    font-size: 55px;
     &:hover{
-        animation: glitch 0.3s infinite;
+        animation: glitch 0.7s infinite;
     }
     
     @keyframes glitch {
         0%{
-            text-shadow: 4px 5px #f44336, -5px -6px #2196f3;
+            text-shadow: 4px 5px #5f0100, -5px -6px #2f4858;
         }
         25%{
-            text-shadow: -4px -5px #f44336, 5px 6px #2196f3;
+            text-shadow: -4px -5px #5f0100, 5px 6px #2f4858;
         }
         50%{
-            text-shadow: 4px 5px #f44336, -5px -6px #2196f3;
+            text-shadow: 4px 5px #5f0100, -5px -6px #2f4858;
         }
         75%{
-            text-shadow: -8px -5px #f44336, -5px 6px #2196f3;
+            text-shadow: -8px -5px #5f0100, -5px 6px #2f4858;
         }
         100%{
-            text-shadow: 4px 0px #f44336, -5px -6px #2196f3;
+            text-shadow: 4px 0px #5f0100, -5px -6px #2f4858;
         }
         
     }

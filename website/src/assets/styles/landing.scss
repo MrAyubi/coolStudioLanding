@@ -185,8 +185,8 @@
              display: grid;
              place-items: start;
              overflow: hidden;
-             width: 18rem;
-
+             width: 29rem;
+             
              
 
              &::after {
@@ -199,11 +199,11 @@
                  }
              }
                 
-                 animation: harekat  .5s cubic-bezier(0.5, 0.5, 0.3, 1) infinite alternate;
+                 animation: harekat  .7s cubic-bezier(0.5, 0.5, 0.3, 1) infinite alternate;
                  content: attr(data-text);
                  position: absolute;
                  height: 100%;
-                 left: 0;
+                 right: 2%;
                  transform: translate3d(0, 85%, 0);
              }
 

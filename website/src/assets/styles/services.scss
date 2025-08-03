@@ -1,9 +1,12 @@
 @import 'base.scss';
 .services {
+    font-family: 'DASHER', sans-serif;
+
     position: relative;
-    font-size: 40px;
+    font-size: 50px;
     height: 300px;
-    background: white;
+    background: #f5c400;
+    color: #102a71;
     overflow: hidden;
     text-align: center;
     padding-top: 1rem;
@@ -16,7 +19,7 @@
         &--left {
             left: 0;
             top: 12rem;
-            animation: moveLeft 20s linear infinite;
+            animation: moveLeft 30s linear infinite;
             @keyframes moveLeft {
                 0%{
                     transform: translate3d(0, 0, 0);
@@ -29,7 +32,7 @@
         &--right {
             right: 0;
             top: 6rem;
-            animation: moveRight 20s linear infinite;
+            animation: moveRight 30s linear infinite;
             @keyframes moveRight {
                 0%{
                     transform: translate3d(0, 0, 0);
