@@ -60,4 +60,16 @@ $main-color: #89a25b;
 $text-color: #ccc;
 $orange-bg: #f28500;
 $font-dark: #1f262c;
-$font-light: #f4f4f4
+$font-light: #f4f4f4;
+
+
+/*--------------predefined classes-------------*/
+.section {
+    padding: 1rem;
+    overflow: hidden;
+    min-height: 100vh;
+    padding-top: 5rem;
+    @media (min-width: 650px) {
+        padding: 5rem;
+    }
+}

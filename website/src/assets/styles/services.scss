@@ -1,0 +1,57 @@
+@import 'base.scss';
+.services {
+    position: relative;
+    font-size: 40px;
+    height: 300px;
+    background: white;
+    overflow: hidden;
+    text-align: center;
+    padding-top: 1rem;
+    &__header {
+        font-weight: 600;
+    }
+    &__text {
+        position: absolute;
+        white-space: nowrap;
+        &--left {
+            left: 0;
+            top: 12rem;
+            animation: moveLeft 20s linear infinite;
+            @keyframes moveLeft {
+                0%{
+                    transform: translate3d(0, 0, 0);
+                }
+                100% {
+                    transform: translate3d(-50%, 0, 0);
+                }
+            }
+        }
+        &--right {
+            right: 0;
+            top: 6rem;
+            animation: moveRight 20s linear infinite;
+            @keyframes moveRight {
+                0%{
+                    transform: translate3d(0, 0, 0);
+                }
+                100% {
+                    transform: translate3d(50%, 0, 0);
+                }
+            }
+        }
+    }
+    @media (max-width: 700px) {
+        & {
+            height: 200px; 
+        }
+        &__text {
+            font-size: 20px;
+            &--left {
+                top: 5rem;
+            }
+            &--right {
+                top: 8rem;
+            }
+        }
+    }
+}
