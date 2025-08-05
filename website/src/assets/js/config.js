@@ -5,4 +5,6 @@ import "../styles/coolLinks.scss"
 import "../styles/coolButton.scss"
 import "../styles/services.scss"
 import "../styles/reviews.scss"
+import "../styles/animations.scss"
+
 import "../icons/font-awsome/css/all.min.css"
