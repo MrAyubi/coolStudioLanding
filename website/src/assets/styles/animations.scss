@@ -1,12 +1,36 @@
+@import 'base.scss';
+
 .sun-shine {
-    height: 40rem;
+    height: 83vh;
     position: relative;
     background-color: #f6e300;
     overflow: hidden;
     animation: sunShineBgChange 1.2s steps(2) infinite;
     border-top: 8px solid #000;
-    border-bottom: 8px solid #000
+    border-bottom: 8px solid #000;
+
+    &__text {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        text-align: center;
+        white-space: nowrap;
+        bottom: 22%;
+
+        h1 {
+            font-family: 'Futura Std', sans-serif;
+            font-weight: 900;
+            font-size: 5vw;
+            font-style: italic;
+            text-transform: uppercase;
+            color: $pastile-purple;
+            text-shadow: 10px 10px 0px black;
+
+        }
+    }
 }
+
 @keyframes sunShineBgChange {
     0%,49% {
         background-color: #ee7b46

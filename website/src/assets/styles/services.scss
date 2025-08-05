@@ -14,6 +14,7 @@
         font-weight: 600;
     }
     &__text {
+        text-transform: uppercase;
         position: absolute;
         white-space: nowrap;
         &--left {
@@ -44,11 +45,12 @@
         }
     }
     @media (max-width: 700px) {
+        font-size: 30px;
         & {
             height: 200px; 
         }
         &__text {
-            font-size: 20px;
+            font-size: 24px;
             &--left {
                 top: 5rem;
             }
