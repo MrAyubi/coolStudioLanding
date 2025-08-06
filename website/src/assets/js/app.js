@@ -1,4 +1,5 @@
 import gsap from "gsap";
+import Swiper from 'swiper'
 const bar = document.querySelector(".loading__bar--inner")
 const barNumber = document.querySelector(".loading__counter--number")
 let c = 0;
@@ -39,4 +40,12 @@ let barInterval = setInterval(() => {
         
     }
 }, 30);
-
+ 
+var swiper = new Swiper(".swiper", {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
+  });

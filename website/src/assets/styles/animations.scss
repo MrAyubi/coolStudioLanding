@@ -8,15 +8,26 @@
     animation: sunShineBgChange 1.2s steps(2) infinite;
     border-top: 8px solid #000;
     border-bottom: 8px solid #000;
+    
+
+            @keyframes pulse__sun {
+                from {
+                    transform: translateX(-50%) scale(1);
+                }
+                to {
+                    transform: translateX(-50%) scale(1.3);
+                }
+            }
 
     &__text {
         position: absolute;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%) scale(1);
         z-index: 2;
         text-align: center;
         white-space: nowrap;
         bottom: 22%;
+        animation: pulse__sun 1.2s steps(2) infinite;
 
         h1 {
             font-family: 'Futura Std', sans-serif;
@@ -126,7 +137,7 @@
     left: 0;
     width: calc(100% + 112px);
     height: 24vw;
-    background: url("https://cdn.studio-job.com/static/img/about/wave_02.svg");
+    background: url("../images/svg/wave.svg");
     background-size: 84px 97px
 }
 
@@ -140,5 +151,49 @@
 @media only screen and (min-width: 1200px) {
     .sun-shine ._1wrQ4B {
         background-size:112px 130px
+    }
+}
+
+
+
+
+
+
+
+
+
+// arrow>>>>
+.candy__wrapper {
+    position: relative;
+    height: 639px;
+    background: #5d328f;
+    border-bottom: 8px solid black;
+}
+.candy {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 230%;
+    height: 100%;
+    z-index: 0;
+    background-image: url("/assets/images/svg/stripes.svg");
+    background-size: 73% 262%
+}
+
+@media only screen and (min-width: 1024px) {
+    .candy {
+        background-size:50% 244%;
+        animation: bgMoveLeft 2s linear infinite
+    }
+}
+@keyframes bgMoveLeft {
+    0% {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0)
+    }
+
+    to {
+        -webkit-transform: translate3d(-50%,0,0);
+        transform: translate3d(-50%,0,0)
     }
 }
