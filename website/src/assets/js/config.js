@@ -7,6 +7,9 @@ import "../styles/services.scss"
 import "../styles/reviews.scss"
 import "../styles/animations.scss"
 import "../styles/swiper.scss"
+import "../styles/playerSelect.scss"
+
 
 
 import "../icons/font-awsome/css/all.min.css"
+

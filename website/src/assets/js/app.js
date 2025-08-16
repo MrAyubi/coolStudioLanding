@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import Swiper from 'swiper'
+import "./injector.js"
 const bar = document.querySelector(".loading__bar--inner")
 const barNumber = document.querySelector(".loading__counter--number")
 let c = 0;
@@ -42,7 +43,8 @@ let barInterval = setInterval(() => {
 }, 30);
  
 var swiper = new Swiper(".swiper", {
-    slidesPerView: 1,
+    loop: true,
+    slidesPerView: 3,
     spaceBetween: 30,
     pagination: {
       el: ".swiper-pagination",

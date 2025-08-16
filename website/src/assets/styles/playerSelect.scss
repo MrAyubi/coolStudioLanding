@@ -1,0 +1,29 @@
+@import "./base.scss";
+
+.player-select {
+    position: relative;
+    background: black;
+    height: 300px;
+    border-top: 8px solid #000;
+    display: flex;
+    justify-content: center;
+    &__header {
+       
+    }
+    &__images {
+        display: flex;
+        gap: 2px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    &__image {
+        width: 300px;
+        height: 300px;
+        border: 2px solid white;
+        
+        &:hover {
+           
+        }
+    }
+    
+}
