@@ -41,8 +41,8 @@
         justify-content: center;
     }
     &__image {
-        width: 300px;
-        height: 300px;
+        width: 200px;
+        height: 200px;
         border: 2px solid white;
         filter: brightness(0.8);
         
@@ -57,6 +57,38 @@
               filter: brightness(3);
             }
           }
+    }
+    &__info {
+        margin-top: 20px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        &--full-body-image {
+            width: 200px;
+            height: 350px;
+        }
+        &--stats {
+            ul {
+                display: flex;  
+                gap: 15px;
+                flex-direction: column;
+
+
+                &fa-star {
+                    columns: gold;
+                    font-size: 20px;
+                }
+            }
+            
+            span {
+                background:linear-gradient(180deg, #635fa6 0%, #ffe9cf 8%, #110a40 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+
+            }
+            
+        }
     }
     
 }
