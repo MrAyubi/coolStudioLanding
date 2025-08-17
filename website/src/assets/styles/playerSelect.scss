@@ -1,18 +1,42 @@
 @import "./base.scss";
 
 .player-select {
+    
+    font-family: 'streetOfRage', sans-serif;
     position: relative;
     background: black;
-    height: 300px;
+    height: 100vh;
     border-top: 8px solid #000;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     &__header {
+       width: fit-content;
+       font-size: 36px;
+       background: linear-gradient(180deg,
+        #d2933f 0%, 
+        #f6db1b 20%,
+        #ffe9cf 40%, 
+        #771108 60%, 
+        #ee9c0b 80%, 
+        #eee0d0 90%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
        
+    }
+    &__card {
+        // color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 24px;
+        background:linear-gradient(180deg, #635fa6 0%, #ffe9cf 8%, #110a40 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
     &__images {
         display: flex;
-        gap: 2px;
+        gap: 10px;
         flex-wrap: wrap;
         justify-content: center;
     }
@@ -20,10 +44,19 @@
         width: 300px;
         height: 300px;
         border: 2px solid white;
+        filter: brightness(0.8);
         
         &:hover {
-           
+            animation: pulse-brightness 0.1s infinite alternate;
         }
+        @keyframes pulse-brightness {
+            from {
+              filter: brightness(1);
+            }
+            to {
+              filter: brightness(3);
+            }
+          }
     }
     
 }

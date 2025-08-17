@@ -57,6 +57,5 @@ players_data.map((player_data) => {
                     </div> `;
                     
                     swiper_container.innerHTML += templete;
-                                        console.log('asd');
 
 });

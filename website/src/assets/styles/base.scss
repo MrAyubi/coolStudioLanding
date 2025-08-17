@@ -5,6 +5,14 @@
 @import url('https://fonts.cdnfonts.com/css/cartoonist-kooky');
 @import url('https://fonts.googleapis.com/css2?family=Bowlby+One&display=swap');
 
+
+@font-face {
+    font-family: "streetOfRage";
+    src: url("/assets/fonts/streets-of-rage-2-3-cyr.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+  }
+
 * {
     margin: 0;
     box-sizing: border-box;
@@ -84,3 +92,5 @@ $box-shadow-blue: rgba(31, 38, 135, 0.27);
         padding: 5rem;
     }
 }
+
+

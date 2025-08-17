@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import Swiper from 'swiper'
 import "./injector.js"
+import "./coolThings"
 const bar = document.querySelector(".loading__bar--inner")
 const barNumber = document.querySelector(".loading__counter--number")
 let c = 0;
