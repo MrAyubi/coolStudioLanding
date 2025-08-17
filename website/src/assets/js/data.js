@@ -26,6 +26,18 @@ let players_data = [
     }
 ]
 
-let another_list = []
+let players_select_data = [
+    {
+        name:"MAMAREZA",
+        skills: {
+            'CODING': 3,
+            'COOKING': 2,
+            'NEGOTIATION': 4,
+            'VIDEO EDDIT': 2,
+            'CREATIVITY': 3
+        }
+    }
 
-export {players_data, another_list}
+]
+
+export {players_data, players_select_data}

@@ -1,7 +1,7 @@
 @import "./base.scss";
 
 .player-select {
-    
+
     font-family: 'streetOfRage', sans-serif;
     position: relative;
     background: black;
@@ -10,85 +10,104 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
     &__header {
-       width: fit-content;
-       font-size: 36px;
-       background: linear-gradient(180deg,
-        #d2933f 0%, 
-        #f6db1b 20%,
-        #ffe9cf 40%, 
-        #771108 60%, 
-        #ee9c0b 80%, 
-        #eee0d0 90%);
+        width: fit-content;
+        font-size: 36px;
+        background: linear-gradient(180deg,
+                #d2933f 0%,
+                #f6db1b 20%,
+                #ffe9cf 40%,
+                #771108 60%,
+                #ee9c0b 80%,
+                #eee0d0 90%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-       
+
     }
+
     &__card {
         // color: white;
         display: flex;
         flex-direction: column;
         align-items: center;
         font-size: 24px;
-        background:linear-gradient(180deg, #635fa6 0%, #ffe9cf 8%, #110a40 100%);
+        background: linear-gradient(180deg, #635fa6 0%, #ffe9cf 8%, #110a40 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
+
     &__images {
         display: flex;
         gap: 10px;
         flex-wrap: wrap;
         justify-content: center;
     }
+
     &__image {
         width: 200px;
         height: 200px;
         border: 2px solid white;
         filter: brightness(0.8);
-        
+
         &:hover {
             animation: pulse-brightness 0.1s infinite alternate;
         }
+
         @keyframes pulse-brightness {
             from {
-              filter: brightness(1);
+                filter: brightness(1);
             }
+
             to {
-              filter: brightness(3);
+                filter: brightness(3);
             }
-          }
+        }
     }
+
     &__info {
         margin-top: 20px;
         position: relative;
         display: flex;
         justify-content: center;
         width: 100%;
+        gap: 36px;
+
         &--full-body-image {
             width: 200px;
             height: 350px;
         }
+
         &--stats {
+            display: flex;
             ul {
-                display: flex;  
+                display: flex;
                 gap: 15px;
                 flex-direction: column;
-
-
-                &fa-star {
-                    columns: gold;
-                    font-size: 20px;
-                }
             }
-            
+            .score-stars {
+                text-align: end;
+            }
+
+            .fa-star {
+                color: yellow;
+                font-size: 20px;
+            }
+
+
             span {
-                background:linear-gradient(180deg, #635fa6 0%, #ffe9cf 8%, #110a40 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+                background: linear-gradient(180deg, #635fa6 0%, #ffe9cf 8%, #110a40 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
 
             }
-            
+
+        }
+        &--bio {
+            color: white;
+            width: 400px;
+            font-size: 16px;
         }
     }
-    
+
 }
