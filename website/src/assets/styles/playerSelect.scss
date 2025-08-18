@@ -72,10 +72,11 @@
         justify-content: center;
         width: 100%;
         gap: 36px;
+        align-items: center;
 
         &--full-body-image {
-            width: 200px;
-            height: 350px;
+            width: 300px;
+            height: 300px;
         }
 
         &--stats {
