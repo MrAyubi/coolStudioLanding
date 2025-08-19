@@ -36,7 +36,45 @@ let players_select_data = [
             'NEGOTIATION': 4,
             'VIDEO EDDIT': 2,
             'CREATIVITY': 3
-        }
+        },
+        bio: "Think you don't need our services?<br/>He'll prove you wrong.<br/>And he built this website too.",
+        gif:gifs.mamarezaGif
+    },
+    {
+        name:"NIMA",
+        skills: {
+            'CODING': 3,
+            'COOKING': 2,
+            'NEGOTIATION': 4,
+            'VIDEO EDDIT': 2,
+            'CREATIVITY': 3
+        },
+        bio: "Think you don't need our services?<br/>He'll prove you wrong.<br/>And he built this website too.",
+        gif:gifs.mamarezaGif
+    },
+    {
+        name:"ASMA",
+        skills: {
+            'CODING': 3,
+            'COOKING': 2,
+            'NEGOTIATION': 4,
+            'VIDEO EDDIT': 2,
+            'CREATIVITY': 3
+        },
+        bio: "Think you don't need our services?<br/>He'll prove you wrong.<br/>And he built this website too.",
+        gif:gifs.mamarezaGif
+    },
+    {
+        name:"MOHEB",
+        skills: {
+            'CODING': 3,
+            'COOKING': 2,
+            'NEGOTIATION': 4,
+            'VIDEO EDDIT': 2,
+            'CREATIVITY': 3
+        },
+        bio: "Think you don't need our services?<br/>He'll prove you wrong.<br/>And he built this website too.",
+        gif:gifs.mamarezaGif
     }
 
 ]
