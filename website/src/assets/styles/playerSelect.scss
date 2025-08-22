@@ -10,6 +10,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
+    padding-bottom: 30px;
 
     &__header {
         width: fit-content;
@@ -83,12 +85,20 @@
         }
 
         &--stats {
+
+            .stats-stars {
+                text-align: right;
+            }
+            
             display: flex;
             ul {
                 display: flex;
                 gap: 15px;
                 flex-direction: column;
                 text-align: center;
+            }
+            .player-stats {
+                width: 240px;
             }
             .score-stars {
                 text-align: end;

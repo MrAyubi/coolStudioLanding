@@ -1,4 +1,4 @@
-import { players_data }  from "./data";
+import { players_data, players_select_data } from "./data";
 
 const swiper_container = document.querySelector(".swiper-wrapper");
 
@@ -44,8 +44,8 @@ players_data.map((player_data) => {
                                 <div class="review__topboarder"></div>
                                 <img src=${player_data.image} alt="" class="review__img">
                                 <div class="review__text">
-                                    <span>${player_data.bio.substring(0,1)}</span>
-                                    ${player_data.bio.substring(1,player_data.bio.length)}
+                                    <span>${player_data.bio.substring(0, 1)}</span>
+                                    ${player_data.bio.substring(1, player_data.bio.length)}
                                 </div>
                                 
                                 <div class="review__profile">
@@ -55,7 +55,32 @@ players_data.map((player_data) => {
                             </div>
                         </div>
                     </div> `;
-                    
-                    swiper_container.innerHTML += templete;
 
+    swiper_container.innerHTML += templete;
+
+});
+
+
+
+const images = document.querySelectorAll(".player-select__image");
+const fullBodyImage = document.querySelector(".player-select__info--full-body-image img");
+const statList = document.querySelector(".player-stats");
+const starList = document.querySelector(".stats-stars");
+const bioBox = document.querySelector(".player-select__info--bio p");
+
+images.forEach(img => {
+    img.addEventListener("click", () => {
+        const playerName = img.dataset.name;
+        const player_info = players_select_data[playerName]
+        let player_stats = ``;
+        let player_stats_star = ``;
+        fullBodyImage.src = player_info['gif'];
+        bioBox.innerHTML = player_info['bio'];
+        player_info['skills'].forEach(skill => {
+            player_stats += `<li><span>${skill['name']}</span></li>`;
+            player_stats_star += `<li>${'<i class="fa-solid fa-star"></i>'.repeat(skill['score'])}</li>`;
+        })
+        statList.innerHTML = player_stats
+        starList.innerHTML = player_stats_star
+    });
 });
