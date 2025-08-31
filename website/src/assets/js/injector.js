@@ -2,7 +2,10 @@ import { players_data, players_select_data } from "./data";
 
 const swiper_container = document.querySelector(".swiper-wrapper");
 
-players_data.map((player_data) => {
+// ------------------------------------------
+// swiper injector
+function injectSwiperInputs() {
+    players_data.map((player_data) => {
     let templete = ` <div class="swiper-slide">
                         <div class="revirew">
                             <svg width="48" height="56" viewBox="0 0 48 56" fill="none"
@@ -59,19 +62,25 @@ players_data.map((player_data) => {
     swiper_container.innerHTML += templete;
 
 });
+}
 
+injectSwiperInputs();
 
-
+// ------------------------------------------
+// player select section
 const images = document.querySelectorAll(".player-select__image");
 const fullBodyImage = document.querySelector(".player-select__info--full-body-image img");
 const statList = document.querySelector(".player-stats");
 const starList = document.querySelector(".stats-stars");
 const bioBox = document.querySelector(".player-select__info--bio p");
 
-images.forEach(img => {
-    img.addEventListener("click", () => {
-        const playerName = img.dataset.name;
-        const player_info = players_select_data[playerName]
+function injectPlayerInputs(img) {
+    // if (!img) {
+    // playerName = Object.keys(players_select_data)[0]; 
+    // }
+    
+    const playerName = img.dataset.name;
+    const player_info = players_select_data[playerName]
         let player_stats = ``;
         let player_stats_star = ``;
         fullBodyImage.src = player_info['gif'];
@@ -82,5 +91,14 @@ images.forEach(img => {
         })
         statList.innerHTML = player_stats
         starList.innerHTML = player_stats_star
-    });
+}
+// injectPlayerInputs();
+
+images.forEach(img => {
+  img.addEventListener("click", function() {
+    injectPlayerInputs(this);
+  });
 });
+
+
+
