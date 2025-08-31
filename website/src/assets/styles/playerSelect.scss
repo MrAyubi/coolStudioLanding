@@ -5,13 +5,14 @@
     font-family: 'streetOfRage', sans-serif;
     position: relative;
     background: black;
-    height: 100vh;
+    min-height: 100vh;
     border-top: 8px solid #000;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
     padding-bottom: 30px;
+
 
     &__header {
         width: fit-content;
@@ -50,7 +51,7 @@
         width: 200px;
         height: 200px;
         border: 2px solid white;
-        filter: brightness(0.8);
+        filter: brightness(0.4);
 
         &:hover {
             animation: pulse-brightness 0.1s infinite alternate;
@@ -131,3 +132,42 @@
     }
 
 }
+@media (max-width: 450px) {
+    .player-select__header {
+        font-size: 20px;
+        text-align: center;
+    }
+    .player-select__images {
+        gap: 20px;
+    }
+    .player-select__image {
+        width: 150px;
+        height: 150px;
+    }
+    .player-select__card {
+        font-size: 18px;
+    }
+    .player-select__info {
+        flex-direction: column;
+        gap: 20px;
+        &--full-body-image {
+            width: 85%;
+            height: auto;
+        }
+        &--stats {
+            
+            ul {
+                gap: 10px;
+            }
+        }
+        &--bio {
+            width: 90%;
+            font-size: 14px;
+            margin-left: 0;
+        }
+    }
+    
+}
+.player-select-img-acctive {
+        filter: brightness(1.5);
+    }

@@ -6,7 +6,7 @@ const swiper_container = document.querySelector(".swiper-wrapper");
 // swiper injector
 function injectSwiperInputs() {
     players_data.map((player_data) => {
-    let templete = ` <div class="swiper-slide">
+        let templete = ` <div class="swiper-slide">
                         <div class="revirew">
                             <svg width="48" height="56" viewBox="0 0 48 56" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -59,9 +59,9 @@ function injectSwiperInputs() {
                         </div>
                     </div> `;
 
-    swiper_container.innerHTML += templete;
+        swiper_container.innerHTML += templete;
 
-});
+    });
 }
 
 injectSwiperInputs();
@@ -73,31 +73,40 @@ const fullBodyImage = document.querySelector(".player-select__info--full-body-im
 const statList = document.querySelector(".player-stats");
 const starList = document.querySelector(".stats-stars");
 const bioBox = document.querySelector(".player-select__info--bio p");
+let prv_img;
 
 function injectPlayerInputs(img) {
-    // if (!img) {
-    // playerName = Object.keys(players_select_data)[0]; 
-    // }
+    let playerName;
+    if (prv_img) {
+        prv_img.classList.toggle("player-select-img-acctive"); 
+    }
     
-    const playerName = img.dataset.name;
+    if (!img) {
+        playerName = Object.keys(players_select_data)[0];
+    } else {
+        playerName = img.dataset.name;
+    }
+    
+    img.classList.toggle("player-select-img-acctive"); 
     const player_info = players_select_data[playerName]
-        let player_stats = ``;
-        let player_stats_star = ``;
-        fullBodyImage.src = player_info['gif'];
-        bioBox.innerHTML = player_info['bio'];
-        player_info['skills'].forEach(skill => {
-            player_stats += `<li><span>${skill['name']}</span></li>`;
-            player_stats_star += `<li>${'<i class="fa-solid fa-star"></i>'.repeat(skill['score'])}</li>`;
-        })
-        statList.innerHTML = player_stats
-        starList.innerHTML = player_stats_star
+    let player_stats = ``;
+    let player_stats_star = ``;
+    fullBodyImage.src = player_info['gif'];
+    bioBox.innerHTML = player_info['bio'];
+    player_info['skills'].forEach(skill => {
+        player_stats += `<li><span>${skill['name']}</span></li>`;
+        player_stats_star += `<li>${'<i class="fa-solid fa-star"></i>'.repeat(skill['score'])}</li>`;
+    })
+    statList.innerHTML = player_stats
+    starList.innerHTML = player_stats_star
+    prv_img = img;
 }
-// injectPlayerInputs();
+injectPlayerInputs(images[0]);
 
 images.forEach(img => {
-  img.addEventListener("click", function() {
-    injectPlayerInputs(this);
-  });
+    img.addEventListener("click", function () {
+        injectPlayerInputs(this);        
+    });
 });
 
 
