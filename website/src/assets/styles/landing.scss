@@ -7,6 +7,12 @@
      background: $orange-bg;
      color: $font-dark;
      overflow: hidden;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-around;
+     padding-top: 3rem;
+
+     
 
 
      .header {
@@ -19,7 +25,7 @@
              padding: 10px;
              display: flex;
              align-items: center;
-             justify-content: space-between;
+             justify-content: x space-between;
              width: 60vw;
          }
 
@@ -170,12 +176,39 @@
          }
      }
 
+     .hero-title {
+         font-family: "cartoonist kooky", sans-serif;
+         color: $font-light;
+         font-size: 40px;
+         padding: 0 2rem;
+
+         p {
+             -webkit-text-stroke: 1px black;
+             opacity: 0;
+             text-shadow:
+                 2px 2px 0px $red-vintage,
+                 4px 4px 0px $yelliw-vintage,
+                 6px 6px 0px $deep-green;
+         }
+         
+         
+     }
+
      .hero-text {
-         position: absolute;
-         left: 5rem;
-         top: 20%;
+         
          color: $font-light;
          text-shadow: 5px 5px $font-dark;
+         padding: 0 2rem;
+
+
+         &__head {
+             position: absolute;
+             left: 5rem;
+             top: 20%;
+             color: $font-light;
+             text-shadow: 5px 5px $font-dark;
+             display: flex;
+         }
 
          h1 {
              font-size: 64px;
@@ -187,20 +220,21 @@
              place-items: start;
              overflow: hidden;
              width: 29rem;
-             
-             
+
+
 
              &::after {
-                @keyframes harekat {
-                 0% {
-                    transform: translate3d(0, 87%, 0);
+                 @keyframes harekat {
+                     0% {
+                         transform: translate3d(0, 87%, 0);
+                     }
+
+                     100% {
+                         transform: translate3d(0, 0%, 0);
+                     }
                  }
-                 100% {
-                    transform: translate3d(0, 0%, 0);  
-                 }
-             }
-                
-                 animation: harekat  .7s cubic-bezier(0.5, 0.5, 0.3, 1) infinite alternate;
+
+                 animation: harekat .7s cubic-bezier(0.5, 0.5, 0.3, 1) infinite alternate;
                  content: attr(data-text);
                  position: absolute;
                  height: 100%;
@@ -209,16 +243,20 @@
              }
 
          }
+
          @media (max-width: 450px) {
-            left: 2rem;
-            & h1 {
-                font-size: 54px;
-            }
-            &__changer {
-                &::after {
-                    right: 17%;
-                }
-            }
+             left: 2rem;
+             top: 5%;
+
+             & h1 {
+                 font-size: 42px;
+             }
+
+             &__changer {
+                 &::after {
+                     right: 35%;
+                 }
+             }
          }
      }
 

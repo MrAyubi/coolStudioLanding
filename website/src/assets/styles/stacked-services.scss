@@ -1,0 +1,148 @@
+ @import 'base.scss';
+
+.stacked-services {
+  position: relative;
+  width: 100%;
+  background: #ffffff;
+
+  .stacked-services__header {
+    text-align: center;
+    background: #fff;
+    position: relative;
+    z-index: 100;
+    display: flex;
+    justify-content: space-around;
+
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #411fca;
+      margin: 0;
+    }
+
+    p {
+      font-size: 1.125rem;
+      color: #411fca;
+      margin-top: 1rem;
+    }
+  }
+
+  .stacked-services__container {
+    position: relative;
+    background-color: $dark-orange;
+  }
+
+  .stacked-services__sticky {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .service-card {
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: #fff;
+
+    &.card-0 {
+      background-color: $retro-red;
+      z-index: 5;
+    }
+
+    &.card-1 {
+      background-color: $retro-orange;
+      z-index: 4;
+    }
+
+    &.card-2 {
+      background-color: $retro-yellow;
+      z-index: 3;
+    }
+
+    &.card-3 {
+      background-color: $retro-light-blue;
+      z-index: 2;
+    }
+
+    &.card-4 {
+      background-color: $retro-dark-blue;
+      z-index: 1;
+    }
+
+    &.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .service-card__content {
+      max-width: 900px;
+      margin: 0 auto;
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.6s ease;
+    }
+
+    .service-card__title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 1rem;
+    }
+
+    .service-card__subtitle {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+
+    .service-card__description.is-visible {
+      opacity: 1;
+      display: block;
+    }
+
+
+    .service-card__description {
+      height: 0;
+      overflow: hidden;
+      font-size: 1.125rem;
+      transition: opacity 0.8s ease;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .stacked-services__header {
+    padding: 2rem 1rem 1rem;
+
+    h2 {
+      font-size: 1.75rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .service-card {
+    padding: 1.5rem 2rem;
+
+    .service-card__title {
+      font-size: 1.8rem;
+    }
+
+    .service-card__subtitle {
+      font-size: 1.2rem;
+    }
+
+    .service-card__description {
+      font-size: 1rem;
+    }
+  }
+}

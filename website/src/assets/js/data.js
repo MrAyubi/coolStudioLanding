@@ -70,7 +70,7 @@ let players_select_data = {
             { name: 'MOHEBskill', score: 1 },
             { name: 'MOHEBskill2', score: 2 },
             { name: 'MOHEBskill3', score: 3 },
-            { name: 'MOHEBskill4', score: 2},
+            { name: 'MOHEBskill4', score: 2 },
             { name: 'MOHEBskill5', score: 1 }
         ],
         bio: "MOHEb bio . This will stop working in the next major version of npm..",
@@ -79,4 +79,6 @@ let players_select_data = {
 
 }
 
-export { players_data, players_select_data }
+
+
+export { players_data, players_select_data}

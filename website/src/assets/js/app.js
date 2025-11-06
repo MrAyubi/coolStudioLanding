@@ -1,7 +1,12 @@
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Swiper from 'swiper'
 import "./injector.js"
 import "./coolThings"
+import "./stackedServices.js"
+import "./image-snake.js"
+
+gsap.registerPlugin(ScrollTrigger);
 const bar = document.querySelector(".loading__bar--inner")
 const barNumber = document.querySelector(".loading__counter--number")
 let c = 0;
@@ -51,4 +56,44 @@ var swiper = new Swiper(".swiper", {
       el: ".swiper-pagination",
       clickable: true,
     },
+    
   });
+
+// Hero title ScrollTrigger animation
+// const heroTitleTexts = document.querySelectorAll('.hero-title p');
+
+// if (heroTitleTexts.length > 0) {
+//     // Create timeline for sequential text animations
+//     const tl = gsap.timeline({
+//         scrollTrigger: {
+//             trigger: ".landing",
+//             start: "top top",
+//             end: "+=400%",
+//             scrub: 1,
+//             pin: ".landing",
+//             pinSpacing: true,
+//             toggleActions: "none none none none",
+//             anticipatePin: 1
+//         }
+//     });
+
+//     // Animate each text sequentially
+//     heroTitleTexts.forEach((text, index) => {
+//         // Fade in
+//         tl.to(text, {
+//             opacity: 1,
+//             duration: 1,
+//         });
+
+//         // Hold
+//         tl.to({}, { duration: 0.5 });
+
+//         // Fade out (except for the last one)
+//         // if (index < heroTitleTexts.length - 1) {
+//         //     tl.to(text, {
+//         //         opacity: 0,
+//         //         duration: 1,
+//         //     });
+//         // }
+//     });
+// }
