@@ -2,8 +2,8 @@
   "name": "website",
   "version": "1.0.0",
   "scripts": {
-    "dev": "npx parcel src/index.html --open",
-    "build": "npx parcel src/build index.html"
+    "dev": "npx parcel 'src/*.html' --open --host 0.0.0.0",
+    "build": "npx parcel build 'src/*.html'"
   },
   "keywords": [],
   "author": "",

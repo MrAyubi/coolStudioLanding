@@ -3,97 +3,76 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Swiper from 'swiper'
 import "./injector.js"
 import "./coolThings"
-import "./stackedServices.js"
 import "./image-snake.js"
+import "./blackBox.js"
+import "./glowNoise.js"
+import "./clients.js"
+import "./studioStory.js"
+import "./offerSplit.js"
+import "./loader.js"
+import { initStackedServices } from "./stackedServices.js";
+import { initArtStrategyMorph } from "./gsapTut.js";
 
 gsap.registerPlugin(ScrollTrigger);
-const bar = document.querySelector(".loading__bar--inner")
-const barNumber = document.querySelector(".loading__counter--number")
-let c = 0;
 
-let barInterval = setInterval(() => {
-    bar.style.width = c + "%";
-    barNumber.innerText = c + "%"
-    c++;
+// =============================================
+// 🔵 SCROLLTRIGGER BOOTSTRAP
+// =============================================
+// Wait until fonts have swapped in AND every image/video has finished
+// loading before creating a single ScrollTrigger. First measurement is
+// then already final — no post-hoc "refresh again later" patching needed.
+function whenReady() {
+  return Promise.all([
+    document.fonts ? document.fonts.ready : Promise.resolve(),
+    new Promise((resolve) => {
+      if (document.readyState === "complete") resolve();
+      else window.addEventListener("load", resolve, { once: true });
+    }),
+  ]);
+}
 
-    if (c===101){
-        clearInterval(barInterval)
-        gsap.to('.loading__bar', {
-            duration: 7,
-            rotate: '400deg',
-            left: '1000%'
-        })
-        gsap.to('.loading__counter, .loading__text--boarder', {
-            duration: 1,
-            opacity: 0
-        })
-        gsap.to('.loading__text',{
-            duration: 1,
-            scale: '3',
-            translateY: '-50%',
-            top: '50%'
-        })
-        gsap.to('.loading__box',{
-            duration: 1,
-            height: '500px',
-            borderRadius: '50%'
-        })
-        gsap.to('.loading',{
-            delay: 2,
-            duration: 2,
-            zIndex: 0,
-            opacity: 0
-        })
-        
-    }
-}, 30);
- 
-var swiper = new Swiper(".swiper", {
-    loop: true,
-    slidesPerView: 3,
-    spaceBetween: 30,
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
-    },
-    
+function initAll() {
+  initArtStrategyMorph();      // layout-changing pin first
+  initStackedServices();       // everything below afterward
+
+  ScrollTrigger.sort();
+  ScrollTrigger.refresh();
+}
+
+whenReady().then(initAll);
+
+// Contact Form Tag Selection
+document.addEventListener('DOMContentLoaded', () => {
+  const tagPills = document.querySelectorAll('.tag-pill');
+
+  tagPills.forEach(pill => {
+    pill.addEventListener('click', function () {
+      const group = this.getAttribute('data-group');
+      const value = this.getAttribute('data-value');
+
+      document.querySelectorAll(`.tag-pill[data-group="${group}"]`)
+        .forEach(p => p.classList.remove('active'));
+
+      this.classList.add('active');
+      document.getElementById(`${group}Input`).value = value;
+    });
   });
 
-// Hero title ScrollTrigger animation
-// const heroTitleTexts = document.querySelectorAll('.hero-title p');
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-// if (heroTitleTexts.length > 0) {
-//     // Create timeline for sequential text animations
-//     const tl = gsap.timeline({
-//         scrollTrigger: {
-//             trigger: ".landing",
-//             start: "top top",
-//             end: "+=400%",
-//             scrub: 1,
-//             pin: ".landing",
-//             pinSpacing: true,
-//             toggleActions: "none none none none",
-//             anticipatePin: 1
-//         }
-//     });
+      const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        message: document.getElementById('message').value,
+        service: document.getElementById('serviceInput').value,
+        vibe: document.getElementById('vibeInput').value
+      };
 
-//     // Animate each text sequentially
-//     heroTitleTexts.forEach((text, index) => {
-//         // Fade in
-//         tl.to(text, {
-//             opacity: 1,
-//             duration: 1,
-//         });
-
-//         // Hold
-//         tl.to({}, { duration: 0.5 });
-
-//         // Fade out (except for the last one)
-//         // if (index < heroTitleTexts.length - 1) {
-//         //     tl.to(text, {
-//         //         opacity: 0,
-//         //         duration: 1,
-//         //     });
-//         // }
-//     });
-// }
+      console.log('Form submitted:', formData);
+      alert('Form submitted! Check console for data.');
+    });
+  }
+});

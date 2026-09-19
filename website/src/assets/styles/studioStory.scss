@@ -1,0 +1,178 @@
+// _studio-intro.scss
+// Star Wars-style intro crawl for the Studio Story page.
+// .title-content position is driven by studio-intro.js — no CSS animation on it.
+
+$crawl-color: #EBD71C;
+$intro-color: #4ee;
+$intro-delay: 9s; // must match JS: CRAWL_START_DELAY_MS
+$logo-delay: 5s;
+
+.star-wars-intro {
+  background: url('../images/stars-bg.jpg') center center / cover;
+  background-color: #000;
+  width: 100%;
+  height: 100%;
+  font-family: 'Droid Sans', arial, verdana, sans-serif;
+  font-weight: 700;
+  color: $crawl-color;
+  overflow: hidden;
+  position: relative;
+
+  // ── "A long time ago…" opening line ────────────────────────────────────────
+  .intro-text {
+    position: relative;
+    max-width: 16em;
+    font-size: 200%;
+    font-weight: 400;
+    margin: 20% auto;
+    color: $intro-color;
+    opacity: 0;
+    z-index: 1;
+    text-align: left;
+    animation: sw-intro 4s ease-out;
+  }
+
+  // ── Studio logo ─────────────────────────────────────────────────────────────
+  .main-logo {
+    position: absolute;
+    width: 100%;
+    // left: 50%;
+    top: 20vh;
+    font-size: 10em;
+    text-align: center;
+    margin: 0 auto;
+    line-height: 0.8em;
+    letter-spacing: -0.05em;
+    color: #000;
+    text-shadow:
+      -2px -2px 0 $crawl-color,
+      2px -2px 0 $crawl-color,
+      -2px 2px 0 $crawl-color,
+      2px 2px 0 $crawl-color;
+    opacity: 0;
+    z-index: 1;
+    animation: sw-logo 8s ease-out $logo-delay;
+
+    >img {
+      width: 100%;
+    }
+  }
+
+  // ── Perspective stage ────────────────────────────────────────────────────────
+  .main-content {
+    position: absolute;
+    z-index: 3;
+    width: 98%;
+    height: 50em;
+    bottom: 0;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    font-size: 80px;
+    font-weight: bold;
+    text-align: justify;
+    overflow: hidden;
+    transform-origin: 50% 100%;
+    transform: perspective(350px) rotateX(25deg);
+
+    // top fade so text disappears into the distanceintro-text
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 60%;
+      // background-image: linear-gradient(to bottom, rgba(#000, 1) 0%, rgba(#000, 0) 100%);
+      pointer-events: none;
+    }
+  }
+
+  // ── Scrolling text — top is set and updated by JS ───────────────────────────
+  .title-content {
+    position: absolute;
+    top: 100%; // JS starts here and counts down
+
+    .content-header {
+      text-align: center;
+    }
+  }
+
+  // ── Optional call-to-action button ──────────────────────────────────────────
+  .space-button {
+    color: $crawl-color;
+    border: 12px solid $crawl-color;
+    padding: 20px;
+    background: transparent;
+    text-decoration: none;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: darken($crawl-color, 10%);
+      border-color: darken($crawl-color, 10%);
+      color: #000;
+    }
+
+    &:active,
+    &:focus {
+      background-color: darken($crawl-color, 20%);
+      border-color: darken($crawl-color, 20%);
+      color: #000;
+    }
+  }
+}
+
+// ── Keyframes ────────────────────────────────────────────────────────────────
+
+@keyframes sw-intro {
+  0% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sw-logo {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 1;
+    transform: scale(1);
+
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+
+  }
+
+
+  100% {
+    transform: scale(0.1);
+    opacity: 1;
+
+  }
+}
+
+// ── Responsive ───────────────────────────────────────────────────────────────
+
+@media screen and (max-width: 720px) {
+  .star-wars-intro {
+    .main-content {
+      font-size: 35px;
+    }
+  }
+}
