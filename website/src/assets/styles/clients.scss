@@ -1,0 +1,101 @@
+// Client Section
+.client-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000; // or your preferred background
+  
+  &__wrapper {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: max-content;
+    height: 100%;
+    will-change: transform;
+  }
+}
+
+// Client Card
+.client-card {
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  position: relative;
+  
+  &__content {
+    max-width: 1200px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  
+  &__image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  &__image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    transform: scale(1.1);
+    opacity: 0;
+  }
+  
+  &__title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  
+  &__description {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .client-card {
+    &__content {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 2rem;
+    }
+    
+    &__title {
+      font-size: 2rem;
+    }
+    
+    &__description {
+      font-size: 1rem;
+    }
+  }
+}

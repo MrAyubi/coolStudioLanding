@@ -1,0 +1,87 @@
+@import 'base.scss';
+
+.sunshine-container {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sunshine {
+    height: 100vh;
+    width: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 85%;
+
+    @media (max-width: 430px) {
+        transform: translate(-50%, -50%) scale(4);
+    }
+}
+
+.shine_a {
+    animation: sunShineColorChange 1.2s steps(2) infinite;
+    -webkit-animation-delay: .6s;
+    -o-animation-delay: .6s;
+    animation-delay: .6s;
+}
+
+.shine_b {
+    animation: sunShineColorChange 1.2s steps(2) infinite;
+
+}
+
+.sun-shine__text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    white-space: nowrap;
+    user-select: none;
+
+    h1 {
+        font-family: 'cartoonistKooky', sans-serif;
+        font-weight: 900;
+        font-size: 5vw;
+        font-style: italic;
+        text-transform: uppercase;
+        color: $text-color;
+
+        @media (max-width:430px) {
+            font-size: 2rem;
+        }
+    }
+
+    &--pulse {
+        animation: pulse__sun 1.2s steps(2) infinite;
+        display: inline-block;
+    }
+}
+
+
+
+@keyframes sunShineColorChange {
+
+    0%,
+    49% {
+        fill: #F28500;
+    }
+
+    50%,
+    to {
+        fill: transparent;
+    }
+}
+
+@keyframes pulse__sun {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.3);
+    }
+}

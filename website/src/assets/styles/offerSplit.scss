@@ -1,0 +1,208 @@
+@import 'base.scss';
+
+.offer-split {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: clamp(320px, 48vh, 520px);
+    overflow: hidden;
+    justify-content: space-around;
+
+    &__panel {
+        position: relative;
+        width: 50%;
+        height: 100%;
+        padding: 0;
+        border: none;
+        cursor: pointer;
+        overflow: hidden;
+        background: transparent;
+        color: $text-color;
+        box-sizing: border-box;
+
+        transition: width 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+
+
+
+        &:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: -4px;
+        }
+    }
+
+    &__label {
+        transform-origin: center;
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        left: 0%;
+        font-size: clamp(1.1rem, 2vw, 1.6rem);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+        transition:
+            top 0.5s ease,
+            left 0.5s ease,
+            transform 0.5s ease;
+    }
+
+    &__content {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 8%;
+        max-width: 80%;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(16px);
+        pointer-events: none;
+        transition:
+            opacity 0.4s ease,
+            transform 0.4s ease,
+            visibility 0s linear 0.4s;
+    }
+
+    &__title {
+        font-size: clamp(1.5rem, 2.4vw, 2.4rem);
+        margin-bottom: 0.75rem;
+    }
+
+    &__text {
+        font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+        line-height: 1.6;
+        opacity: 0.85;
+    }
+
+    // Decorative frame
+
+    &__frame {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+        pointer-events: none;
+        user-select: none;
+        z-index: 100;
+    }
+
+    // Decorative divider
+
+    &__divider {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        height: 90%;
+        width: auto;
+
+        pointer-events: none;
+        user-select: none;
+
+        z-index: 50;
+
+        transition:
+            left 0.7s cubic-bezier(0.65, 0, 0.35, 1),
+            transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    // Active state
+
+    &.has-active {
+
+        .offer-split__panel {
+            width: 20%;
+
+            &.is-active {
+                width: 80%;
+
+                // .offer-split__label {
+                //     top: 15%;
+                //     left: 50%;
+                //     transform: translate(-50%, 0);
+                // }
+
+                .offer-split__content {
+                    opacity: 1;
+                    visibility: visible;
+                    transform: translateY(0);
+                    pointer-events: auto;
+                    margin: 0 auto;
+                    transition:
+                        opacity 2s ease 0.25s,
+                        transform 0.5s ease 0.25s,
+                        visibility 0s linear 0s;
+                }
+            }
+        }
+
+        .offer-split__panel--business.is-active~.offer-split__divider {
+            left: 80%;
+        }
+
+        .offer-split__panel--artists.is-active~.offer-split__divider {
+            left: 20%;
+        }
+    }
+}
+
+.offer-split:not(.has-active) {
+
+    .offer-split__panel:hover {
+
+        .offer-split__label {
+            transform: translate(-50%, calc(-50% - 15px));
+        }
+    }
+}
+
+@media (max-width: 768px) {
+
+    .offer-split {
+        height: clamp(280px, 42vh, 400px);
+
+        &__label {
+            font-size: 0.9rem;
+        }
+
+        &__content {
+            padding: 0 6%;
+        }
+
+        &__title {
+            font-size: 1.3rem;
+        }
+
+        &__text {
+            font-size: 0.85rem;
+        }
+
+        &__divider {
+            height: 88%;
+        }
+
+        &.has-active {
+
+            .offer-split__panel {
+                width: 14%;
+
+                &.is-active {
+                    width: 86%;
+                }
+            }
+
+            .offer-split__panel--business.is-active~.offer-split__divider {
+                left: 86%;
+            }
+
+            .offer-split__panel--artists.is-active~.offer-split__divider {
+                left: 14%;
+            }
+        }
+    }
+}
