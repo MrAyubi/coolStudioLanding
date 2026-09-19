@@ -2,16 +2,16 @@
   "name": "website",
   "version": "1.0.0",
   "scripts": {
-    "dev": "npx parcel src/index.html --open",
-    "build": "npx parcel src/build index.html"
+    "dev": "npx parcel 'src/*.html' --open --host 0.0.0.0",
+    "build": "npx parcel build 'src/*.html'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.16.0",
-    "parcel-bundler": "^1.12.5",
+    "@parcel/transformer-sass": "^2.16.4",
+    "parcel": "^2.16.4",
     "sass": "^1.89.2"
   },
   "dependencies": {

@@ -12,92 +12,131 @@
 </head>
 
 <body>
-    <!----Loading!!-->
-    <div class="loading">
-        <div class="loading__box">
-            <div class="loading__text">
-                <div class="loading__text--boarder loading__width_animation"></div>
-                C
-                <div class="loading__text--dot"></div>
-                <div class="loading__text--dot--2"></div>
-                l Studio
+    <main>
+        <section class="site-loader" id="site-loader">
+
+            <div class="site-loader__sequence">
+                <img class="site-loader__frame" id="loader-frame" alt="">
             </div>
-            <div class="loading__bar ">
-                <div class="loading__bar--inner">
+
+            <div class="site-loader__logo" id="loader-logo">
+                <img src="assets/images/logo/fj-logo.svg" alt="Very Cool">
+            </div>
+
+        </section>
+
+
+        <div class="hero-video-wrapper">
+            <img src="./assets/images/background/tornPaperUp-1.png" alt="" class="torn-paper-bottom">
+            <img src="./assets/images/background/tornPaperDown-1.png" alt="" class="torn-paper-top">
+
+            <video autoplay muted loop playsinline>
+                <source src="assets/videos/herovid.mp4" type="video/mp4">
+            </video>
+            <div class="mouse-scroll-cta">
+                <div class="mouse-scroll-cta__wrapper">
+                    <p class="mouse-scroll-cta__text">&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL
+                        DOWN
+                        &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL
+                        DOWN
+                        &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL
+                        DOWN
+                        &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL
+                        DOWN
+                        &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL
+                        DOWN
+                        &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL
+                        DOWN
+                        &nbsp;&nbsp; SCROLL DOWN &nbsp;
+                    </p>
 
                 </div>
             </div>
-            <div class="loading__counter">
-                <span>0%</span>
-                <div class="loading__counter--number">0%
+        </div>
+
+        <div class="landing content-container">
+            <div class="hero-content">
+
+                <!----header!!-->
+                <header class="header">
+                    <div class="header__wrap">
+                        <ul class="header__left">
+                            <li>
+                                <a href="#" class="cool-link" data-text="Home"><span>Home</span></a>
+                            </li>
+                            <li>
+                                <a href="#" class="cool-link header__sm" data-text="Reviews"><span>Reviews</span></a>
+                            </li>
+                            <li>
+                                <a href="#" class="cool-link" data-text="Projects"><span>Projects</span></a>
+                            </li>
+                            <li>
+                                <a href="#" class="cool-link header__sm" data-text="Insight"><span>Insight</span></a>
+                            </li>
+                            <li>
+                                <a href="#" class="cool-link header__sm" data-text="FAQ"><span>FAQ</span></a>
+                            </li>
+                        </ul>
+                        <div class="header__right">
+                            <button class="cool-button"><span>Contact</span></button>
+
+                        </div>
+                    </div>
+                </header>
+                <img class="hero-logo glitch-on-hover-box" src="assets/images/logo/fj-logo.svg" alt="very cool logo">
+                <div class="hero-text">
+
+                    <h1 class="hero-text__changer" data-text="Creative">Very</h1>
+                    <h1>Cool &nbsp; <span>Studiooo</span></h1>
+
+
 
                 </div>
-            </div>
-        </div>
-    </div>
-    <!----landing!!-->
-    <div class="landing">
-        <!----header!!-->
-        <!-- <header class="header">
-            <div class="header__wrap">
-                <ul class="header__left">
-                    <li>
-                        <a href="#" class="cool-link" data-text="Home"><span>Home</span></a>
-                    </li>
-                    <li>
-                        <a href="#" class="cool-link header__sm" data-text="Reviews"><span>Reviews</span></a>
-                    </li>
-                    <li>
-                        <a href="#" class="cool-link" data-text="Projects"><span>Projects</span></a>
-                    </li>
-                    <li>
-                        <a href="#" class="cool-link header__sm" data-text="Insight"><span>Insight</span></a>
-                    </li>
-                    <li>
-                        <a href="#" class="cool-link header__sm" data-text="FAQ"><span>FAQ</span></a>
-                    </li>
-                </ul>
-                <div class="header__right">
-                    <button class="cool-button"><span>Contact</span></button>
+                <div class="art-strategy-morph" id="data-art-strategy-morph">
+                    <div class="art-strategy-morph__ghost" data-ghost aria-hidden="true">
+                        <span class="color-asli" data-ghost-letter="a">a</span>
+                        <span class="color-asli" data-ghost-letter="r">r</span>
+                        <span class="color-asli" data-ghost-letter="t">t:</span>
+                    </div>
+
+                    <div class="art-strategy-morph__word" data-word>
+                        <span class="art-strategy-morph__char" data-before>s</span>
+                        <span class="art-strategy-morph__char art-strategy-morph__char--shared color-asli"
+                            data-shared="t">t</span>
+                        <span class="art-strategy-morph__char art-strategy-morph__char--shared color-asli"
+                            data-shared="r">r</span>
+                        <span class="art-strategy-morph__char art-strategy-morph__char--shared color-asli"
+                            data-shared="a">a</span>
+                        <span class="art-strategy-morph__char" data-after>tegy</span>
+                    </div>
+
+                    <div class="art-strategy-morph__defs" data-defs>
+                        <p class="art-strategy-morph__def" data-def-art>
+                            the expression or application of human creative skill and imagination
+                        </p>
+                        <p class="art-strategy-morph__def" data-def-strategy>
+                            careful, long-term plan or method used to reach a specific goal
+                        </p>
+                    </div>
 
                 </div>
-            </div>
-        </header> -->
-        <div class="hero-text">
+                <!-- <div class="hero-title">
+                    <p>
+                        Real problems <br>Cool solutions
+                    </p>
+                    <p>
+                        we don't start with deliverables <br>
+                        we start with questions
+                    </p>
+                    <p>
+                        Cool isn’t just a look <br>It’s how we solve things
+                    </p>
+                </div> -->
 
-            <h1 class="hero-text__changer" data-text="Creative">Very</h1>
-            <h1>Cool Studio</h1>
 
 
-
-        </div>
-        <div class="hero-title">
-            <p>
-                Real problems. <br>Cool solutions.
-            </p>
-            <p>
-                We make brands look cool <br>and think smarter.
-            </p>
-            <p>
-                Cool isn’t just a look. <br>It’s how we solve things.
-            </p>
-        </div>
-        <div class="mouse-scroll-cta">
-            <div class="mouse-scroll-cta__wrapper">
-                <p class="mouse-scroll-cta__text">&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN
-                    &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN
-                    &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN
-                    &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN
-                    &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN
-                    &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN &nbsp;&nbsp; SCROLL DOWN
-                    &nbsp;&nbsp; SCROLL DOWN &nbsp;
-                </p>
-
-            </div>
-        </div>
-
-        <!----socials!!-->
-        <!-- <div class="socials">
+                <!----socials!!-->
+                <!-- <div class="socials">
             <a href="" target="_blank">
                 <i class="fa-brands fa-linkedin colored-icon"></i>
             </a>
@@ -108,8 +147,8 @@
                 <i class="fa-brands fa-youtube colored-icon"></i>
             </a>
         </div> -->
-        <!----scroll down!!-->
-        <!-- <div class="scroll-down">
+                <!----scroll down!!-->
+                <!-- <div class="scroll-down">
             <div class="scroll-down__wheel">
                 <div class="scroll-down__wheel--inner">
 
@@ -123,14 +162,367 @@
         </div> -->
 
 
-
-    </div>
-    <div class="services">
-        <div class="servoces__header">
-            TALK ABOUT
+            </div>
         </div>
-        <div class="services__text services__text--left">
-            <p>&nbsp;&nbsp;&nbsp; Cool Website &nbsp;&nbsp;&nbsp; Marketing &nbsp;&nbsp;&nbsp; Photography
+        <section class="offer-split content-container" id="offer-split">
+            <button class="offer-split__panel offer-split__panel--business" data-panel="business" aria-expanded="false"
+                type="button">
+                <span class="offer-split__label">For Businesses</span>
+
+                <div class="offer-split__content">
+                    <h3 class="offer-split__title">Be Cool</h3>
+                    <p class="offer-split__text">
+                        We build brand systems, campaigns, and digital experiences that move the needle —
+                        strategy, design, and execution under one roof.
+                    </p>
+                </div>
+            </button>
+
+            <button class="offer-split__panel offer-split__panel--artists" data-panel="artists" aria-expanded="false"
+                type="button">
+                <span class="offer-split__label">For Artists</span>
+
+                <div class="offer-split__content">
+                    <h3 class="offer-split__title">Be Yourself</h3>
+                    <p class="offer-split__text">
+                        We help artists shape their visual identity, release strategy, and audience —
+                        turning creative work into a lasting career.
+                    </p>
+                </div>
+            </button>
+
+            <img class="offer-split__frame" src="./assets/images/background/frame.png" alt="" aria-hidden="true">
+
+            <img class="offer-split__divider" src="./assets/images/background/middleLine.png" alt="" aria-hidden="true">
+        </section>
+
+        <div class="case-studies content-container">
+            <div class="case-studies__title">
+                <h1>Cool isn’t just a look <br>It’s how we <span>solve</span> things</h1>
+            </div>
+            <div class="case-studies__works">
+                <div class="case-studies__card" id="affogato">
+
+                    <div class="case-studies__card--video-wrapper">
+                        <img src="./assets/images/background/tornPaperDown-1.png" alt=""
+                            class="case-studies__card--frame__top">
+                        <img src="./assets/images/background/framePaperLeft.png" alt=""
+                            class="case-studies__card--frame__left">
+                        <img src="./assets/images/background/framePaperRight.png" alt=""
+                            class="case-studies__card--frame__right">
+                        <video autoplay muted loop playsinline>
+                            <source src="./assets/videos/AFFOGATO.mp4" type="video/mp4">
+                        </video>
+                        <div class="case-studies__card--video-wrapper__overlay">
+                            <p class="case-studies__card--video-wrapper__text">Affogato <br>Teaser 🎛 🥏 🕶 </p>
+                            <p>2025</p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="case-studies__card" id="jellyMoon">
+                    <div class="case-studies__card--video-wrapper">
+                        <img src="./assets/images/background/tornPaperDown-1.png" alt=""
+                            class="case-studies__card--frame__top">
+                        <img src="./assets/images/background/framePaperLeft.png" alt=""
+                            class="case-studies__card--frame__left">
+                        <img src="./assets/images/background/framePaperRight.png" alt=""
+                            class="case-studies__card--frame__right">
+                        <video autoplay muted loop playsinline>
+                            <source src="./assets/videos/jellymoon.mp4" type="video/mp4">
+                        </video>
+                        <div class="case-studies__card--video-wrapper__overlay">
+                            <p class="case-studies__card--video-wrapper__text">Jelly Moon <br> Comercial</p>
+                            <p>2024</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="case-studies__card" id="agony">
+                    <div class="case-studies__card--video-wrapper">
+                        <img src="./assets/images/background/tornPaperDown-1.png" alt=""
+                            class="case-studies__card--frame__top">
+                        <img src="./assets/images/background/framePaperLeft.png" alt=""
+                            class="case-studies__card--frame__left">
+                        <img src="./assets/images/background/framePaperRight.png" alt=""
+                            class="case-studies__card--frame__right">
+                        <video autoplay muted loop playsinline>
+                            <source src="./assets/videos/morteza.mp4" type="video/mp4">
+                        </video>
+                        <div class="case-studies__card--video-wrapper__overlay">
+                            <p class="case-studies__card--video-wrapper__text">Morteza Shojaee <br> Personal Brand
+                            </p>
+                            <p>Team<br>2024</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-studies__card" id="agony">
+                    <div class="case-studies__card--video-wrapper">
+                        <img src="./assets/images/background/tornPaperDown-1.png" alt=""
+                            class="case-studies__card--frame__top">
+                        <img src="./assets/images/background/framePaperLeft.png" alt=""
+                            class="case-studies__card--frame__left">
+                        <img src="./assets/images/background/framePaperRight.png" alt=""
+                            class="case-studies__card--frame__right">
+                        <video autoplay muted loop playsinline>
+                            <source src="./assets/videos/agony.mp4" type="video/mp4">
+                        </video>
+                        <div class="case-studies__card--video-wrapper__overlay">
+                            <p class="case-studies__card--video-wrapper__text">Agony <br> Experimental Movie
+                            </p>
+                            <p>By Rowshan <br>2024</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="case-studies__card" id="agony">
+                    <div class="case-studies__card--video-wrapper">
+                        <img src="./assets/images/background/tornPaperDown-1.png" alt=""
+                            class="case-studies__card--frame__top">
+                        <img src="./assets/images/background/framePaperLeft.png" alt=""
+                            class="case-studies__card--frame__left">
+                        <img src="./assets/images/background/framePaperRight.png" alt=""
+                            class="case-studies__card--frame__right">
+                        <video autoplay muted loop playsinline>
+                            <source src="./assets/videos/rechem.mp4" type="video/mp4">
+                        </video>
+                        <div class="case-studies__card--video-wrapper__overlay">
+                            <p class="case-studies__card--video-wrapper__text">Rech M <br> Music Video
+                            </p>
+                            <p>By Rowshan <br>2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <section class="sunshine-section">
+            <div class="sunshine-container">
+                <img src="./assets/images/background/tornPaperDown-1.png" alt="" class="torn-paper-top">
+
+                <div class="sun-shine__text">
+                    <h1>They're too basic<br>We're Very<br> <span class="sun-shine__text--pulse"> Cool!</span></h1>
+                </div>
+                <svg class="sunshine shine_a" viewBox="0 0 1335 738" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M1335 29.8008L667.5 369L1335 142.734V231.047L667.5 369L1335 333.281V404.719L667.5 369L1335 506.953V595.266L667.5 369L1335 708.199V738H1173.83L667.5 369L1029.51 738H925.052L667.5 369L839.947 738H767.464L667.5 369L699.92 738H635.08L667.5 369L567.536 738H495.053L667.5 369L409.948 738H305.492L667.5 369L161.167 738H0V708.199L667.5 369L0 595.266V506.953L667.5 369L0 404.719V333.281L667.5 369L0 231.047V142.734L667.5 369L0 29.8008V0H161.167L667.5 369L305.492 0H409.948L667.5 369L495.053 0H567.536L667.5 369L635.08 0H699.92L667.5 369L767.464 0H839.947L667.5 369L925.052 0H1029.51L667.5 369L1173.83 0H1335V29.8008Z" />
+                </svg>
+                <svg class="sunshine shine_b" viewBox="0 0 1335 738" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M667.5 369L635.08 738H567.536L667.5 369L495.053 738H409.948L667.5 369L305.492 738L161.167 738L667.5 369L4.64967e-05 708.199L3.56088e-05 595.266L667.5 369L0 506.953L2.14476e-05 404.719L667.5 369Z" />
+                    <path
+                        d="M667.5 369L699.92 738H767.464L667.5 369L839.947 738H925.052L667.5 369L1029.51 738L1173.83 738L667.5 369L1335 708.199V595.266L667.5 369L1335 506.953V404.719L667.5 369Z" />
+                    <path
+                        d="M667.5 369L635.08 4.14424e-05L567.536 3.55359e-05L667.5 369L495.053 2.91975e-05L409.948 2.17552e-05L667.5 369L305.492 1.26208e-05L161.167 0L667.5 369L4.64967e-05 29.8012L3.56088e-05 142.734L667.5 369L0 231.047L2.14476e-05 333.281L667.5 369Z" />
+                    <path
+                        d="M667.5 369L699.92 4.14424e-05L767.464 3.55359e-05L667.5 369L839.947 2.91975e-05L925.052 2.17552e-05L667.5 369L1029.51 1.26208e-05L1173.83 0L667.5 369L1335 29.8012V142.734L667.5 369L1335 231.047V333.281L667.5 369Z" />
+                </svg>
+                <img src="./assets/images/background/tornPaperUp-1.png" alt="" class="torn-paper-bottom">
+
+            </div>
+        </section>
+
+
+
+        <!-- <div class="candy__wrapper">
+        <h1>If you dare to be different,<br>here is our services...</h1>
+        <div class="candy">
+
+        </div>
+    </div> -->
+
+
+
+
+        <section class="stacked-services content-container">
+
+            <h1>
+                we don't start <br>
+                with deliverables <br>
+                we start <br>
+                with questions
+            </h1>
+
+            <div class="stacked-services__container">
+
+                <div class="stacked-services__sticky">
+
+                    <!-- BRANDING -->
+                    <div class="service-card card-branding is-active">
+
+                        <div class="service-card__content content-container">
+
+                            <h2 class="service-card__title">
+                                Tired of looking like everyone else?
+                            </h2>
+
+                            <div class="service-card__description">
+
+                                <div class="service-card__description-inner">
+
+                                    <h1>
+                                        Brand:
+                                    </h1>
+
+                                    <p>
+                                        Branding isn't a logo. <br>
+                                        It's who you are and how people remember you.
+                                        <br>
+                                        We uncover what makes you genuinely different,
+                                        then build an identity and communication system
+                                        that expresses it consistently.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MARKETING -->
+                    <div class="service-card card-youtube">
+
+                        <div class="service-card__content content-container">
+
+                            <h2 class="service-card__title">
+                                Your marketing feels random.
+                            </h2>
+
+                            <div class="service-card__description">
+
+                                <div class="service-card__description-inner">
+
+                                    <h1>
+                                        Marketing:
+                                    </h1>
+
+                                    <p>
+                                        Marketing shouldn't be a collection of activities.
+                                        <br>
+                                        It should be a series of intentional decisions.
+                                        <br><br>
+                                        We align strategy, creativity and execution,
+                                        so every touchpoint moves in the same direction.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTENT -->
+                    <div class="service-card card-content">
+
+                        <div class="service-card__content content-container">
+
+                            <h2 class="service-card__title">
+                                Your content exists. Your story doesn't.
+                            </h2>
+
+                            <div class="service-card__description">
+
+                                <div class="service-card__description-inner">
+
+                                    <h1>
+                                        Content:
+                                    </h1>
+
+                                    <p>
+                                        We don't create content just to stay active.
+                                        <br>
+                                        First, we discover why the content should exist.
+                                        <br>
+                                        Then we choose the right format to tell the story.
+                                        <br><br>
+                                        Sometimes that's an Instagram Reel.
+                                        <br>
+                                        Sometimes it's a documentary.
+                                        <br>
+                                        Sometimes it's something completely different.
+                                        <br><br>
+                                        The format follows the idea—not the other way around.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- WEBSITE -->
+                    <div class="service-card card-marketing">
+
+                        <div class="service-card__content content-container">
+
+                            <h2 class="service-card__title">
+                                Your website feels boring after seeing what it could be.
+                            </h2>
+
+                            <div class="service-card__description">
+
+                                <div class="service-card__description-inner">
+
+                                    <h1>
+                                        Website:
+                                    </h1>
+
+                                    <p>
+                                        A website isn't a collection of pages.
+                                        <br>
+                                        It's a tool with a job to do.
+                                        <br><br>
+                                        Before thinking about how it should look,
+                                        we ask what it should achieve.
+                                        <br><br>
+                                        Once we understand that, creativity has no limits.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <div class="services">
+            <div class="servoces__header">
+                TALK ABOUT
+            </div>
+            <div class="services__text services__text--left">
+                <p>&nbsp;&nbsp;&nbsp; Cool Website &nbsp;&nbsp;&nbsp; Marketing &nbsp;&nbsp;&nbsp; Photography
+                    &nbsp;&nbsp;&nbsp; Social Media &nbsp;&nbsp;&nbsp; Music Video
+                    &nbsp;&nbsp;&nbsp; Sticker &nbsp;&nbsp;&nbsp; Branding &nbsp;&nbsp;&nbsp; Content Strategy
+                    &nbsp;&nbsp;&nbsp; Packaging
+                    &nbsp;&nbsp;&nbsp; Design &nbsp;&nbsp;&nbsp; Cool Website &nbsp;&nbsp;&nbsp; Marketing
+                    &nbsp;&nbsp;&nbsp;
+                    Photography &nbsp;&nbsp;&nbsp; Social Media &nbsp;&nbsp;&nbsp; Music Video
+                    &nbsp;&nbsp;&nbsp; Sticker &nbsp;&nbsp;&nbsp; Branding &nbsp;&nbsp;&nbsp; Content Strategy
+                    &nbsp;&nbsp;&nbsp; Packaging
+                    &nbsp;&nbsp;&nbsp; Design &nbsp;&nbsp;&nbsp;</p>
+
+            </div>
+            <div class="services__text services__text--right">
+                &nbsp;&nbsp;&nbsp; Cool Website &nbsp;&nbsp;&nbsp; Marketing &nbsp;&nbsp;&nbsp; Photography
                 &nbsp;&nbsp;&nbsp; Social Media &nbsp;&nbsp;&nbsp; Music Video
                 &nbsp;&nbsp;&nbsp; Sticker &nbsp;&nbsp;&nbsp; Branding &nbsp;&nbsp;&nbsp; Content Strategy
                 &nbsp;&nbsp;&nbsp; Packaging
@@ -139,350 +531,194 @@
                 Photography &nbsp;&nbsp;&nbsp; Social Media &nbsp;&nbsp;&nbsp; Music Video
                 &nbsp;&nbsp;&nbsp; Sticker &nbsp;&nbsp;&nbsp; Branding &nbsp;&nbsp;&nbsp; Content Strategy
                 &nbsp;&nbsp;&nbsp; Packaging
-                &nbsp;&nbsp;&nbsp; Design &nbsp;&nbsp;&nbsp;</p>
+                &nbsp;&nbsp;&nbsp; Design &nbsp;&nbsp;&nbsp;
 
+            </div>
         </div>
-        <div class="services__text services__text--right">
-            &nbsp;&nbsp;&nbsp; Cool Website &nbsp;&nbsp;&nbsp; Marketing &nbsp;&nbsp;&nbsp; Photography
-            &nbsp;&nbsp;&nbsp; Social Media &nbsp;&nbsp;&nbsp; Music Video
-            &nbsp;&nbsp;&nbsp; Sticker &nbsp;&nbsp;&nbsp; Branding &nbsp;&nbsp;&nbsp; Content Strategy
-            &nbsp;&nbsp;&nbsp; Packaging
-            &nbsp;&nbsp;&nbsp; Design &nbsp;&nbsp;&nbsp; Cool Website &nbsp;&nbsp;&nbsp; Marketing &nbsp;&nbsp;&nbsp;
-            Photography &nbsp;&nbsp;&nbsp; Social Media &nbsp;&nbsp;&nbsp; Music Video
-            &nbsp;&nbsp;&nbsp; Sticker &nbsp;&nbsp;&nbsp; Branding &nbsp;&nbsp;&nbsp; Content Strategy
-            &nbsp;&nbsp;&nbsp; Packaging
-            &nbsp;&nbsp;&nbsp; Design &nbsp;&nbsp;&nbsp;
 
-        </div>
-    </div>
-    <div class="sun-shine">
-        <div class="sun-shine__text">
-            <h1>You're too basic<br>We're Very<br> <span class="sun-shine__text--pulse"> Cool!</span></h1>
-        </div>
-        <div class="_1quF88 shines"> <svg class="nNnDiX" viewBox="0 0 3432.2 2025.7">
-                <path class="_3BJPNu"
-                    d="M3432.2,2025.7l0-0.4l0,0l0,0.1v-0.1l0,0h0l0,0v0v0l0,0v0h0h0v0l0,0l0,0l0,0v0l0,0l0,0l0-0.1v-0.1l0,0.1l0,0 l0-0.2v-0.5l-0.1,0.7l0,0L3265.5,0h-347.3l514,2025.3l0,0L2545.5,0h-437.6l1324.3,2025.3l0,0L1570.8,0H828.7l2603.4,2025.3h0 L0,163.6v683.9l3432.1,1177.7h0L0,1448.7v576.6h3431.9 M3432.1,2025.3L3432.1,2025.3 M3432.1,2025.3L3432.1,2025.3 M3432.1,2025.3 L3432.1,2025.3 M3432.1,2025.3L3432.1,2025.3 M3432.2,2025.3L3432.2,2025.3L3432.2,2025.3L3432.2,2025.3L3432.2,2025.3 L3432.2,2025.3z M3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3z M3432.1,2025.3 L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3z M3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3 L3432.1,2025.3z M3432.1,2025.3L3432.1,2025.3z M3432.2,2025.3L3432.2,2025.3L3432.2,2025.3L3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z">
-                </path>
-            </svg> </div>
-        <div class="_2pakBd shines"> <svg class="nNnDiX" viewBox="0 0 3432.2 2025.7">
-                <path class="_3BJPNu"
-                    d="M3432.2,2025.7l0-0.4l0,0l0,0.1v-0.1l0,0h0l0,0v0v0l0,0v0h0h0v0l0,0l0,0l0,0v0l0,0l0,0l0-0.1v-0.1l0,0.1l0,0 l0-0.2v-0.5l-0.1,0.7l0,0L3265.5,0h-347.3l514,2025.3l0,0L2545.5,0h-437.6l1324.3,2025.3l0,0L1570.8,0H828.7l2603.4,2025.3h0 L0,163.6v683.9l3432.1,1177.7h0L0,1448.7v576.6h3431.9 M3432.1,2025.3L3432.1,2025.3 M3432.1,2025.3L3432.1,2025.3 M3432.1,2025.3 L3432.1,2025.3 M3432.1,2025.3L3432.1,2025.3 M3432.2,2025.3L3432.2,2025.3L3432.2,2025.3L3432.2,2025.3L3432.2,2025.3 L3432.2,2025.3z M3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3z M3432.1,2025.3 L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3z M3432.1,2025.3L3432.1,2025.3L3432.1,2025.3L3432.1,2025.3 L3432.1,2025.3z M3432.1,2025.3L3432.1,2025.3z M3432.2,2025.3L3432.2,2025.3L3432.2,2025.3L3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z M3432.2,2025.3L3432.2,2025.3z">
-                </path>
-            </svg> </div>
 
-        <div class="_1wrQ4B"></div>
-    </div>
-    <div class="candy__wrapper">
-        <div class="candy"></div>
-    </div>
 
-    <!--swiper-->
-    <div class="section reviews">
-        <!-- <div class="reviews__header">
-            <div class="instructor">
-                <div class="instructor__curve"></div>
-                <div class="instructor__infos">
-                    <img src="assets/images/me.jpg" alt="" class="instructor__img">
-                    <div class="instructor__col">
-                        <div class="instructor__info">
-                            <img src="assets/images/people.png" alt="">
-                            <span>4.5 / 5 Instructor Rating</span>
-                        </div>
-                        <div class="instructor__info">
-                            <img src="assets/images/people.png" alt="">
-                            <span>4.5 / 5 Instructor Rating</span>
-                        </div>
-                        <div class="instructor__info">
-                            <img src="assets/images/people.png" alt="">
-                            <span>4.5 / 5 Instructor Rating</span>
-                        </div>
-                        <div class="instructor__info">
-                            <img src="assets/images/people.png" alt="">
-                            <span>4.5 / 5 Instructor Rating</span>
-                        </div>
+        <!-- <section class="client-section">
+        <div class="client-section__wrapper">
+            <div class="client-card">
+                <div class="client-card__content">
+                    <div class="client-card__image-container">
+                        <img src="path/to/client1.jpg" alt="Client 1" class="client-card__image">
                     </div>
+                    <h3 class="client-card__title">Client Name 1</h3>
+                    <p class="client-card__description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                        eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </div>
             </div>
-        </div> -->
 
-        <div class="swiper__wrapper">
-            <div class="swiper">
-                <div class="swiper-wrapper">
-                    <!-- <div class="swiper-slide">
-                        <div class="revirew">
-                            <svg width="48" height="56" viewBox="0 0 48 56" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M32.6688 55H31.0919V49.3062L12.9573 53.2192V55H11.3803V53.5598L10.1779 53.8207C9.97425 53.8641 9.75743 53.8388 9.57783 53.75C9.39824 53.6612 9.26464 53.5163 9.21426 53.346L8.11918 49.7228C8.01405 49.3768 8.26592 49.0235 8.68424 48.933L11.3803 48.3514V44.7826H9.97863C9.54279 44.7826 9.19017 44.4909 9.19017 44.1304V40.5072C9.19017 40.1467 9.54279 39.8551 9.97863 39.8551H11.3803V37.2844C8.55064 35.9964 7 33.3025 7 29.6377V8.80435C7 6.94746 8.8266 5.43478 11.0737 5.43478C13.3208 5.43478 15.1474 6.94565 15.1474 8.80435V15.2011C15.8373 14.7572 16.7046 14.4928 17.6442 14.4928C18.9912 14.4928 20.187 15.0362 20.9295 15.8714C21.672 15.0362 22.8678 14.4928 24.2147 14.4928C25.1543 14.4928 26.0216 14.7572 26.7115 15.2011V3.36957C26.7115 1.42029 28.4221 0.00543478 30.7787 0C30.7831 0 30.7853 0 30.7896 0C30.794 0 30.7962 0 30.8006 0C33.1528 0.00543478 34.8612 1.42029 34.8612 3.36957V26.7663C34.8612 26.9873 35.0889 27.1757 35.3627 27.1757C35.5379 27.1757 35.654 27.0996 35.7088 27.0562L41.1404 22.6522C41.9113 22.0598 42.8947 21.7409 43.9263 21.7409C46.1712 21.7409 48 23.2518 48 25.1105C48 26.0109 47.5751 26.8569 46.8064 27.4928L37.0732 35.4438C36.0614 36.2826 34.5195 37.2627 32.6688 37.4891V39.8569H34.0705C34.5064 39.8569 34.859 40.1485 34.859 40.5091V44.0525L35.93 47.5978C36.0351 47.9438 35.7832 48.2971 35.3627 48.3877L32.6688 48.9692V55ZM32.5 45L31.6688 46.5978L33 48L33.6688 46.0978L32.5 45ZM12.9573 44.7826V48.0109L27.9227 44.7826H12.9573ZM10.7671 43.4783H33.282V41.1594H10.7671V43.4783ZM12.9573 39.8551H31.0919V36.8841C31.0919 36.5235 31.4445 36.2319 31.8803 36.2319C33.6281 36.2319 35.1875 35.1576 35.9606 34.5181L45.6806 26.5761C46.1624 26.1793 46.4209 25.6612 46.4209 25.1087C46.4209 23.971 45.3017 23.0435 43.9241 23.0435C43.2911 23.0435 42.6888 23.2391 42.2267 23.5942L36.8148 27.9801C36.4293 28.2989 35.9103 28.4783 35.3583 28.4783C34.2129 28.4783 33.2799 27.7101 33.2799 26.7663V3.36957C33.2799 2.11594 32.303 1.30616 30.7874 1.30435C29.2718 1.30616 28.2885 2.11594 28.2885 3.36957V25.1087C28.2885 26.9656 26.4597 28.4783 24.2147 28.4783C22.3268 28.4783 20.6908 27.3514 20.2549 25.8822C19.5475 26.3714 18.6364 26.6667 17.6442 26.6667C15.4365 26.6667 13.5705 25.1232 13.5705 23.2971V8.80435C13.5705 7.66667 12.4491 6.73913 11.0737 6.73913C9.69829 6.73913 8.57692 7.66667 8.57692 8.80435V29.6377C8.57692 31.5598 9.08723 34.9801 12.5017 36.2935C12.7799 36.3985 12.9573 36.6304 12.9573 36.8841V39.8551ZM21.7179 23.2971V25.1087C21.7179 26.2083 22.8853 27.1739 24.2147 27.1739C25.5902 27.1739 26.7115 26.2464 26.7115 25.1087V17.8623C26.7115 16.7246 25.5902 15.7971 24.2147 15.7971C22.8393 15.7971 21.7179 16.7246 21.7179 17.8623V23.2971ZM15.1474 17.8623V23.2971C15.1474 24.3967 16.3148 25.3623 17.6442 25.3623C19.0197 25.3623 20.141 24.4348 20.141 23.2971V17.8623C20.141 16.7246 19.0197 15.7971 17.6442 15.7971C16.2688 15.7971 15.1474 16.7246 15.1474 17.8623Z"
-                                    fill="black" />
-                                <path
-                                    d="M12.9573 39.8551H31.0919V36.8841C31.0919 36.5235 31.4445 36.2319 31.8803 36.2319C33.6281 36.2319 35.1875 35.1576 35.9606 34.5181L45.6806 26.5761C46.1624 26.1793 46.4209 25.6612 46.4209 25.1087C46.4209 23.971 45.3017 23.0435 43.9241 23.0435C43.2911 23.0435 42.6888 23.2391 42.2267 23.5942L36.8148 27.9801C36.4293 28.2989 35.9103 28.4783 35.3583 28.4783C34.2129 28.4783 33.2799 27.7101 33.2799 26.7663V3.36957C33.2799 2.11594 32.303 1.30616 30.7874 1.30435C29.2718 1.30616 28.2885 2.11594 28.2885 3.36957V25.1087C28.2885 26.9656 26.4597 28.4783 24.2147 28.4783C22.3268 28.4783 20.6908 27.3514 20.2549 25.8822C19.5475 26.3714 18.6364 26.6667 17.6442 26.6667C15.4365 26.6667 13.5705 25.1232 13.5705 23.2971V8.80435C13.5705 7.66667 12.4491 6.73913 11.0737 6.73913C9.69829 6.73913 8.57692 7.66667 8.57692 8.80435V29.6377C8.57692 31.5598 9.08723 34.9801 12.5017 36.2935C12.7799 36.3985 12.9573 36.6304 12.9573 36.8841V39.8551Z"
-                                    fill="#FCE7D0" />
-                                <path
-                                    d="M15.1474 17.8623V23.2971C15.1474 24.3967 16.3148 25.3623 17.6442 25.3623C19.0197 25.3623 20.141 24.4348 20.141 23.2971V17.8623C20.141 16.7246 19.0197 15.7971 17.6442 15.7971C16.2688 15.7971 15.1474 16.7246 15.1474 17.8623Z"
-                                    fill="#FCE7D0" />
-                                <path
-                                    d="M21.7179 23.2971V25.1087C21.7179 26.2083 22.8853 27.1739 24.2147 27.1739C25.5902 27.1739 26.7115 26.2464 26.7115 25.1087V17.8623C26.7115 16.7246 25.5902 15.7971 24.2147 15.7971C22.8393 15.7971 21.7179 16.7246 21.7179 17.8623V23.2971Z"
-                                    fill="#FCE7D0" />
-                                <path d="M10.7671 43.4783H33.282V41.1594H10.7671V43.4783Z" fill="#E84E4E" />
-                                <path d="M32.5 45L31.6688 46.5978L33 48L33.6688 46.0978L32.5 45Z" fill="#D4EA2C" />
-                                <path
-                                    d="M28.5937 45.6377L28.1525 47.3877L29.6525 48.3877L30.1709 46.9226L28.5937 45.6377Z"
-                                    fill="#D4EA2C" />
-                                <path d="M24.5623 46.433L24.0623 47.933L25.5 49.5L26 47.5L24.5623 46.433Z"
-                                    fill="#D4EA2C" />
-                                <path d="M20.5 47L20.141 48.933L21.8862 50.3062L22.141 48.433L20.5 47Z"
-                                    fill="#D4EA2C" />
-                                <path d="M16.1442 48.465L15.4116 50.3062L17.5 51.5L18 49.5L16.1442 48.465Z"
-                                    fill="#D4EA2C" />
-                                <path
-                                    d="M11.9997 49.7228L11.4997 51.2228L12.9997 52.2228L13.4997 50.7228L11.9997 49.7228Z"
-                                    fill="#D4EA2C" />
-                                <path d="M8.43513 50.3062L7.93513 51.8062L9.10968 53L8.82553 51.5978L8.43513 50.3062Z"
-                                    fill="#D4EA2C" />
-                                <path d="M35.1338 44.5V45.715L35.954 47.215L36.6338 45.5L35.1338 44.5Z"
-                                    fill="#D4EA2C" />
-                                <path d="M12.9573 44.7826V48.0109L27.9227 44.7826H12.9573Z" fill="#1E267D" />
-                            </svg>
+            <div class="client-card">
+                <div class="client-card__content">
+                    <div class="client-card__image-container">
+                        <img src="path/to/client2.jpg" alt="Client 2" class="client-card__image">
+                    </div>
+                    <h3 class="client-card__title">Client Name 2</h3>
+                    <p class="client-card__description">Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                        laboris nisi ut aliquip ex ea commodo consequat.</p>
+                </div>
+            </div>
 
-                            <div class="review__card">
-                                <div class="review__topboarder"></div>
-                                <img src="assets/images/me.jpg" alt="" class="review__img">
-                                <div class="review__text">
-                                    <span>L</span>
-                                    orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                    unknown printer took a galley of type and scrambled it to make a type specimen
-                                    book. It has survived not only five centuries, but also the leap into electronic
-                                    typesetting, remaining essentially unchanged
-                                </div>
-                                
-                                <div class="review__profile">
-                                    <span>mamad reza</span>
-                                    <span>ayubi</span>
-                                </div>
+            <div class="client-card">
+                <div class="client-card__content">
+                    <div class="client-card__image-container">
+                        <img src="path/to/client3.jpg" alt="Client 3" class="client-card__image">
+                    </div>
+                    <h3 class="client-card__title">Client Name 3</h3>
+                    <p class="client-card__description">Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur.</p>
+                </div>
+            </div>
+
+        </div>
+    </section> -->
+
+
+        <div class="tv-frame">
+
+            <img src="./assets/images/TV/cabinet-width.png" alt="" class="tv-frame__image">
+            <div class="tv-frame__screen">
+                <div class="player-select content-container">
+                    <div class="player-select__header">
+                        <h1>SELECT PLAYER</h1>
+                    </div>
+                    <div class="player-select__images">
+                        <div class="player-select__card">
+                            <!-- <div class="player-select__card--name">
+                                <span>MOHEB</span>
+                            </div> -->
+                            <img src="./assets/images/mamad.png" alt="" data-name="moheb" class="player-select__image">
+                        </div>
+                        <div class="player-select__card">
+                            <!-- <div class="player-select__card--name">
+                                <span>MAMAREZA</span>
+                            </div>  -->
+                            <img src="./assets/images/mamareza2.jpeg" alt="" data-name="mamareza"
+                                class="player-select__image">
+                        </div>
+                        <div class="player-select__card">
+                            <!-- <div class="player-select__card--name">
+                                <span>ASMA</span>
+                            </div>  -->
+                            <img src="./assets/images/asma.jpg" alt="" data-name="asma" class="player-select__image">
+                        </div>
+                        <div class="player-select__card">
+                            <!-- <div class="player-select__card--name">
+                                <span>NIMA</span>
+                            </div>  -->
+                            <img src="./assets/images/nima.png" alt="" data-name="nima" class="player-select__image">
+                        </div>
+                        <div class="player-select__card">
+                            <!-- <div class="player-select__card--name">
+                                <span>AMIN</span>
+                            </div>  -->
+                            <img src="./assets/images/amin.png" alt="" data-name="amin" class="player-select__image">
+                        </div>
+                    </div>
+                    <div class="player-select__info">
+                        <div class="player-select__card--name--responsive">
+                            <span></span>
+                        </div>
+                        <div class="player-select__info--left">
+                            <div class="player-select__info--full-body-image">
+                                <img src="./assets/gifs/mamareza.gif" alt="">
+                            </div>
+                            <div class="player-select__info--stats">
+                                <ul class="stats-stars"></ul>
+                                <ul class="player-stats"></ul>
                             </div>
                         </div>
-                    </div>  -->
+                        <div class="player-select__info--bio">
+                            <h3>BIO:</h3>
+                            <p></p>
 
+                        </div>
+                    </div>
                 </div>
-                <div class="swiper-pagination"></div>
             </div>
         </div>
+        <!-- <section class="black-box">
+        <div class="black-box__wrapper">
+            <div class="cursor-light"></div>
 
-    </div>
+            <div class="light-1"></div>
+            <div class="light-2"></div>
+            <div class="light-3"></div>
+            <div class="light-4"></div>
 
-    <!-- Stacked Services Section -->
-    <!-- <section class="stacked-services">
-        <div class="stacked-services__header">
-            <h2>Our Services</h2>
-            <p>Discover what we do</p>
-        </div>
-
-        <div class="stacked-services__container">
-            <div class="stacked-services__sticky">
-                <div class="service-card card-0">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Brand Identity and Strategy</h2>
-                        <h3 class="service-card__subtitle">Shaping a vision into effective branding</h3>
-                        <p class="service-card__description">
-                            We build strategic roadmaps, guided by creativity and grounded in market trend analysis,
-                            to address your unique goals and define your needs. This is the point where the vision
-                            takes shape, the identity forms, and the branding sets itself apart authentically.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="service-card card-1">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Verbal Identity and Naming</h2>
-                        <h3 class="service-card__subtitle">Turning up the voice your brand needs</h3>
-                        <p class="service-card__description">
-                            It takes more than choosing the right words to build meaningful connections with your
-                            audience. We guide the use of your brand's voice to create a presence that sets you
-                            apart from the first impression to every lasting connection.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="service-card card-2">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Packaging and Print Design</h2>
-                        <h3 class="service-card__subtitle">Taking your brand beyond the screen</h3>
-                        <p class="service-card__description">
-                            From packaging to catalogues, we combine bold aesthetics with purposeful design to bring
-                            your brand into the real world because we know this is the most powerful marketing tool.
-                            Whether on shelves, in hands, or across the city, it's about showing up in the moments
-                            that matter.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="service-card card-3">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Digital Design</h2>
-                        <h3 class="service-card__subtitle">Creating digital experiences that engage</h3>
-                        <p class="service-card__description">
-                            We design intuitive interfaces and immersive digital experiences across web and mobile
-                            platforms. Our approach combines user-centered design with cutting-edge technology to
-                            create solutions that not only look beautiful but also perform seamlessly.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="service-card card-4">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Font Design</h2>
-                        <h3 class="service-card__subtitle">Typography as a brand asset</h3>
-                        <p class="service-card__description">
-                            Custom typefaces and font design that become an integral part of your brand identity.
-                            A unique font elevates your brand presence and creates distinctive visual recognition
-                            in an increasingly crowded digital landscape.
-                        </p>
-                    </div>
-                </div>
+            <div class="black-box__text">
+                <h1>VERY COOOOOOOOOOOOOOOOOL</h1>
+                <h1>VERY COOOOOOOOOOOOOOOOOL</h1>
+                <h1>VERY COOOOOOOOOOOOOOOOOL</h1>
+                <h1>VERY COOOOOOOOOOOOOOOOOL</h1>
+                <h1>VERY COOOOOOOOOOOOOOOOOL</h1>
+                <h1>VERY COOOOOOOOOOOOOOOOOL</h1>
             </div>
         </div>
     </section> -->
-    <section class="stacked-services">
-        <div class="stacked-services__header">
-            <h2>Our Services</h2>
-            <p>Discover what we do</p>
-        </div>
 
-        <div class="stacked-services__container">
-            <div class="stacked-services__sticky">
-                <!-- Card 1: Brand Identity -->
-                <div class="service-card card-0">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Brand Identity and Strategy</h2>
-                        <p class="service-card__description">
-                            We build strategic roadmaps, guided by creativity and grounded in market trend analysis,
-                            to address your unique goals and define your needs. This is the point where the vision
-                            takes shape, the identity forms, and the branding sets itself apart authentically.
-                            We build strategic roadmaps, guided by creativity and grounded in market trend analysis,
-                            to address your unique goals and define your needs. This is the point where the vision
-                            takes shape, the identity forms, and the branding sets itself apart authentically.
-                        </p>
-                        
-                    </div>
-                </div>
+        <section id="contact-us">
+            <div class="test glitch-on-hover">
+                <a href="studio-intro.html">storyyyyyyy</a>
+            </div>
+            <div id="contact-us__wrapper">
+                <div class="contact-us__container content-container">
+                    <h2 class="contact-us__title">Get In Touch</h2>
 
-                <!-- Card 2: Verbal Identity -->
-                <div class="service-card card-1">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Verbal Identity and Naming</h2>
-                        <p class="service-card__description">
-                            It takes more than choosing the right words to build meaningful connections with your
-                            audience. We guide the use of your brand's voice to create a presence that sets you
-                            apart from the first impression to every lasting connection.
-                            We build strategic roadmaps, guided by creativity and grounded in market trend analysis,
-                            to address your unique goals and define your needs. This is the point where the vision
-                            takes shape, the identity forms, and the branding sets itself apart authentically.
-                        </p>
-                    </div>
-                </div>
+                    <form class="contact-form" id="contactForm">
+                        <!-- Text Inputs -->
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        </div>
 
-                <!-- Card 3: Packaging -->
-                <div class="service-card card-2">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Packaging and Print Design</h2>
-                        <p class="service-card__description">
-                            From packaging to catalogues, we combine bold aesthetics with purposeful design to bring
-                            your brand into the real world because we know this is the most powerful marketing tool.
-                            Whether on shelves, in hands, or across the city, it's about showing up in the moments
-                            that matter.
-                            We build strategic roadmaps, guided by creativity and grounded in market trend analysis,
-                            to address your unique goals and define your needs. This is the point where the vision
-                            takes shape, the identity forms, and the branding sets itself apart authentically.
-                        </p>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        </div>
 
-                <!-- Card 4: Digital Design -->
-                <div class="service-card card-3">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Digital Design</h2>
-                        <p class="service-card__description">
-                            We design intuitive interfaces and immersive digital experiences across web and mobile
-                            platforms. Our approach combines user-centered design with cutting-edge technology to
-                            create solutions that not only look beautiful but also perform seamlessly.We build strategic roadmaps, guided by creativity and grounded in market trend analysis,
-                            to address your unique goals and define your needs. This is the point where the vision
-                            takes shape, the identity forms, and the branding sets itself apart authentically.
-                            
-                        </p>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" rows="5" placeholder="Your Message"
+                                required></textarea>
+                        </div>
 
-                <!-- Card 5: Font Design -->
-                <div class="service-card card-4">
-                    <div class="service-card__content">
-                        <h2 class="service-card__title">Font Design</h2>
-                        <p class="service-card__description">
-                            Custom typefaces and font design that become an integral part of your brand identity.
-                            A unique font elevates your brand presence and creates distinctive visual recognition
-                            in an increasingly crowded digital landscape.
-                            We build strategic roadmaps, guided by creativity and grounded in market trend analysis,
-                            to address your unique goals and define your needs. This is the point where the vision
-                            takes shape, the identity forms, and the branding sets itself apart authentically.
-                        </p>
-                    </div>
+                        <!-- Tag Selection: Services -->
+                        <div class="tag-group">
+                            <label class="tag-group__label">What service interests you?</label>
+                            <div class="tag-pills">
+                                <button type="button" class="tag-pill" data-group="service"
+                                    data-value="marketing">Marketing</button>
+                                <button type="button" class="tag-pill" data-group="service"
+                                    data-value="music">Music</button>
+                                <button type="button" class="tag-pill" data-group="service"
+                                    data-value="video">Video</button>
+                                <button type="button" class="tag-pill" data-group="service"
+                                    data-value="website">Website</button>
+                            </div>
+                            <input type="hidden" name="service" id="serviceInput">
+                        </div>
+
+                        <!-- Tag Selection: Vibes -->
+                        <div class="tag-group">
+                            <label class="tag-group__label">Describe your project vibe:</label>
+                            <div class="tag-pills">
+                                <button type="button" class="tag-pill" data-group="vibe" data-value="cool">Cool</button>
+                                <button type="button" class="tag-pill" data-group="vibe"
+                                    data-value="amazing">Amazing</button>
+                                <button type="button" class="tag-pill" data-group="vibe"
+                                    data-value="creative">Creative</button>
+                                <button type="button" class="tag-pill" data-group="vibe" data-value="bold">Bold</button>
+                            </div>
+                            <input type="hidden" name="vibe" id="vibeInput">
+                        </div>
+
+                        <button type="submit" class="contact-form__submit">Send Message</button>
+                    </form>
                 </div>
             </div>
-        </div>
-    </section>
-
-
-
-    <div class="player-select">
-        <div class="player-select__header">
-            <h1>SELECT PLAYER</h1>
-        </div>
-        <div class="player-select__images">
-            <div class="player-select__card">
-                <span>MOHEB</span>
-                <img src="./assets/images/mamad.png" alt="" data-name="moheb" class="player-select__image">
-            </div>
-            <div class="player-select__card">
-                <span>MAMAREZA</span>
-                <img src="./assets/images/mamareza2.png" alt="" data-name="mamareza" class="player-select__image">
-            </div>
-            <div class="player-select__card">
-                <span>ASMA</span>
-                <img src="./assets/images/asma.jpg" alt="" data-name="asma" class="player-select__image">
-            </div>
-            <div class="player-select__card">
-                <span>NIMA</span>
-                <img src="./assets/images/nima.png" alt="" data-name="nima" class="player-select__image">
-            </div>
-        </div>
-        <div class="player-select__info">
-            <div class="player-select__info--full-body-image">
-                <img src="./assets/gifs/mamareza.gif" alt="">
-            </div>
-            <div class="player-select__info--stats">
-                <ul class="stats-stars">
-                    <!-- <li><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></li>
-                    <li><i class="fa-solid fa-star"></i></li>
-                    <li><i class="fa-solid fa-star"></i></li>
-                    <li><i class="fa-solid fa-star"></i></li>
-                    <li><i class="fa-solid fa-star"></i></li> -->
-                </ul>
-                <ul class="player-stats">
-                    <!-- <li><span>CODING</span></li>
-                    <li><span>COOKING</span></li>
-                    <li><span>NEGOTIATION</span></li>
-                    <li><span>VIDEO EDDIT</span></li>
-                    <li><span>CREATIVITY</span></li> -->
-                </ul>
-            </div>
-            <div class="player-select__info--bio">
-                <h3>BIO:</h3>
-                <p></p>
-
-            </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
 
     <script type="module" src="assets/js/app.js"></script>

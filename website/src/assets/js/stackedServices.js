@@ -1,53 +1,32 @@
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-gsap.registerPlugin(ScrollTrigger);
+export function initStackedServices() {
+  const section = document.querySelector(".stacked-services");
 
-document.addEventListener("DOMContentLoaded", () => {
+  if (!section) return;
 
-  // 🟣 HERO SECTION
-  const heroTitleTexts = document.querySelectorAll(".hero-title p");
+  const cards = [...section.querySelectorAll(".service-card")];
 
-  if (heroTitleTexts.length > 0) {
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".landing",
-        start: "top top",
-        end: "+=200%",
-        scrub: 1,
-        pin: ".landing",
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        pinSpacing: true,
-      },
+  if (cards.length === 0) return;
+
+
+  cards.forEach((card) => {
+
+    card.addEventListener("click", () => {
+
+      // Already open → do nothing
+      if (card.classList.contains("is-active")) {
+        return;
+      }
+
+
+      // Close every other card
+      cards.forEach((otherCard) => {
+        otherCard.classList.remove("is-active");
+      });
+
+
+      // Open clicked card
+      card.classList.add("is-active");
     });
 
-    heroTitleTexts.forEach((text) => {
-      tl.to(text, { opacity: 1, duration: 1 });
-      tl.to({}, { duration: 0.5 });
-    });
-  }
-
-
-  const services_card = document.querySelectorAll(".service-card__description");
-
-
-  const tl_2 = gsap.timeline({
-    scrollTrigger: {
-      trigger: ".stacked-services__header",
-      start: "top top",
-      end: "+=120%",
-      scrub: 1,
-      pin: ".stacked-services",
-      anticipatePin: 1,
-      invalidateOnRefresh: true,
-      pinSpacing: true,
-    },
   });
-
-  services_card.forEach((service) => {
-    tl_2.to(service, { height: 'auto' });
-    tl_2.to({}, { duration: .5 });
-    tl_2.to(service, { height: 0 });
-
-  });
-});
+}

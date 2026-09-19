@@ -1,148 +1,324 @@
- @import 'base.scss';
+@import 'base.scss';
+
 
 .stacked-services {
+  font-family: "cartoonistKooky";
+
   position: relative;
   width: 100%;
-  background: #ffffff;
 
-  .stacked-services__header {
-    text-align: center;
-    background: #fff;
-    position: relative;
-    z-index: 100;
-    display: flex;
-    justify-content: space-around;
+  margin: 3rem 0;
+  padding: 2rem 3rem;
 
-    h2 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #411fca;
-      margin: 0;
-    }
 
-    p {
-      font-size: 1.125rem;
-      color: #411fca;
-      margin-top: 1rem;
-    }
+  /* =========================================================
+     INTRO
+     ========================================================= */
+
+  >h1 {
+    font-size: 4rem;
+    margin: 2rem 0;
   }
+
+
+  /* =========================================================
+     CONTAINER
+     ========================================================= */
 
   .stacked-services__container {
     position: relative;
-    background-color: $dark-orange;
+    width: 100%;
   }
 
   .stacked-services__sticky {
-    position: sticky;
-    top: 0;
+    position: relative;
     width: 100%;
-    overflow: visible;
   }
 
+
+  /* =========================================================
+     SERVICE CARD
+     ========================================================= */
+
   .service-card {
+    position: relative;
+
     width: 100%;
-    top: 0;
-    left: 0;
-    border-bottom: 1px solid black;
-    border-top: 1px solid black;
+
     box-sizing: border-box;
+
     overflow: hidden;
+
     color: #fff;
 
-    &.card-0 {
-      background-color: $retro-red;
+    border-bottom: 16px solid #292929;
+
+    cursor: pointer;
+
+
+    /* =======================================================
+       COLORS
+       ======================================================= */
+
+    &.card-youtube {
+      background: $retro-red;
       z-index: 5;
     }
 
-    &.card-1 {
-      background-color: $retro-orange;
+    &.card-branding {
+      background: $retro-orange;
       z-index: 4;
     }
 
-    &.card-2 {
-      background-color: $retro-yellow;
+    &.card-content {
+      background: $retro-yellow;
       z-index: 3;
     }
 
-    &.card-3 {
-      background-color: $retro-light-blue;
+    &.card-marketing {
+      background: $retro-light-blue;
       z-index: 2;
     }
 
-    &.card-4 {
-      background-color: $retro-dark-blue;
+    &.card-artists {
+      background: $retro-dark-blue;
       z-index: 1;
     }
 
-    &.active {
-      transform: translateY(0);
-      opacity: 1;
-    }
+
+    /* =======================================================
+       CARD CONTENT
+       ======================================================= */
 
     .service-card__content {
-      max-width: 900px;
-      margin: 0 auto;
-      opacity: 1;
-      transform: translateY(0);
-      transition: all 0.6s ease;
+      position: relative;
+
+      padding-top: 1px;
     }
+
+
+    /* =======================================================
+       TITLE
+       ======================================================= */
 
     .service-card__title {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin: 1rem;
+      margin: 1rem 0;
+
+      text-shadow: 2px 2px #282828;
+
+      user-select: none;
     }
 
-    .service-card__subtitle {
-      font-size: 1.75rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      opacity: 0.9;
-    }
 
-    .service-card__description.is-visible {
-      opacity: 1;
-      display: block;
-    }
-
+    /* =======================================================
+       DESCRIPTION
+       ======================================================= */
 
     .service-card__description {
-      height: 0;
+      display: grid;
+
+      /*
+       * CLOSED STATE
+       *
+       * The description exists in the DOM but has no
+       * visible height.
+       */
+
+      grid-template-rows: 0fr;
+
+      width: 100%;
+
       overflow: hidden;
+
       font-size: 1.125rem;
-      transition: opacity 0.8s ease;
       line-height: 1.7;
-      margin-bottom: 1rem;
+
+      transition:
+        grid-template-rows 0.7s ease;
+    }
+
+
+    /* =======================================================
+       DESCRIPTION INNER
+       ======================================================= */
+
+    .service-card__description-inner {
+      min-height: 0;
+
+      overflow: hidden;
+
+      display: flex;
+    }
+
+
+    /* =======================================================
+       DESCRIPTION HEADING
+       ======================================================= */
+
+    .service-card__description h1 {
+      width: 50%;
+
+      margin: 0;
+
+      font-size: 5rem;
+      font-weight: 600;
+
+      text-shadow: 3px 3px #282828;
+    }
+
+
+    /* =======================================================
+       DESCRIPTION PARAGRAPH
+       ======================================================= */
+
+    .service-card__description p {
+      width: 50%;
+
+      padding-left: 2rem;
+
+      margin: 0 0 2rem;
+
+      text-shadow: 2px 2px #282828;
+    }
+
+
+    /* =======================================================
+       DESCRIPTION LIST
+       ======================================================= */
+
+    .service-card__description ul {
+      width: 50%;
+
+      padding-left: 2rem;
+
+      margin-bottom: 2rem;
+
+      list-style: disc;
+    }
+
+    .service-card__description li {
+      list-style: disc;
     }
   }
-}
 
-@media (max-width: 768px) {
-  .stacked-services__header {
-    padding: 2rem 1rem 1rem;
 
-    h2 {
-      font-size: 1.75rem;
-    }
+  /* =========================================================
+     ACTIVE CARD
+     
+     IMPORTANT:
+     This is OUTSIDE .service-card.
+     
+     HTML:
+     .service-card.card-content.is-active
+     
+     Therefore this selector correctly becomes:
+     .stacked-services .service-card.is-active
+     ========================================================= */
 
-    p {
-      font-size: 1rem;
-    }
-  }
-
-  .service-card {
-    padding: 1.5rem 2rem;
-
-    .service-card__title {
-      font-size: 1.8rem;
-    }
-
-    .service-card__subtitle {
-      font-size: 1.2rem;
-    }
+  .service-card.is-active {
 
     .service-card__description {
-      font-size: 1rem;
+      grid-template-rows: 1fr;
+    }
+  }
+
+
+  /* =========================================================
+     TABLET
+     ========================================================= */
+
+  @media (max-width: 768px) {
+
+    padding: 2rem 1rem;
+
+
+    .service-card {
+
+      border-bottom-width: 10px;
+
+
+      .service-card__title {
+        font-size: 1.8rem;
+      }
+
+
+      .service-card__description {
+        font-size: 1rem;
+      }
+
+
+      .service-card__description h1 {
+        font-size: 3rem;
+      }
+    }
+  }
+
+
+  /* =========================================================
+     SMALL MOBILE
+     ========================================================= */
+
+  @media (max-width: 650px) {
+
+    .service-card {
+
+      .service-card__description-inner {
+        flex-direction: column;
+      }
+
+
+      .service-card__description h1 {
+        width: 100%;
+      }
+
+
+      .service-card__description p {
+        width: 100%;
+
+        padding-left: 0;
+      }
+
+
+      .service-card__description ul {
+        width: 100%;
+
+        padding-left: 1.5rem;
+
+        margin-top: 1rem;
+      }
+    }
+  }
+
+
+  /* =========================================================
+     PHONE
+     ========================================================= */
+
+  @media (max-width: 430px) {
+
+    padding: 1rem;
+
+
+    >h1 {
+      font-size: 2rem;
+
+      margin: 1.5rem 0;
+    }
+
+
+    .service-card {
+
+      border-bottom-width: 8px;
+
+
+      .service-card__title {
+        font-size: 16px;
+      }
+
+
+      .service-card__description h1 {
+        font-size: 2rem;
+      }
     }
   }
 }
