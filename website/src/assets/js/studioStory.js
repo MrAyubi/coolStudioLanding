@@ -1,4 +1,4 @@
-import starwarsTheme from '../sounds/starwars.mp3';
+import starwarsTheme from 'url:../sounds/starwars.mp3';
 
 
 // studio-intro.js

@@ -6,3 +6,12 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 Thumbs.db
+
+# Parcel 2 build cache
+.parcel-cache/
+
+# MCP browser-automation screenshots
+.playwright-mcp/
+
+# Machine-local Claude Code settings
+**/.claude/settings.local.json

@@ -1,5 +1,5 @@
 const images = document.querySelectorAll('.player-select__image');
-import hoverSound from '../sounds/playerSelect.mp3';
+import hoverSound from 'url:../sounds/playerSelect.mp3';
 
 const sound = new Audio(hoverSound);
 

@@ -10,8 +10,8 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.16.0",
-    "parcel-bundler": "^1.12.5",
+    "@parcel/transformer-sass": "^2.16.4",
+    "parcel": "^2.16.4",
     "sass": "^1.89.2"
   },
   "dependencies": {

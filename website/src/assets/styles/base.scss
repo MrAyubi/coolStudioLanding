@@ -1,41 +1,41 @@
 @font-face {
     font-family: "streetOfRage";
-    src: url("/assets/fonts/streets-of-rage-2-3-cyr.woff2") format("woff2");
+    src: url("../fonts/streets-of-rage-2-3-cyr.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: "verycool";
-    src: url("/assets/fonts/verycoolfont.ttf") format("woff2");
+    src: url("../fonts/verycoolfont.ttf") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: "dasher";
-    src: url("/assets/fonts/DASHER.ttf") format("woff2");
+    src: url("../fonts/DASHER.ttf") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: "cartoonistKooky";
-    src: url("/assets/fonts/cartoonist_kooky.ttf") format("woff2");
+    src: url("../fonts/cartoonist_kooky.ttf") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: "cartoonistKooky";
-    src: url("/assets/fonts/cartoonist_kooky.ttf") format("woff2");
+    src: url("../fonts/cartoonist_kooky.ttf") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'Poppins';
-    src: url("/assets/fonts/Poppins-Regular.ttf") format("ttf");
+    src: url("../fonts/Poppins-Regular.ttf") format("ttf");
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -43,7 +43,7 @@
 
 @font-face {
     font-family: 'Poppins';
-    src: url("/assets/fonts/Poppins-Medium.ttf") format("ttf");
+    src: url("../fonts/Poppins-Medium.ttf") format("ttf");
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -51,7 +51,7 @@
 
 @font-face {
     font-family: 'Poppins';
-    src: url("/assets/fonts/Poppins-Bold.ttf") format("ttf");
+    src: url("../fonts/Poppins-Bold.ttf") format("ttf");
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -59,7 +59,7 @@
 
 @font-face {
     font-family: 'starwarsOutline';
-    src: url("/assets/fonts/starwarsOutline.ttf") format("truetype");
+    src: url("../fonts/starwarsOutline.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -67,7 +67,7 @@
 
 @font-face {
     font-family: 'starwarsAlternate';
-    src: url("/assets/fonts/starwarsAlternate.ttf") format("truetype");
+    src: url("../fonts/starwarsAlternate.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -75,7 +75,7 @@
 
 @font-face {
     font-family: 'starwars';
-    src: url("/assets/fonts/starwars.ttf") format("truetype");
+    src: url("../fonts/starwars.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -83,7 +83,7 @@
 
 @font-face {
     font-family: 'lilitaOne';
-    src: url("/assets/fonts/LilitaOne.ttf") format("truetype");
+    src: url("../fonts/LilitaOne.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -91,7 +91,7 @@
 
 @font-face {
     font-family: 'bebas';
-    src: url("/assets/fonts/BebasNeue-Regular.ttf") format("truetype");
+    src: url("../fonts/BebasNeue-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -151,7 +151,7 @@ body::before {
     position: fixed; // fixed = its own compositing layer, immune to pin-spacer/reflow
     inset: 0;
     z-index: -1;
-    background-image: image-set(url('/assets/images/background/black_tuxture.webp') type('image/webp'));
+    background-image: image-set(url('../images/background/black_tuxture.webp') type('image/webp'));
     background-color: #0a0a0a;
     background-size: auto;
     background-repeat: repeat;
