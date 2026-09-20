@@ -1,0 +1,43 @@
+# Two ways to run the site. Pick one by name:
+#
+#   docker compose up web    -> http://localhost:8080  (production build, nginx)
+#   docker compose up dev    -> http://localhost:1234  (Parcel, hot reload)
+#
+# A bare `docker compose up` starts both at once.
+
+services:
+  web:
+    build:
+      context: .
+      target: runtime
+    image: coolstudio-web
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    healthcheck:
+      # 127.0.0.1, not localhost: inside the container localhost resolves to
+      # ::1 first and nginx only binds IPv4, so busybox wget gets ECONNREFUSED.
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  dev:
+    build:
+      context: .
+      target: dev
+    image: coolstudio-dev
+    ports:
+      - "1234:1234"
+    volumes:
+      # Only src/ is mounted. Mounting the whole website/ directory would let
+      # the host's node_modules and dist shadow the container's, which is the
+      # usual source of "works locally, breaks in Docker".
+      # Trade-off: changing package.json needs `docker compose build dev`.
+      - ./website/src:/app/src
+      # .parcel-cache is deliberately NOT a named volume. Persisting it across
+      # container recreation reproduces the stale-build issue documented in
+      # website/CLAUDE.md ("Parcel Caching") - deleted CSS rules kept being
+      # served after the source was reverted. A cold bundle costs ~2.5s, which
+      # is not worth that confusion.

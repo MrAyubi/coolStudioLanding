@@ -8,6 +8,36 @@ This is a creative portfolio/landing page for "Cool Studio" - an interactive, an
 
 ## Development Commands
 
+### With Docker (recommended - no local Node required)
+
+Full guide: [`../README_DOCKER.md`](../README_DOCKER.md).
+
+Run from the **repository root** (`coolwebsite/`, one level above this file):
+
+```bash
+docker compose up dev     # Parcel dev server + hot reload -> http://localhost:1234
+docker compose up web     # production build served by nginx -> http://localhost:8080
+```
+
+Add `--build` after changing `package.json` (dependencies are baked into the image):
+```bash
+docker compose up --build dev
+```
+
+Notes:
+- A bare `docker compose up` starts **both** services at once.
+- The `dev` service bind-mounts only `website/src`, so edits on the host hot-reload
+  in the container. Everything else (`node_modules`, `dist`) lives inside the image.
+- The `web` service runs the real production artifact: Parcel build output served by
+  nginx with gzip and long-lived caching for hashed assets. No Node at runtime.
+- Hot reload through the bind mount is verified on Linux. It is expected to work on
+  macOS via Docker Desktop, but has not been tested there; if the watcher misbehaves,
+  `docker compose up web` (rebuild to see changes) is the fallback.
+
+### With local Node
+
+Requires Node 22 (see `.nvmrc`).
+
 **Start development server:**
 ```bash
 npm run dev
@@ -18,7 +48,7 @@ Opens development server with Parcel at http://localhost:1234 with hot reload en
 ```bash
 npm run build
 ```
-Note: There's a typo in package.json - the build command incorrectly reads `npx parcel src/build index.html` but should likely be `npx parcel build src/index.html`.
+Builds both entry points (`src/index.html` and `src/studio-intro.html`) into `dist/`.
 
 ## Project Architecture
 
@@ -101,7 +131,11 @@ Note: There's a typo in package.json - the build command incorrectly reads `npx 
 ## Common Pitfalls
 
 **Parcel Caching:**
-The `.parcel-cache` directory can cause stale build issues. Delete it if experiencing odd bundling behavior.
+The `.parcel-cache` directory can cause stale build issues - notably, a deleted CSS
+rule can keep being served after the source is reverted. Delete it if experiencing odd
+bundling behavior. In Docker this cache is intentionally not persisted across container
+recreation, so `docker compose up dev` always starts from a clean cache; if a running
+dev container goes stale, `docker compose up -d --force-recreate dev` resets it.
 
 **Asset Path Resolution:**
 Parcel transforms paths differently in dev vs production. Use relative paths from `src/` directory (e.g., `./assets/images/file.png`).
