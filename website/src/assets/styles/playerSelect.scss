@@ -108,13 +108,15 @@
     // }
 
     &__images {
-        width: 40%;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        flex-wrap: wrap;
+        flex-flow: row wrap;
         justify-content: center;
         align-items: center;
+        gap: 10px;
+        height: fit-content;
+        width: 40%;
+        display: flex;
+        margin-top: 4rem;
+        margin-bottom: auto;
 
 
         @media (max-width: 430px) {
