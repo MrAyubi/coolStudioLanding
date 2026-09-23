@@ -20,15 +20,19 @@
     }
 }
 
+// step-end, not steps(2): timing functions apply per keyframe segment, so steps(2)
+// held a half-transparent fill for ~6ms inside the 49%->50% segment every cycle.
 .shine_a {
-    animation: sunShineColorChange 1.2s steps(2) infinite;
-    -webkit-animation-delay: .6s;
-    -o-animation-delay: .6s;
-    animation-delay: .6s;
+    animation: sunShineColorChange 1.2s step-end infinite;
+    // Negative delay starts shine_a half a cycle in (transparent) instead of idling
+    // for .6s with the SVG default fill, which is black.
+    -webkit-animation-delay: -.6s;
+    -o-animation-delay: -.6s;
+    animation-delay: -.6s;
 }
 
 .shine_b {
-    animation: sunShineColorChange 1.2s steps(2) infinite;
+    animation: sunShineColorChange 1.2s step-end infinite;
 
 }
 

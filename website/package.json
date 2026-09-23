@@ -9,6 +9,20 @@
   "author": "",
   "license": "ISC",
   "description": "",
+  "htmlnano": {
+    "minifySvg": {
+      "plugins": [
+        {
+          "name": "preset-default",
+          "params": {
+            "overrides": {
+              "mergePaths": false
+            }
+          }
+        }
+      ]
+    }
+  },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.16.4",
     "parcel": "^2.16.4",
