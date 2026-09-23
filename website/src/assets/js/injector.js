@@ -10,7 +10,8 @@ const fullBodyImage = document.querySelector(".player-select__info--full-body-im
 const statList = document.querySelector(".player-stats");
 const starList = document.querySelector(".stats-stars");
 const bioBox = document.querySelector(".player-select__info--bio p");
-const playerNameResponsive = document.querySelector(".player-select__card--name--responsive span")
+// const playerNameResponsive = document.querySelector(".player-select__card--name--responsive span")
+const playerNameDesktop = document.querySelector(".player-select-descktop-name span")
 let prv_img;
 
 function injectPlayerInputs(img) {
@@ -31,7 +32,9 @@ function injectPlayerInputs(img) {
     let player_stats_star = ``;
     fullBodyImage.src = player_info['gif'];
     bioBox.innerHTML = player_info['bio'];
-    playerNameResponsive.innerHTML = player_info['name']
+    // playerNameResponsive.innerHTML = player_info['name']
+    playerNameDesktop.innerHTML = player_info['name']
+
     player_info['skills'].forEach(skill => {
         player_stats += `<li><span>${skill['name']}</span></li>`;
         player_stats_star += `<li>${'<i class="fa-solid fa-star"></i>'.repeat(skill['score'])}</li>`;
