@@ -1,17 +1,39 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+
+# Caches (Parcel 2 build cache, linters, npm)
 .cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.npm/
+
+# Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.DS_Store
-Thumbs.db
 
-# Parcel 2 build cache
-.parcel-cache/
+# Environment variables - never commit real values.
+# Commit a .env.example with placeholder values instead.
+.env
+.env.*
+*.env
+!.env.example
+
+# Machine-local tool and editor config
+**/.claude/settings.local.json
+.vscode/
+.idea/
+*.swp
+*.swo
 
 # MCP browser-automation screenshots
 .playwright-mcp/
 
-# Machine-local Claude Code settings
-**/.claude/settings.local.json
+# OS files
+.DS_Store
+Thumbs.db
