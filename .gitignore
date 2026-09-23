@@ -24,6 +24,17 @@ yarn-error.log*
 *.env
 !.env.example
 
+# SSH keys and certificates - never commit, even public halves.
+*.pem
+*.key
+*.pub
+id_rsa*
+id_ecdsa*
+id_ed25519*
+
+# Working docs (design notes, setup prompts describing the VPS) - kept local.
+website/docs/*
+
 # Machine-local tool and editor config
 **/.claude/settings.local.json
 .vscode/
