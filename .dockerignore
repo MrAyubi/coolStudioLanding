@@ -1,27 +1,15 @@
-# Dependencies and build artifacts are produced inside the image, never copied in.
-node_modules/
-**/node_modules/
-website/dist/
-website/.parcel-cache/
-.cache/
+# Allowlist: exclude everything, then re-include only what the Dockerfile COPYs.
+# Adding a new COPY source? Add a matching `!` line here, or the build fails
+# with "not found".
+*
+!nginx.conf
+!website/package.json
+!website/package-lock.json
+!website/src/
 
-# Browser-automation screenshots
-website/.playwright-mcp/
-
-# Version control and editor cruft
-.git/
-.gitignore
+# Junk that can live inside the allowed paths. Unlike .gitignore, patterns
+# here only match from the repo root, so `**/` is needed to match at any depth.
 **/.DS_Store
-Thumbs.db
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Docker's own files and docs - changing them shouldn't bust the build cache
-Dockerfile
-docker-compose.yml
-.dockerignore
-docs/
-website/docs/
-*.md
-**/.claude/
+**/Thumbs.db
+**/.env*
+website/src/deleted codes/
