@@ -25,7 +25,9 @@ if (section) {
             if (!label) return;
             if (isMobile()) {
                 if (panel.classList.contains("is-active")) {
-                    label.style.visibility = "hidden"
+                    label.style.top = "18%"
+                    label.style.transform = "rotate(0deg)";
+
 
 
 
@@ -33,12 +35,16 @@ if (section) {
                     label.style.transform = "rotate(90deg)";
                     label.style.left = "0%"
                     label.style.visibility = "visible"
+                    label.style.top = "40%"
+
 
 
                 } else {
                     label.style.transform = "rotate(0deg)";
                     label.style.left = "0%"
                     label.style.visibility = "visible"
+                    label.style.top = "50%"
+
 
 
                 }
@@ -47,18 +53,22 @@ if (section) {
 
 
             if (panel.classList.contains("is-active")) {
-                label.style.visibility = "hidden"
+                label.style.top = "18%"
+                label.style.transform = "rotate(0deg)";
+
 
 
 
             } else if (section.classList.contains("has-active")) {
                 label.style.transform = "rotate(90deg)";
                 label.style.visibility = "visible"
+                label.style.top = "50%"
 
 
             } else {
                 label.style.transform = "rotate(0deg)";
                 label.style.visibility = "visible"
+                label.style.top = "50%"
 
 
             }
