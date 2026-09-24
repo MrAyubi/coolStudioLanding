@@ -7,8 +7,8 @@ let players_select_data = {
         name: "MAMAREZA",
         skills: [
             { name: 'CODING', score: 2 },
-            { name: 'COOKING', score: 3 },
-            { name: 'NEGOTIATION', score: 3 },
+            { name: 'multitasking', score: 3 },
+            { name: 'NEGOTIATION', score: 2 },
             { name: 'descipline', score: 1 },
             { name: 'CREATIVITY', score: 3 }
         ],
@@ -42,11 +42,11 @@ let players_select_data = {
     moheb: {
         name: "MOHEB",
         skills: [
-            { name: 'MOHEBskill', score: 1 },
-            { name: 'MOHEBskill2', score: 2 },
-            { name: 'MOHEBskill3', score: 3 },
-            { name: 'MOHEBskill4', score: 2 },
-            { name: 'MOHEBskill5', score: 1 }
+            { name: 'Framing', score: 3 },
+            { name: 'Scissor skills', score: 3 },
+            { name: 'using a stabiliser', score: 1 },
+            { name: 'lighting', score: 2 },
+            { name: 'focus', score: 3 }
         ],
         bio: "He has a samurai within.<br/>Every shot is a discipline. Every frame, a strike.And yes he carries a katana.",
         gif: gifs.mohebGif
@@ -54,11 +54,11 @@ let players_select_data = {
     amin: {
         name: "AMIN",
         skills: [
-            { name: 'AMINskill', score: 1 },
-            { name: 'AMINskill2', score: 2 },
-            { name: 'AMINskill3', score: 3 },
-            { name: 'AMINskill4', score: 2 },
-            { name: 'AMINskill5', score: 1 }
+            { name: 'Directing', score: 3 },
+            { name: 'Technical Skills', score: 2 },
+            { name: 'Anthropology', score: 3 },
+            { name: 'Punching', score: 3 },
+            { name: 'Politeness', score: 1 }
         ],
         bio: "Amin bio . This will stop working in the next major version of npm..",
         gif: gifs.aminGif
