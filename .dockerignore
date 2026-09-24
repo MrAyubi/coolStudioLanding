@@ -3,6 +3,7 @@
 # with "not found".
 *
 !nginx.conf
+!origin-cert.sh
 !website/package.json
 !website/package-lock.json
 !website/src/

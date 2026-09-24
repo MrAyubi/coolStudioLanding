@@ -44,7 +44,10 @@ files. There is no Node in the final image.
 docker compose up web          # http://localhost
 ```
 
-- Port **80** → container port 80 (the same port the VPS serves the domain on)
+- Ports **80** and **443** → the same nginx server (the ports the VPS serves the domain
+  on). `https://localhost` works too, but its certificate is self-signed, so the browser
+  warns about it. That's expected: the certificate is only there for ParsPack's CDN,
+  which doesn't verify it. Visitors see the CDN's own certificate.
 - Image `coolstudio-web`, ~93 MB (mostly the site's own video and image assets)
 - `restart: unless-stopped` — comes back after a reboot or daemon restart
 - Has a healthcheck, so `docker compose ps` reports `healthy` rather than just `Up`
@@ -137,7 +140,7 @@ The dependency install is a separate cached layer, so a source-only rebuild skip
 ```
 deps  ──┬──> dev      (target: dev)     Parcel dev server, port 1234
         │
-        └──> build ──> runtime          nginx serving dist/, port 80
+        └──> build ──> runtime          nginx serving dist/, ports 80 + 443
                        (target: runtime)
 ```
 
@@ -152,6 +155,9 @@ deps  ──┬──> dev      (target: dev)     Parcel dev server, port 1234
 - **`build`** — adds the source and runs `npx parcel build 'src/*.html'`, producing
   `/app/dist`. Both entry points are built: `index.html` and `studio-intro.html`.
 - **`runtime`** — `nginx:1.27-alpine` with `dist/` copied to the web root and no Node.
+  It adds `openssl` and `origin-cert.sh`, which makes a self-signed certificate for
+  port 443 when the container first starts (mount a real one over
+  `/etc/nginx/certs/origin.crt` + `origin.key` to replace it).
 
 ### Two details that matter
 
@@ -170,12 +176,13 @@ context from ~345 MB to ~52 MB. If builds suddenly get slow, check it first.
 
 **Port already in use**
 
-Something else holds 80 or 1234 (a local Apache or nginx often owns 80). Either stop it, or remap the host side — only the
+Something else holds 80, 443 or 1234 (a local Apache or nginx often owns 80). Either stop it, or remap the host side — only the
 left number changes:
 
 ```yaml
 ports:
   - "3000:80"      # web, now at http://localhost:3000
+  - "3443:443"     # and https://localhost:3443
 ```
 
 **`dev` doesn't pick up my edits**
@@ -242,7 +249,7 @@ from the host:
 
 ```bash
 docker compose build web
-docker run --rm -p 80:80 coolstudio-web
+docker run --rm -p 80:80 -p 443:443 coolstudio-web
 ```
 
 The site must be served from the **web root**, not a sub-path. To push it to a

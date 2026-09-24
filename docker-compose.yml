@@ -1,6 +1,7 @@
 # Two ways to run the site. Pick one by name:
 #
-#   docker compose up web    -> http://localhost       (production build, nginx)
+#   docker compose up web    -> http://localhost       (production build, nginx;
+#                               also https://localhost, self-signed)
 #   docker compose up dev    -> http://localhost:1234  (Parcel, hot reload)
 #
 # A bare `docker compose up` starts both at once.
@@ -12,9 +13,11 @@ services:
       target: runtime
     image: coolstudio-web
     ports:
-      # Port 80 because this is what the VPS runs, and a domain can't carry a
-      # port: browsers and ParsPack's CDN both look for the site on 80.
+      # 80 and 443 because a domain can't carry a port: ParsPack's CDN connects
+      # to the VPS on 80 for HTTP visitors and on 443 for HTTPS ones. Both reach
+      # the same nginx server block (nginx.conf).
       - "80:80"
+      - "443:443"
     restart: unless-stopped
     healthcheck:
       # 127.0.0.1, not localhost: inside the container localhost resolves to

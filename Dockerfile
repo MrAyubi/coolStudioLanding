@@ -49,7 +49,12 @@ RUN npx parcel build 'src/*.html'
 # ---------------------------------------------------------------------------
 FROM nginx:1.27-alpine AS runtime
 
+# openssl makes the self-signed certificate for port 443 (origin-cert.sh). The
+# nginx image doesn't include it.
+RUN apk add --no-cache openssl
+
+COPY --chmod=755 origin-cert.sh /docker-entrypoint.d/40-origin-cert.sh
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 80 443
