@@ -3,7 +3,9 @@ import starwarsTheme from 'url:../sounds/starwars.mp3';
 
 // studio-intro.js
 // Controls the .title-content crawl position.
-// Auto-plays after CRAWL_START_DELAY_MS. While the user scrolls, the
+// Nothing starts until the visitor presses the start screen (browsers block
+// music without a user gesture). Auto-plays CRAWL_START_DELAY_MS after that
+// start; the music comes in at AUDIO_START_DELAY_MS. While the user scrolls, the
 // animation pauses and the scroll drives the position directly. When
 // scrolling stops, auto-play resumes from wherever the user left off.
 
@@ -128,6 +130,32 @@ function onTouchMove(e) {
   }, SCROLL_RESUME_MS);
 }
 
+// ── Start gate ───────────────────────────────────────────────────────────────
+
+// Keys that shouldn't start the intro (focus navigation, modifiers, and Esc,
+// which browsers don't count as a user gesture).
+const IGNORED_START_KEYS = ['Tab', 'Escape', 'Shift', 'Control', 'Alt', 'Meta'];
+
+function startIntro(stage, audio) {
+  if (stage.classList.contains('is-started')) return;
+  stage.classList.add('is-started'); // kicks off the CSS text + logo animations
+
+  // iOS Safari only lets an element play if play() is first called inside the
+  // user's gesture, and the real play() below runs from a timer. Calling it
+  // here unlocks the element; pausing straight away keeps it silent.
+  audio.play().catch(() => {});
+  audio.pause();
+
+  setTimeout(() => {
+    crawlStarted = true;
+    startAutoPlay();
+  }, CRAWL_START_DELAY_MS);
+
+  setTimeout(() => {
+    audio.play().catch((err) => console.warn('Intro music could not start:', err));
+  }, AUDIO_START_DELAY_MS);
+}
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 
 function initCrawl() {
@@ -142,17 +170,15 @@ function initCrawl() {
   stage.addEventListener('touchstart', onTouchStart, { passive: true });
   stage.addEventListener('touchmove', onTouchMove, { passive: false });
 
-  // Start auto-play after the same delay as the original CSS (4 s)
-  setTimeout(() => {
-    crawlStarted = true;
-    startAutoPlay();
-  }, CRAWL_START_DELAY_MS);
+  // Created up front so the track buffers while the start screen is showing
   const audio = new Audio(starwarsTheme);
   audio.volume = 1.0;
 
-  setTimeout(() => {
-    audio.play();
-  }, AUDIO_START_DELAY_MS);
+  const start = () => startIntro(stage, audio);
+  stage.querySelector('.start-screen')?.addEventListener('click', start);
+  document.addEventListener('keydown', (e) => {
+    if (!IGNORED_START_KEYS.includes(e.key)) start();
+  });
 }
 
 // Run after DOM is ready

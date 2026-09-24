@@ -137,6 +137,16 @@ bundling behavior. In Docker this cache is intentionally not persisted across co
 recreation, so `docker compose up dev` always starts from a clean cache; if a running
 dev container goes stale, `docker compose up -d --force-recreate dev` resets it.
 
+**Browser Targets:**
+`browserslist` in `package.json` sets the oldest supported browsers (Safari/iOS 14, Chrome 87).
+Don't remove it: without it Parcel targets only the latest browsers, resolves every asset
+through an import map + `import.meta.resolve`, and writes media queries in range syntax
+(`width<=720px`). On Safari/iOS < 16.4 that breaks all JS and ignores every breakpoint.
+
+**Autoplay:**
+Browsers block audio until the visitor interacts. `studio-intro.html` waits on a
+"press to start" screen for this reason; don't make it autostart again.
+
 **Asset Path Resolution:**
 Parcel transforms paths differently in dev vs production. Use relative paths from `src/` directory (e.g., `./assets/images/file.png`).
 

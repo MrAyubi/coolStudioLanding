@@ -23,6 +23,13 @@
       ]
     }
   },
+  "browserslist": [
+    "chrome >= 87",
+    "edge >= 88",
+    "firefox >= 79",
+    "safari >= 14",
+    "ios_saf >= 14"
+  ],
   "devDependencies": {
     "@parcel/transformer-sass": "^2.16.4",
     "parcel": "^2.16.4",
