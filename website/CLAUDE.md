@@ -16,7 +16,7 @@ Run from the **repository root** (`coolwebsite/`, one level above this file):
 
 ```bash
 docker compose up dev     # Parcel dev server + hot reload -> http://localhost:1234
-docker compose up web     # production build served by nginx -> http://localhost:8080
+docker compose up web     # production build served by nginx -> http://localhost
 ```
 
 Add `--build` after changing `package.json` (dependencies are baked into the image):

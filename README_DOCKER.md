@@ -15,7 +15,7 @@ docker --version && docker compose version
 ## TL;DR
 
 ```bash
-docker compose up web     # production site  -> http://localhost:8080
+docker compose up web     # production site  -> http://localhost
 docker compose up dev     # live-editing     -> http://localhost:1234
 ```
 
@@ -32,7 +32,7 @@ runs just that one.
 > Compose profiles are an opt-in mechanism where a service stays hidden until you pass
 > `--profile <name>`. That indirection buys nothing with only two services, so it isn't
 > used here — you select a mode by naming the service directly. The practical
-> difference: a bare `docker compose up` starts **both** services at once (ports 8080
+> difference: a bare `docker compose up` starts **both** services at once (ports 80
 > and 1234 together). That is usually not what you want; name the one you need.
 
 ### `web` — production
@@ -41,10 +41,10 @@ What ships. Parcel builds the optimized bundle, and nginx serves the result as s
 files. There is no Node in the final image.
 
 ```bash
-docker compose up web          # http://localhost:8080
+docker compose up web          # http://localhost
 ```
 
-- Port **8080** → container port 80
+- Port **80** → container port 80 (the same port the VPS serves the domain on)
 - Image `coolstudio-web`, ~93 MB (mostly the site's own video and image assets)
 - `restart: unless-stopped` — comes back after a reboot or daemon restart
 - Has a healthcheck, so `docker compose ps` reports `healthy` rather than just `Up`
@@ -80,7 +80,7 @@ Use `dev` for day-to-day work.
 
 |  | `web` | `dev` |
 |---|---|---|
-| URL | http://localhost:8080 | http://localhost:1234 |
+| URL | http://localhost | http://localhost:1234 |
 | Serves | nginx + built `dist/` | Parcel dev server |
 | Hot reload | no | yes |
 | Node at runtime | no | yes |
@@ -170,7 +170,7 @@ context from ~345 MB to ~52 MB. If builds suddenly get slow, check it first.
 
 **Port already in use**
 
-Something else holds 8080 or 1234. Either stop it, or remap the host side — only the
+Something else holds 80 or 1234 (a local Apache or nginx often owns 80). Either stop it, or remap the host side — only the
 left number changes:
 
 ```yaml
@@ -242,7 +242,7 @@ from the host:
 
 ```bash
 docker compose build web
-docker run --rm -p 8080:80 coolstudio-web
+docker run --rm -p 80:80 coolstudio-web
 ```
 
 The site must be served from the **web root**, not a sub-path. To push it to a
