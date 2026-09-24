@@ -35,6 +35,10 @@ id_ed25519*
 # Working docs (design notes, setup prompts describing the VPS) - kept local.
 website/docs/*
 
+# VPS deploy script and its guide - kept local, handed to developers directly.
+/deploy.sh
+/DEPLOY.md
+
 # Machine-local tool and editor config
 **/.claude/settings.local.json
 .vscode/
