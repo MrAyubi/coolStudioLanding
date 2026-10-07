@@ -1,5 +1,14 @@
 @import "./base.scss";
 
+// Breakpoints for the player select section.
+// Phones and portrait tablets share the stacked (single column) layout; landscape
+// tablets have enough width for the desktop side-by-side layout.
+$phone: "(max-width: 430px)";
+$tablet-portrait: "(min-width: 431px) and (max-width: 1024px) and (orientation: portrait)";
+$stacked: "#{$phone}, #{$tablet-portrait}";
+// Landscape tablets keep the side-by-side layout, but in a more compact version.
+$tablet-landscape: "(min-width: 431px) and (max-width: 1180px) and (orientation: landscape)";
+
 .tv-frame {
     position: relative;
     height: 100vh;
@@ -13,7 +22,7 @@
         width: 100%;
         pointer-events: none;
 
-        @media (max-width: 430px) {
+        @media #{$phone} {
             scale: 1.2;
         }
     }
@@ -27,7 +36,7 @@
         right: 14.25%;
         overflow: hidden;
 
-        @media (max-width: 430px) {
+        @media #{$phone} {
             top: 4%;
             bottom: 13.6%;
             left: 7.25%;
@@ -49,7 +58,7 @@
     height: 100%;
     background: black;
 
-    @media (max-width: 430px) {
+    @media #{$stacked} {
         flex-direction: column;
     }
 
@@ -72,13 +81,18 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
 
-        @media (max-width: 430px) {
-            font-size: 10px;
-            margin-top: 0rem;
+        @media #{$stacked} {
             position: unset;
             margin: 8px auto;
             transform: translateX(0%);
+        }
 
+        @media #{$phone} {
+            font-size: 10px;
+        }
+
+        @media #{$tablet-landscape} {
+            white-space: nowrap;
         }
 
     }
@@ -119,12 +133,40 @@
         margin-bottom: auto;
 
 
-        @media (max-width: 430px) {
-            flex-direction: row;
+        // When stacked, a 5-column grid keeps every portrait on one row; columns
+        // shrink below their max on narrow screens (e.g. Galaxy S23 at 384px) instead of wrapping.
+        @media #{$stacked} {
+            display: grid;
+            justify-content: center;
             width: 100%;
+
+            .player-select__card {
+                width: auto;
+                min-width: 0;
+            }
+
+            .player-select-descktop-name {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media #{$phone} {
+            grid-template-columns: repeat(5, minmax(0, 59px));
             gap: 2px;
             margin-bottom: 1rem;
             margin-top: 2rem;
+        }
+
+        @media #{$tablet-portrait} {
+            grid-template-columns: repeat(5, minmax(0, 94px));
+            gap: 8px;
+            margin-top: 1rem;
+            margin-bottom: 0;
+        }
+
+        @media #{$tablet-landscape} {
+            width: 32%;
+            gap: 8px;
         }
 
     }
@@ -149,9 +191,19 @@
             }
         }
 
-        @media (max-width: 430px) {
-            width: 55px;
-            height: 55px;
+        @media #{$tablet-landscape} {
+            width: clamp(56px, 7vw, 90px);
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+
+        @media #{$stacked} {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: cover;
         }
     }
 
@@ -166,20 +218,36 @@
         align-items: center;
         overflow: hidden;
 
-        @media (max-width:430px) {
+        @media #{$phone} {
             gap: 8px;
+        }
+
+        @media #{$tablet-portrait} {
+            gap: 16px;
+            margin-top: 0;
         }
 
         &--full-body-image {
             width: 250px;
             height: auto;
 
-            @media (max-width: 430px) {
-                width: 160px;
+            @media #{$stacked} {
                 margin: 0 auto;
             }
 
+            @media #{$phone} {
+                width: 160px;
+            }
 
+            // Scale with the viewport height so the whole stack fits inside the screen.
+            @media #{$tablet-portrait} {
+                width: clamp(160px, 20vh, 300px);
+            }
+
+            @media #{$tablet-landscape} {
+                width: clamp(140px, 17vw, 250px);
+                flex-shrink: 0;
+            }
         }
 
         &--left {
@@ -187,8 +255,13 @@
             flex-direction: row;
             min-height: 40%;
 
-            @media (max-width: 430px) {
+            @media #{$stacked} {
                 flex-direction: column;
+            }
+
+            // Never let the GIF + stats block shrink under its content, or the bio overlaps it.
+            @media #{$tablet-portrait} {
+                flex-shrink: 0;
             }
         }
 
@@ -209,7 +282,7 @@
 
                     }
 
-                    @media (max-width: 430px) {
+                    @media #{$phone} {
                         min-width: 50px;
 
                         i {
@@ -229,21 +302,40 @@
                 gap: 15px;
                 flex-direction: column;
 
-                @media (max-width: 430px) {
+                @media #{$phone} {
                     gap: 2px;
-                    font-size: 12px;
+                    // Shrinks on narrow phones so the longest stat name stays on one line.
+                    font-size: clamp(9px, 3vw, 12px);
                     padding-left: 8px;
                     letter-spacing: -1px;
 
+                }
+
+                @media #{$tablet-portrait} {
+                    gap: 8px;
+                    padding-left: 12px;
+                }
+
+                @media #{$tablet-landscape} {
+                    gap: 10px;
+                    font-size: 12px;
+                    padding-left: 8px;
                 }
             }
 
             .player-stats {
                 li {
                     width: 275px;
+                    // Stars live in a separate list, so a wrapped name would misalign every row below it.
+                    white-space: nowrap;
 
-                    @media (max-width: 430px) {
-                        max-width: 208px;
+                    // No max-width here: the gradient text is clipped to this box,
+                    // so any text past it would turn invisible.
+                    @media #{$phone} {
+                        width: auto;
+                    }
+
+                    @media #{$tablet-landscape} {
                         width: auto;
                     }
                 }
@@ -267,9 +359,10 @@
 
             }
 
-            @media (max-width: 430px) {
+            @media #{$stacked} {
                 height: auto;
                 margin-top: 12px;
+                justify-content: center;
             }
 
         }
@@ -283,16 +376,27 @@
             margin-right: auto;
             min-height: 25%;
 
-            @media (max-width: 430px) {
-                width: 100%;
-                font-size: 10px;
-                margin-top: 8px;
+            @media #{$stacked} {
                 margin-left: auto;
                 margin-right: auto;
                 min-height: auto;
             }
 
+            @media #{$phone} {
+                width: 100%;
+                font-size: 10px;
+                margin-top: 8px;
+            }
 
+            @media #{$tablet-portrait} {
+                width: min(400px, 100%);
+                font-size: 13px;
+            }
+
+            @media #{$tablet-landscape} {
+                width: min(400px, 100%);
+                font-size: 13px;
+            }
 
         }
     }
