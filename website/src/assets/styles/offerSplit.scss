@@ -7,6 +7,8 @@
     height: clamp(320px, 48vh, 520px);
     overflow: hidden;
     justify-content: space-around;
+    // Panels reach the frame edges, so there's no non-clickable strip inside the frame.
+    padding-inline: 0;
 
     &__panel {
         position: relative;
@@ -28,6 +30,25 @@
             outline: 2px solid #fff;
             outline-offset: -4px;
         }
+    }
+
+    // Hand-drawn "+" that tells visitors the panel opens; turns into "×" once open.
+    &__icon {
+        display: inline-block;
+        width: 1.1em;
+        height: 1.1em;
+        margin-left: 0.35em;
+        vertical-align: -0.15em;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        transition: transform 0.4s ease;
+    }
+
+    &__panel.is-active &__icon {
+        transform: rotate(45deg);
     }
 
     &__label {
@@ -151,13 +172,29 @@
     }
 }
 
-.offer-split:not(.has-active) {
+.offer-split__hint {
+    font-size: 22px;
+    margin-top: 0.5rem;
+    opacity: 0.75;
 
-    .offer-split__panel:hover {
+    @media (max-width: 430px) {
+        font-size: 16px;
+    }
+}
 
-        .offer-split__label {
-            transform: translate(-50%, calc(-50% - 15px));
-        }
+// Hover feedback only on devices that can hover (not touch screens).
+// The divider slide on hover is handled in offerSplit.js.
+@media (hover: hover) {
+    .offer-split__panel:hover .offer-split__icon {
+        transform: scale(1.25);
+    }
+
+    .offer-split__panel.is-active:hover .offer-split__icon {
+        transform: rotate(45deg) scale(1.25);
+    }
+
+    .offer-split:not(.has-active) .offer-split__panel:hover .offer-split__label {
+        transform: translateY(-12px);
     }
 }
 

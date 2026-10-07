@@ -40,7 +40,8 @@ if (section) {
 
 
                 } else {
-                    label.style.transform = "rotate(0deg)";
+                    // Cleared rather than set, so the CSS hover lift can apply.
+                    label.style.transform = "";
                     label.style.left = "0%"
                     label.style.visibility = "visible"
                     label.style.top = "50%"
@@ -66,7 +67,7 @@ if (section) {
 
 
             } else {
-                label.style.transform = "rotate(0deg)";
+                label.style.transform = "";
                 label.style.visibility = "visible"
                 label.style.top = "50%"
 
@@ -75,8 +76,88 @@ if (section) {
         });
     };
 
+    // One-time "peek" when the section first scrolls into view: the divider slides
+    // to each side and back, hinting that the panels can be opened.
+    let peekTimers = [];
+
+    const cancelPeek = () => {
+        peekTimers.forEach(clearTimeout);
+        peekTimers = [];
+        panels.forEach(p => (p.style.width = ""));
+    };
+
+    const peek = () => {
+        if (section.classList.contains("has-active")) return;
+
+        const steps = [60, 40, 50];
+        steps.forEach((first, i) => {
+            peekTimers.push(setTimeout(() => setSplit(first), i * 700));
+        });
+        peekTimers.push(setTimeout(() => {
+            cancelPeek();
+            updateDivider();
+        }, steps.length * 700));
+    };
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Run a callback once the site loader is gone, so the peek never plays hidden behind it
+    // (e.g. after a reload restores a scroll position at this section).
+    const whenLoaderDone = callback => {
+        const loader = document.querySelector("#site-loader");
+        if (!loader || loader.classList.contains("is-hidden")) {
+            callback();
+            return;
+        }
+        const loaderObserver = new MutationObserver(() => {
+            if (!loader.classList.contains("is-hidden")) return;
+            loaderObserver.disconnect();
+            callback();
+        });
+        loaderObserver.observe(loader, { attributes: true, attributeFilter: ["class"] });
+    };
+
+    if (!reduceMotion && "IntersectionObserver" in window) {
+        whenLoaderDone(() => {
+            const observer = new IntersectionObserver(entries => {
+                if (!entries[0].isIntersecting) return;
+                observer.disconnect();
+                peekTimers.push(setTimeout(peek, 400));
+            }, { threshold: 0.6 });
+            observer.observe(section);
+        });
+    }
+
+    // Desktop hover: the hovered panel widens a little and the divider slides,
+    // like a small version of the peek.
+    const canHover = window.matchMedia("(hover: hover)");
+
+    const setSplit = firstWidth => {
+        panels[0].style.width = `${firstWidth}%`;
+        panels[1].style.width = `${100 - firstWidth}%`;
+        divider.style.left = `${firstWidth}%`;
+    };
+
+    const resetSplit = () => {
+        panels.forEach(p => (p.style.width = ""));
+        updateDivider();
+    };
+
+    panels.forEach((panel, i) => {
+        panel.addEventListener("mouseenter", () => {
+            if (!canHover.matches || section.classList.contains("has-active") || peekTimers.length) return;
+            setSplit(i === 0 ? 60 : 40);
+        });
+    });
+
+    section.addEventListener("mouseleave", () => {
+        if (!canHover.matches || section.classList.contains("has-active") || peekTimers.length) return;
+        resetSplit();
+    });
+
     panels.forEach(panel => {
         panel.addEventListener("click", () => {
+            cancelPeek();
             const isAlreadyActive = panel.classList.contains("is-active");
 
             panels.forEach(p => p.classList.remove("is-active"));

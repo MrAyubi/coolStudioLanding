@@ -53,7 +53,11 @@
 
     border-bottom: 16px solid #292929;
 
-    cursor: pointer;
+    // A closed card opens from anywhere on it; an open card only closes from its title row,
+    // so reading or selecting the text doesn't close it.
+    &:not(.is-active) {
+      cursor: pointer;
+    }
 
 
     /* =======================================================
@@ -101,12 +105,73 @@
        TITLE
        ======================================================= */
 
+    // No margin on the title: the spacing lives inside the toggle button as padding,
+    // so the whole row is clickable and the cursor doesn't flip between arrow and hand.
     .service-card__title {
-      margin: 1rem 0;
+      margin: 0;
 
       text-shadow: 2px 2px #282828;
 
       user-select: none;
+    }
+
+
+    /* =======================================================
+       TOGGLE BUTTON (the whole question row)
+       ======================================================= */
+
+    .service-card__toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+
+      // Stretches over the card's 1rem side padding (from .content-container)
+      // so the clickable row reaches the card's edges.
+      width: calc(100% + 2rem);
+      margin: 0 -1rem;
+      padding: 1rem;
+
+      border: none;
+      background: none;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      text-shadow: inherit; // buttons reset text-shadow by default
+      text-align: left;
+
+      cursor: pointer;
+
+      transition: padding-bottom 0.3s ease;
+
+      &:focus-visible {
+        outline: 2px solid #fff;
+        outline-offset: -2px;
+      }
+    }
+
+
+    /* =======================================================
+       ICON: hand-drawn "+" (same as the split section),
+       turns into "×" when the card is open
+       ======================================================= */
+
+    .service-card__icon {
+      flex-shrink: 0;
+
+      width: 1.2em;
+      height: 1.2em;
+
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+
+      filter: drop-shadow(2px 2px 0 #282828);
+
+      transition: transform 0.4s ease;
     }
 
 
@@ -219,6 +284,36 @@
 
     .service-card__description {
       grid-template-rows: 1fr;
+    }
+
+    .service-card__icon {
+      transform: rotate(45deg);
+    }
+  }
+
+
+  /* =========================================================
+     HOVER (devices with a mouse only)
+
+     A closed card grows a little, as if it is starting to
+     open, and its "+" gets bigger.
+     ========================================================= */
+
+  @media (hover: hover) {
+
+    .service-card:not(.is-active):hover {
+
+      .service-card__toggle {
+        padding-bottom: 1.75rem;
+      }
+
+      .service-card__icon {
+        transform: scale(1.25);
+      }
+    }
+
+    .service-card.is-active .service-card__toggle:hover .service-card__icon {
+      transform: rotate(45deg) scale(1.25);
     }
   }
 
