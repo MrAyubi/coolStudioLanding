@@ -24,7 +24,7 @@ let players_select_data = {
             { name: 'FOCUS', score: 1 },
             { name: 'CREATIVITY', score: 3 }
         ],
-        bio: "The Thinker. Questions everything, solves the unsolvable, and occasionally glitches reality for fun.",
+        bio: "He tells Voldemort's story so well you'd let him babysit your kids. Good stories aren't luck. Every word has a plan behind it.",
         gif: gifs.nimaGif
     },
     asma: {
@@ -42,11 +42,11 @@ let players_select_data = {
     moheb: {
         name: "MOHEB",
         skills: [
-            { name: 'Framing', score: 3 },
-            { name: 'Scissor skills', score: 3 },
-            { name: 'using a stabiliser', score: 1 },
-            { name: 'lighting', score: 2 },
-            { name: 'focus', score: 3 }
+            { name: 'Underground access', score: 3 },
+            { name: 'Frame Obsession', score: 3 },
+            { name: 'Breaking Rules', score: 3 },
+            { name: 'Sleep', score: 1 },
+            { name: 'Color OCD', score: 3 }
         ],
         bio: "He has a samurai within.<br/>Every shot is a discipline. Every frame, a strike.And yes he carries a katana.",
         gif: gifs.mohebGif
@@ -60,7 +60,7 @@ let players_select_data = {
             { name: 'Punching', score: 3 },
             { name: 'Politeness', score: 1 }
         ],
-        bio: "Amin bio . This will stop working in the next major version of npm..",
+        bio: "Ex-boxer. Current director. He hooks viewers in 3 seconds, just like he used to hook jaws. Don't worry, he's only dangerous on the timeline now.",
         gif: gifs.aminGif
     }
 
