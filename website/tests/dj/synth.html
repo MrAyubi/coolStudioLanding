@@ -1,0 +1,49 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>synth voices harness</title>
+<body style="font:14px monospace">
+<div id="btns"></div>
+<pre id="out"></pre>
+<script type="module">
+import * as synth from '../../src/assets/js/dj/synth.js';
+
+const voices = {
+  kick: (c, d) => synth.kick(c, d, 0),
+  snare: (c, d) => synth.snare(c, d, 0),
+  hat: (c, d) => synth.hat(c, d, 0),
+  bass: (c, d) => synth.bass(c, d, 0, 55, 0.4),
+  chord: (c, d) => synth.chord(c, d, 0, [220, 261.63, 329.63], 0.6),
+  pluck: (c, d) => synth.pluck(c, d, 0, 440),
+};
+const out = document.getElementById('out');
+const log = (s) => { out.textContent += s + '\n'; };
+
+async function render(name) {
+  try {
+    const ctx = new OfflineAudioContext(1, 44100, 44100);
+    voices[name](ctx, ctx.destination);
+    const buf = await ctx.startRendering();
+    const d = buf.getChannelData(0);
+    let peak = 0;
+    for (let i = 0; i < d.length; i++) peak = Math.max(peak, Math.abs(d[i]));
+    let tail = 0;
+    for (let i = d.length - 4410; i < d.length; i++) tail = Math.max(tail, Math.abs(d[i]));
+    const decayed = tail < 0.001;
+    const ok = peak > 0.05 && peak <= 1.0 && decayed;
+    log(`${ok ? 'PASS' : 'FAIL'} ${name} peak=${peak.toFixed(3)} decayed=${decayed}`);
+  } catch (e) {
+    log(`FAIL ${name} error=${e.message}`);
+  }
+}
+async function renderAll() { for (const n of Object.keys(voices)) await render(n); log('DONE'); }
+
+for (const n of Object.keys(voices)) {
+  const b = document.createElement('button');
+  b.textContent = n; b.onclick = () => render(n);
+  document.getElementById('btns').appendChild(b);
+}
+const all = document.createElement('button');
+all.textContent = 'Render all'; all.onclick = renderAll;
+document.getElementById('btns').appendChild(all);
+renderAll();
+</script>
