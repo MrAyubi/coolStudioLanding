@@ -98,7 +98,7 @@ export function bass(ctx, dest, time, hz, dur) {
 
 export function chord(ctx, dest, time, hzs, dur) {
   const g = ctx.createGain();
-  const peak = Math.min(0.5, 0.6 / Math.max(1, hzs.length));
+  const peak = 0.6 / Math.max(1, hzs.length * 2);
   const attack = Math.min(0.03, dur / 4);
   g.gain.setValueAtTime(0.0001, time);
   g.gain.linearRampToValueAtTime(peak, time + attack);
