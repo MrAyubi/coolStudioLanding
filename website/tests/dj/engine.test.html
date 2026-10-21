@@ -1,0 +1,198 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>engine harness</title>
+<body style="font:14px monospace">
+<button id="run">Run</button>
+<pre id="out"></pre>
+<script type="module">
+const out = document.getElementById('out');
+const log = (s) => { out.textContent += s + '\n'; console.log(s); };
+const SR = 44100;
+
+// Fake timer: the harness drives ticks itself via ctx.suspend().
+const fakeTimers = () => ({ setTimer: () => ({}), clearTimer: () => {} });
+
+function setup(createEngine, seconds, so = {}) {
+  const ctx = new OfflineAudioContext(2, Math.round(SR * seconds), SR);
+  const engine = createEngine({ audioContext: ctx, schedulerOptions: { lookahead: 0.2, ...fakeTimers(), ...so } });
+  // Tick the scheduler every 0.1 s of render time.
+  for (let t = 0.1; t < seconds - 0.05; t += 0.1) {
+    ctx.suspend(t).then(() => { engine._debug.tick(); ctx.resume(); });
+  }
+  return { ctx, engine };
+}
+
+function peak(buf, from, to) {
+  let p = 0;
+  for (let c = 0; c < buf.numberOfChannels; c++) {
+    const d = buf.getChannelData(c);
+    for (let i = Math.floor(from * SR); i < Math.min(d.length, to * SR); i++) p = Math.max(p, Math.abs(d[i]));
+  }
+  return p;
+}
+
+// Energy below ~150 Hz via a one-pole lowpass over the channel sum.
+function lowEnergy(buf) {
+  const a = 1 - Math.exp((-2 * Math.PI * 150) / SR);
+  const l = buf.getChannelData(0), r = buf.getChannelData(1);
+  let y = 0, e = 0;
+  for (let i = 0; i < l.length; i++) { y += a * ((l[i] + r[i]) / 2 - y); e += y * y; }
+  return e;
+}
+
+const muteAllBut = (deck, keep) =>
+  ['drums', 'bass', 'chords', 'lead'].forEach((l) => deck.setLayerMuted(l, !keep.includes(l)));
+
+async function run() {
+  out.textContent = '';
+  let createEngine;
+  try {
+    ({ createEngine } = await import('../../src/assets/js/dj/engine.js'));
+  } catch (e) {
+    log(`FAIL import ${e.message}`);
+    log('DONE');
+    return;
+  }
+  const check = async (name, fn) => {
+    try {
+      const detail = await fn();
+      log(detail === true ? `PASS ${name}` : `FAIL ${name} ${detail}`);
+    } catch (e) {
+      log(`FAIL ${name} threw ${e && e.message}`);
+    }
+  };
+
+  await check('deck A play renders energy', async () => {
+    const { ctx, engine } = setup(createEngine, 2);
+    engine.decks[0].play();
+    const buf = await ctx.startRendering();
+    const p = peak(buf, 0, 2);
+    return p > 0.01 || `peak=${p}`;
+  });
+
+  await check('crossfade 1 silences playing deck A', async () => {
+    const { ctx, engine } = setup(createEngine, 2);
+    engine.setCrossfade(1);
+    engine.decks[0].play();
+    const buf = await ctx.startRendering();
+    const p = peak(buf, 0.5, 2);
+    if (!engine.decks[0].isPlaying) return 'isPlaying false';
+    return p < 0.001 || `peak=${p}`;
+  });
+
+  await check('muting bass reduces low-band energy', async () => {
+    const render = async (muted) => {
+      const { ctx, engine } = setup(createEngine, 2);
+      engine.decks[0].setLayerMuted('bass', muted);
+      engine.decks[0].play();
+      return lowEnergy(await ctx.startRendering());
+    };
+    const on = await render(false), off = await render(true);
+    return off < on * 0.8 || `unmuted=${on.toFixed(3)} muted=${off.toFixed(3)}`;
+  });
+
+  await check('isLayerMuted reflects setLayerMuted', async () => {
+    const { engine } = setup(createEngine, 0.5);
+    const d = engine.decks[0];
+    d.setLayerMuted('lead', true);
+    return (d.isLayerMuted('lead') && !d.isLayerMuted('bass')) || 'mute state wrong';
+  });
+
+  await check('drop cuts drums+bass for a bar then restores', async () => {
+    const { ctx, engine } = setup(createEngine, 4);
+    muteAllBut(engine.decks[0], ['drums', 'bass']);
+    engine.decks[0].play();
+    engine.drop();
+    engine.drop(); // ignored during a drop
+    const buf = await ctx.startRendering();
+    // Steps 0-1 precede the drop (lookahead 0.2), drop covers ~0.3-2.3 s at 120 BPM.
+    const during = peak(buf, 0.8, 2.2), after = peak(buf, 2.5, 3.9);
+    return (during < 0.005 && after > 0.05) || `during=${during} after=${after}`;
+  });
+
+  await check('play/stop x20 leaves one scheduler timer', async () => {
+    const { engine } = setup(createEngine, 0.5);
+    let max = 0;
+    for (let i = 0; i < 20; i++) {
+      engine.decks[0].play();
+      max = Math.max(max, engine._debug.timers);
+      engine.decks[0].stop();
+    }
+    engine.decks[0].play();
+    engine.decks[1].play();
+    const t = engine._debug.timers;
+    return (max === 1 && t === 1) || `max=${max} timers=${t}`;
+  });
+
+  await check('scheduler stops when last deck stops', async () => {
+    const { engine } = setup(createEngine, 0.5);
+    engine.decks[0].play();
+    engine.decks[1].play();
+    engine.decks[0].stop();
+    const mid = engine._debug.timers;
+    engine.decks[1].stop();
+    return (mid === 1 && engine._debug.timers === 0) || `mid=${mid} end=${engine._debug.timers}`;
+  });
+
+  await check('setBpm clamps', async () => {
+    const { engine } = setup(createEngine, 0.5);
+    const r = engine.setBpm(500), r2 = engine.setBpm(10);
+    return (r === 140 && r2 === 90 && engine.getBpm() === 90) || `got ${r}, ${r2}`;
+  });
+
+  await check('defaults', async () => {
+    const { engine } = setup(createEngine, 0.5, {});
+    const [a, b] = engine.decks;
+    const e2 = createEngine({ audioContext: engine.ctx, bpm: 133 });
+    const bpm = e2.getBpm();
+    e2.destroy();
+    const ok = a.trackId === 'house' && b.trackId === 'breaks' && !a.isPlaying && engine.getBpm() === 120 && bpm === 133;
+    const an = engine.analysers;
+    return (ok && !!(an.a && an.b && an.master)) || `a=${a.trackId} b=${b.trackId} bpm=${bpm}`;
+  });
+
+  await check('setTrack switches and ignores unknown ids', async () => {
+    const { engine } = setup(createEngine, 0.5);
+    engine.decks[0].setTrack('dub');
+    engine.decks[0].setTrack('nope');
+    return engine.decks[0].trackId === 'dub' || `trackId=${engine.decks[0].trackId}`;
+  });
+
+  await check('non-finite setter input is ignored (render stays finite)', async () => {
+    const { ctx, engine } = setup(createEngine, 1);
+    const d = engine.decks[0];
+    const r = engine.setBpm(NaN);
+    engine.setCrossfade(NaN); engine.setFx(NaN, Infinity);
+    d.setVolume(NaN); d.setEq('low', NaN); d.setFilter(Infinity);
+    d.play();
+    const buf = await ctx.startRendering();
+    const ch = buf.getChannelData(0);
+    for (let i = 0; i < ch.length; i++) if (!Number.isFinite(ch[i])) return `non-finite sample at ${i}`;
+    const p = peak(buf, 0, 1);
+    return (r === 120 && p > 0.01) || `bpm=${r} peak=${p}`;
+  });
+
+  await check('filter + eq + fx render audio', async () => {
+    const { ctx, engine } = setup(createEngine, 2);
+    const d = engine.decks[0];
+    d.setFilter(-0.5); d.setEq('high', -1); d.setEq('mid', 0.5); d.setVolume(0.5);
+    engine.setFx(0.6, 0.6);
+    d.play();
+    const buf = await ctx.startRendering();
+    const p = peak(buf, 0.2, 2);
+    return (p > 0.01 && p <= 1) || `peak=${p}`;
+  });
+
+  await check('destroy leaves zero timers', async () => {
+    const { engine } = setup(createEngine, 0.5);
+    engine.decks[0].play();
+    engine.destroy();
+    return engine._debug.timers === 0 || `timers=${engine._debug.timers}`;
+  });
+
+  log('DONE');
+}
+
+document.getElementById('run').addEventListener('click', run);
+run();
+</script>
