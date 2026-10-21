@@ -85,8 +85,8 @@ export function bass(ctx, dest, time, hz, dur) {
   filter.frequency.exponentialRampToValueAtTime(Math.max(120, hz * 2), time + dur);
   const g = ctx.createGain();
   g.gain.setValueAtTime(0.0001, time);
-  g.gain.linearRampToValueAtTime(0.45, time + 0.01);
-  g.gain.setValueAtTime(0.45, time + Math.max(0.011, dur - 0.05));
+  g.gain.linearRampToValueAtTime(0.35, time + 0.01);
+  g.gain.setValueAtTime(0.35, time + Math.max(0.011, dur - 0.05));
   g.gain.exponentialRampToValueAtTime(0.0001, time + dur + 0.05);
   osc.connect(filter);
   filter.connect(g);

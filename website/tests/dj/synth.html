@@ -11,10 +11,17 @@ const voices = {
   kick: (c, d) => synth.kick(c, d, 0),
   snare: (c, d) => synth.snare(c, d, 0),
   hat: (c, d) => synth.hat(c, d, 0),
-  bass: (c, d) => synth.bass(c, d, 0, 55, 0.4),
-  chord: (c, d) => synth.chord(c, d, 0, [220, 261.63, 329.63], 0.6),
   pluck: (c, d) => synth.pluck(c, d, 0, 440),
 };
+for (const hz of [55, 110, 165, 220]) {
+  for (const dur of [0.15, 0.4]) {
+    voices[`bass ${hz}Hz ${dur}s`] = (c, d) => synth.bass(c, d, 0, hz, dur);
+  }
+}
+const CH = [220, 261.63, 329.63, 392, 440];
+for (const n of [1, 3, 5]) {
+  voices[`chord ${n} notes`] = (c, d) => synth.chord(c, d, 0, CH.slice(0, n), 0.6);
+}
 const out = document.getElementById('out');
 const log = (s) => { out.textContent += s + '\n'; };
 
@@ -29,7 +36,7 @@ async function render(name) {
     let tail = 0;
     for (let i = d.length - 4410; i < d.length; i++) tail = Math.max(tail, Math.abs(d[i]));
     const decayed = tail < 0.001;
-    const ok = peak > 0.05 && peak <= 1.0 && decayed;
+    const ok = peak > 0.05 && peak <= 0.9 && decayed;
     log(`${ok ? 'PASS' : 'FAIL'} ${name} peak=${peak.toFixed(3)} decayed=${decayed}`);
   } catch (e) {
     log(`FAIL ${name} error=${e.message}`);
