@@ -1,0 +1,551 @@
+// DJ deck page (dj.html). Palette, fonts, fluid() and $bp-phone come from base.scss,
+// like every other page; its global output (black textured body background, resets)
+// suits this page too. Safari 14 floor: no flex `gap`, no `aspect-ratio`, no `inset`.
+// Controls are styled at rest here; djDeck.js wires them up.
+@use "./base" as *;
+
+$dj-panel: $font-dark;
+$dj-ink: $font-light;
+$dj-line: #000;
+$dj-accent-a: $retro-orange;
+$dj-accent-b: $retro-light-blue;
+$dj-shadow: 4px 4px 0 $dj-line;
+$dj-display: "streetOfRage", sans-serif;
+$dj-body: "Poppins", sans-serif;
+$dj-knob: fluid(40px, 56px);
+$dj-platter: fluid(140px, 220px);
+
+.dj {
+    min-height: 100vh;
+    font-family: $dj-body;
+    color: $dj-ink;
+
+    // ── "Press to start" gate ──────────────────────────────────────────────────
+    // Browsers block audio until the visitor interacts, so the engine is only
+    // created from this button (or a key press).
+    &__start {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 0 16px;
+        border: 0;
+        background: transparent;
+        color: $yelliw-vintage;
+        text-align: center;
+        cursor: pointer;
+
+        &[hidden] {
+            display: none;
+        }
+
+        &:focus-visible .dj__start-title {
+            outline: 3px solid $dj-accent-b;
+            outline-offset: 8px;
+        }
+    }
+
+    &__start-title {
+        font-family: $dj-display;
+        font-size: fluid(22px, 48px);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        text-shadow: 3px 3px 0 $retro-red, 6px 6px 0 $dj-line;
+        animation: dj-press 1.2s ease-in-out infinite alternate;
+    }
+
+    &__start-hint {
+        margin-top: 1.25em;
+        font-size: fluid(14px, 18px);
+        color: $dj-accent-b;
+    }
+
+    // ── Mixer layout: deck A | centre | deck B ─────────────────────────────────
+    &__mixer {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr) minmax(0, 1fr);
+        grid-template-areas:
+            "title title title"
+            "deck-a centre deck-b";
+        gap: fluid(12px, 32px);
+        align-items: start;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: fluid(16px, 40px);
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    &__title {
+        grid-area: title;
+        justify-self: center;
+        font-family: $dj-display;
+        font-size: fluid(24px, 44px);
+        font-weight: normal;
+        letter-spacing: 0.1em;
+        color: $yelliw-vintage;
+        text-shadow: 3px 3px 0 $retro-red, 6px 6px 0 $dj-line;
+        outline: none;
+    }
+
+    &__label {
+        font-family: $dj-display;
+        font-size: 10px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $white-vintage;
+    }
+
+    // ── Deck panel ─────────────────────────────────────────────────────────────
+    &__deck,
+    &__centre {
+        --accent: #{$yelliw-vintage};
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: center;
+        gap: fluid(12px, 20px);
+        min-width: 0;
+        padding: fluid(12px, 24px);
+        border: 3px solid var(--accent);
+        border-radius: 12px;
+        background: $dj-panel;
+        box-shadow: $dj-shadow;
+    }
+
+    &__deck--a {
+        grid-area: deck-a;
+        --accent: #{$dj-accent-a};
+    }
+
+    &__deck--b {
+        grid-area: deck-b;
+        --accent: #{$dj-accent-b};
+    }
+
+    &__centre {
+        grid-area: centre;
+        --accent: #{$yelliw-vintage};
+    }
+
+    &__deck-name {
+        font-family: $dj-display;
+        font-size: fluid(14px, 22px);
+        font-weight: normal;
+        letter-spacing: 0.1em;
+        color: var(--accent);
+        text-shadow: 2px 2px 0 $dj-line;
+    }
+
+    // Vinyl: grooves, a coloured label and a marker so rotation is visible.
+    &__platter {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: $dj-platter;
+        height: $dj-platter;
+        max-width: 100%;
+        border: 3px solid $dj-line;
+        border-radius: 50%;
+        background:
+            repeating-radial-gradient(circle, #111 0 2px, #1c1c1c 2px 4px);
+        box-shadow: 0 0 0 4px var(--accent), $dj-shadow;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 6%;
+            left: 50%;
+            width: 4px;
+            height: 22%;
+            margin-left: -2px;
+            border-radius: 2px;
+            background: $white-vintage;
+        }
+    }
+
+    &__platter-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36%;
+        height: 36%;
+        border: 3px solid $dj-line;
+        border-radius: 50%;
+        background: var(--accent);
+        font-family: $dj-display;
+        font-size: fluid(16px, 24px);
+        color: $font-dark;
+    }
+
+    // ── Transport: play + track ────────────────────────────────────────────────
+    &__transport {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: end;
+        gap: 12px;
+        width: 100%;
+    }
+
+    &__play,
+    &__drop,
+    &__pad {
+        border: 3px solid $dj-line;
+        border-radius: 8px;
+        font-family: $dj-display;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: $dj-shadow;
+        transition: transform 80ms ease-out, box-shadow 80ms ease-out, filter 120ms;
+
+        &:active {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0 $dj-line;
+        }
+
+        &:focus-visible {
+            outline: 3px solid $white-vintage;
+            outline-offset: 3px;
+        }
+    }
+
+    &__play {
+        min-width: 88px;
+        min-height: 44px;
+        padding: 0 16px;
+        background: var(--accent);
+        color: $font-dark;
+        font-size: 14px;
+    }
+
+    &__track {
+        display: grid;
+        gap: 4px;
+        min-width: 0;
+    }
+
+    &__track-select {
+        width: 100%;
+        min-height: 44px;
+        padding: 0 8px;
+        border: 3px solid $dj-line;
+        border-radius: 8px;
+        background: $font-light;
+        color: $font-dark;
+        font-size: 14px;
+    }
+
+    // ── Knobs + meter ──────────────────────────────────────────────────────────
+    &__strip {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: stretch;
+        gap: 12px;
+        width: 100%;
+    }
+
+    &__knobs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(#{$dj-knob}, 1fr));
+        gap: 12px 8px;
+        justify-items: center;
+        min-width: 0;
+    }
+
+    &__control {
+        display: grid;
+        justify-items: center;
+        gap: 6px;
+    }
+
+    // A knob is a 0–1 slider; --value sets the pointer angle (-135deg to +135deg).
+    &__knob {
+        --value: 0.5;
+        position: relative;
+        width: $dj-knob;
+        height: $dj-knob;
+        border: 3px solid $dj-line;
+        border-radius: 50%;
+        background:
+            radial-gradient(circle at 35% 30%, #4a535b 0 20%, #2b3238 60%, #1a1f23 100%);
+        box-shadow: 0 0 0 3px var(--accent), 3px 3px 0 3px $dj-line;
+        cursor: ns-resize;
+        touch-action: none;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            width: 4px;
+            height: 38%;
+            margin-left: -2px;
+            border-radius: 2px;
+            background: $white-vintage;
+            transform-origin: 50% 110%;
+            transform: rotate(calc(var(--value) * 270deg - 135deg));
+        }
+
+        &:focus-visible {
+            outline: 3px solid $white-vintage;
+            outline-offset: 6px;
+        }
+    }
+
+    &__meter {
+        width: 16px;
+        height: 100%;
+        min-height: 120px;
+        border: 3px solid $dj-line;
+        border-radius: 4px;
+        background: #0d0f11;
+    }
+
+    // ── Layer pads ─────────────────────────────────────────────────────────────
+    &__pads {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        width: 100%;
+    }
+
+    // Lit = layer playing; pressed (aria-pressed="true") = layer muted.
+    &__pad {
+        min-height: 48px;
+        padding: 0 4px;
+        background: var(--accent);
+        color: $font-dark;
+        font-size: 11px;
+
+        &[aria-pressed="true"] {
+            background: #3a4148;
+            color: $white-vintage;
+            filter: saturate(0.4);
+        }
+    }
+
+    // ── Centre column ──────────────────────────────────────────────────────────
+    &__tempo-wrap {
+        display: grid;
+        grid-auto-flow: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    &__tempo-value {
+        font-family: $dj-display;
+        font-size: 12px;
+        color: $white-vintage;
+    }
+
+    &__tempo-bpm {
+        font-size: fluid(18px, 26px);
+        color: $yelliw-vintage;
+    }
+
+    &__drop {
+        width: 100%;
+        min-height: 56px;
+        background: $retro-red;
+        color: $font-light;
+        font-size: fluid(16px, 22px);
+        text-shadow: 2px 2px 0 $dj-line;
+    }
+
+    // Effects pad: --x / --y (0–1) place the puck; y = 0 is the bottom edge.
+    &__xy {
+        --x: 0;
+        --y: 0;
+        position: relative;
+        width: 100%;
+        border: 3px solid $dj-line;
+        border-radius: 8px;
+        // rgba(124, 74, 168) is $pastile-purple; #3d2454 is it darkened
+        background:
+            linear-gradient(rgba(124, 74, 168, 0.35) 1px, transparent 1px) 0 0 / 25% 25%,
+            linear-gradient(90deg, rgba(124, 74, 168, 0.35) 1px, transparent 1px) 0 0 / 25% 25%,
+            linear-gradient(135deg, #3d2454, #12091c);
+        box-shadow: $dj-shadow;
+        cursor: crosshair;
+        touch-action: none;
+
+        // Square without aspect-ratio (Safari 14): padding % follows the width.
+        &::before {
+            content: "";
+            display: block;
+            padding-top: 100%;
+        }
+
+        &:focus-visible {
+            outline: 3px solid $white-vintage;
+            outline-offset: 3px;
+        }
+    }
+
+    &__xy-puck {
+        position: absolute;
+        left: calc(var(--x) * 100%);
+        bottom: calc(var(--y) * 100%);
+        width: 28px;
+        height: 28px;
+        margin: 0 0 -14px -14px;
+        border: 3px solid $dj-line;
+        border-radius: 50%;
+        background: $yelliw-vintage;
+        box-shadow: 0 0 12px $yelliw-vintage;
+        pointer-events: none;
+    }
+
+    &__xy-axis {
+        position: absolute;
+        font-family: $dj-display;
+        font-size: 9px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: $white-vintage;
+        opacity: 0.8;
+        pointer-events: none;
+
+        &--x {
+            right: 8px;
+            bottom: 6px;
+        }
+
+        &--y {
+            top: 8px;
+            left: 6px;
+        }
+    }
+
+    &__scope {
+        display: block;
+        width: 100%;
+        height: 72px;
+        border: 3px solid $dj-line;
+        border-radius: 8px;
+        background: #0d0f11;
+    }
+
+    &__xfade {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+    }
+
+    &__xfade-end {
+        font-family: $dj-display;
+        font-size: 14px;
+        color: $white-vintage;
+
+        &:first-child {
+            color: $dj-accent-a;
+        }
+
+        &:last-child {
+            color: $dj-accent-b;
+        }
+    }
+
+    // Crossfader: a 0–1 slider; --value places the handle along the track.
+    &__crossfader {
+        --value: 0.5;
+        position: relative;
+        height: 44px;
+        cursor: ew-resize;
+        touch-action: none;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 10px;
+            margin-top: -5px;
+            border: 3px solid $dj-line;
+            border-radius: 5px;
+            background: linear-gradient(90deg, $dj-accent-a, $dj-accent-b);
+        }
+
+        &:focus-visible {
+            outline: 3px solid $white-vintage;
+            outline-offset: 3px;
+        }
+    }
+
+    &__crossfader-handle {
+        position: absolute;
+        top: 50%;
+        left: calc(var(--value) * (100% - 28px));
+        width: 28px;
+        height: 40px;
+        margin-top: -20px;
+        border: 3px solid $dj-line;
+        border-radius: 6px;
+        background:
+            linear-gradient($dj-line, $dj-line) center / 4px 60% no-repeat,
+            $white-vintage;
+        box-shadow: 3px 3px 0 $dj-line;
+        pointer-events: none;
+    }
+
+    // ── Fallback when the browser has no Web Audio ─────────────────────────────
+    &__unsupported {
+        max-width: 32em;
+        margin: 20vh auto 0;
+        padding: 0 16px;
+        font-family: $dj-display;
+        font-size: fluid(14px, 20px);
+        line-height: 1.6;
+        text-align: center;
+        color: $yelliw-vintage;
+    }
+}
+
+// ── Phone: stacked, 16 px gutters ──────────────────────────────────────────────
+@media (max-width: $bp-phone) {
+    .dj__mixer {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "title"
+            "deck-a"
+            "centre"
+            "deck-b";
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .dj__xy {
+        width: min(100%, 320px);
+    }
+}
+
+@keyframes dj-press {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0.4;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dj *,
+    .dj *::before,
+    .dj *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

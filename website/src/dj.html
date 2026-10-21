@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DJ Deck</title>
+    <link rel="stylesheet" href="./assets/styles/dj.scss">
+</head>
+
+<body>
+
+    <div class="dj">
+        <!-- Browsers block audio until the visitor interacts, so the deck waits for this -->
+        <button class="dj__start" type="button">
+            <span class="dj__start-title">Press to start</span>
+            <span class="dj__start-hint">click, tap or press any key</span>
+        </button>
+
+        <!-- Knobs and the crossfader are 0–1 sliders; --value mirrors aria-valuenow for the CSS -->
+        <main class="dj__mixer" hidden>
+            <h1 class="dj__title" tabindex="-1">DJ Deck</h1>
+
+            <section class="dj__deck dj__deck--a" data-deck="a" aria-label="Deck A">
+                <h2 class="dj__deck-name">Deck A</h2>
+
+                <div class="dj__platter" aria-hidden="true">
+                    <span class="dj__platter-label">A</span>
+                </div>
+
+                <div class="dj__transport">
+                    <button class="dj__play" type="button">Play</button>
+                    <label class="dj__track">
+                        <span class="dj__label">Track</span>
+                        <select class="dj__track-select" aria-label="Deck A track"></select>
+                    </label>
+                </div>
+
+                <div class="dj__strip">
+                    <div class="dj__knobs">
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="vol" role="slider" tabindex="0"
+                                aria-label="Deck A volume" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.8" style="--value: 0.8"></div>
+                            <span class="dj__label" aria-hidden="true">Vol</span>
+                        </div>
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="filter" role="slider" tabindex="0"
+                                aria-label="Deck A filter" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.5" style="--value: 0.5"></div>
+                            <span class="dj__label" aria-hidden="true">Filter</span>
+                        </div>
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="high" role="slider" tabindex="0"
+                                aria-label="Deck A high EQ" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.5" style="--value: 0.5"></div>
+                            <span class="dj__label" aria-hidden="true">High</span>
+                        </div>
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="mid" role="slider" tabindex="0"
+                                aria-label="Deck A mid EQ" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.5" style="--value: 0.5"></div>
+                            <span class="dj__label" aria-hidden="true">Mid</span>
+                        </div>
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="low" role="slider" tabindex="0"
+                                aria-label="Deck A low EQ" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.5" style="--value: 0.5"></div>
+                            <span class="dj__label" aria-hidden="true">Low</span>
+                        </div>
+                    </div>
+                    <canvas class="dj__meter" width="16" height="160" aria-hidden="true"></canvas>
+                </div>
+
+                <div class="dj__pads">
+                    <button class="dj__pad" type="button" data-layer="drums" aria-pressed="false"
+                        aria-label="Mute Drums, deck A">Drums</button>
+                    <button class="dj__pad" type="button" data-layer="bass" aria-pressed="false"
+                        aria-label="Mute Bass, deck A">Bass</button>
+                    <button class="dj__pad" type="button" data-layer="chords" aria-pressed="false"
+                        aria-label="Mute Chords, deck A">Chords</button>
+                    <button class="dj__pad" type="button" data-layer="lead" aria-pressed="false"
+                        aria-label="Mute Lead, deck A">Lead</button>
+                </div>
+            </section>
+
+            <section class="dj__centre" aria-label="Master">
+                <div class="dj__tempo-wrap">
+                    <div class="dj__knob dj__tempo" role="slider" tabindex="0" aria-label="Master tempo"
+                        aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.6" aria-valuetext="120 BPM"
+                        style="--value: 0.6"></div>
+                    <span class="dj__tempo-value"><span class="dj__tempo-bpm">120</span> BPM</span>
+                </div>
+
+                <button class="dj__drop" type="button">Drop</button>
+
+                <div class="dj__xy" role="group" tabindex="0" aria-label="Effects pad: delay left to right, reverb bottom to top"
+                    style="--x: 0; --y: 0">
+                    <span class="dj__xy-puck" aria-hidden="true"></span>
+                    <span class="dj__xy-axis dj__xy-axis--x" aria-hidden="true">Delay</span>
+                    <span class="dj__xy-axis dj__xy-axis--y" aria-hidden="true">Reverb</span>
+                </div>
+
+                <canvas class="dj__scope" width="320" height="80" aria-hidden="true"></canvas>
+
+                <div class="dj__xfade">
+                    <span class="dj__xfade-end" aria-hidden="true">A</span>
+                    <div class="dj__crossfader" role="slider" tabindex="0" aria-label="Crossfader"
+                        aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.5" style="--value: 0.5">
+                        <span class="dj__crossfader-handle" aria-hidden="true"></span>
+                    </div>
+                    <span class="dj__xfade-end" aria-hidden="true">B</span>
+                </div>
+            </section>
+
+            <section class="dj__deck dj__deck--b" data-deck="b" aria-label="Deck B">
+                <h2 class="dj__deck-name">Deck B</h2>
+
+                <div class="dj__platter" aria-hidden="true">
+                    <span class="dj__platter-label">B</span>
+                </div>
+
+                <div class="dj__transport">
+                    <button class="dj__play" type="button">Play</button>
+                    <label class="dj__track">
+                        <span class="dj__label">Track</span>
+                        <select class="dj__track-select" aria-label="Deck B track"></select>
+                    </label>
+                </div>
+
+                <div class="dj__strip">
+                    <div class="dj__knobs">
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="vol" role="slider" tabindex="0"
+                                aria-label="Deck B volume" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.8" style="--value: 0.8"></div>
+                            <span class="dj__label" aria-hidden="true">Vol</span>
+                        </div>
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="filter" role="slider" tabindex="0"
+                                aria-label="Deck B filter" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.5" style="--value: 0.5"></div>
+                            <span class="dj__label" aria-hidden="true">Filter</span>
+                        </div>
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="high" role="slider" tabindex="0"
+                                aria-label="Deck B high EQ" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.5" style="--value: 0.5"></div>
+                            <span class="dj__label" aria-hidden="true">High</span>
+                        </div>
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="mid" role="slider" tabindex="0"
+                                aria-label="Deck B mid EQ" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.5" style="--value: 0.5"></div>
+                            <span class="dj__label" aria-hidden="true">Mid</span>
+                        </div>
+                        <div class="dj__control">
+                            <div class="dj__knob" data-control="low" role="slider" tabindex="0"
+                                aria-label="Deck B low EQ" aria-valuemin="0" aria-valuemax="1"
+                                aria-valuenow="0.5" style="--value: 0.5"></div>
+                            <span class="dj__label" aria-hidden="true">Low</span>
+                        </div>
+                    </div>
+                    <canvas class="dj__meter" width="16" height="160" aria-hidden="true"></canvas>
+                </div>
+
+                <div class="dj__pads">
+                    <button class="dj__pad" type="button" data-layer="drums" aria-pressed="false"
+                        aria-label="Mute Drums, deck B">Drums</button>
+                    <button class="dj__pad" type="button" data-layer="bass" aria-pressed="false"
+                        aria-label="Mute Bass, deck B">Bass</button>
+                    <button class="dj__pad" type="button" data-layer="chords" aria-pressed="false"
+                        aria-label="Mute Chords, deck B">Chords</button>
+                    <button class="dj__pad" type="button" data-layer="lead" aria-pressed="false"
+                        aria-label="Mute Lead, deck B">Lead</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="./assets/js/djDeck.js"></script>
+</body>
+
+</html>
