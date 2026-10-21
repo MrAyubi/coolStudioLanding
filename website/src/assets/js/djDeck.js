@@ -1,11 +1,13 @@
 // DJ deck page: start gate, engine lifecycle, the no-Web-Audio fallback, and
 // the mapping from mixer controls to the engine. Nothing makes sound until the
 // visitor presses start (browsers block audio until a user gesture). The DOM
-// slider plumbing lives in dj/controls.js; this file exports nothing.
+// slider plumbing lives in dj/controls.js, the platters, meters and scope in
+// dj/visuals.js; this file exports nothing.
 import { createEngine } from './dj/engine.js';
 import { TRACKS } from './dj/tracks.js';
 import { BPM_MIN, BPM_MAX } from './dj/music.js';
 import { bindKnob, bindXY } from './dj/controls.js';
+import { startVisuals } from './dj/visuals.js';
 
 // Keys that shouldn't start the deck (focus navigation, modifiers, and Esc,
 // which browsers don't count as a user gesture).
@@ -217,6 +219,7 @@ async function start(root, fromPointer = false) {
   window.__djEngine = engine; // dev aid for debugging; later code doesn't import from here
   console.info('[dj] engine created');
   wireControls(root);
+  startVisuals(engine, root); // its loop starts once the mixer is shown
 
   try {
     await engine.resume();

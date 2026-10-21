@@ -74,6 +74,7 @@ export function createEngine(opts = {}) {
   let dropUntil = 0;
   const dropActive = () => dropPending || dropRemaining > 0;
   const internals = new Map();
+  const stepListeners = new Set(); // visuals: cb(stepIndex, time) per scheduled step
 
   function createDeck(trackId) {
     const layerGains = {};
@@ -221,6 +222,14 @@ export function createEngine(opts = {}) {
       dropUntil = time + sd - DROP_LEAD;
       setDropGains(null, dropUntil);
     }
+    // A throwing listener must never break scheduling.
+    stepListeners.forEach((cb) => {
+      try {
+        cb(i, time);
+      } catch (err) {
+        console.error('[dj] step listener failed:', err);
+      }
+    });
   }
 
   // Count live timers so the harness can verify there is never more than one.
@@ -280,11 +289,17 @@ export function createEngine(opts = {}) {
       if (fin(x)) set(delaySend.gain, clamp01(x));
       if (fin(y)) set(reverbSend.gain, clamp01(y));
     },
+    onStep(cb) {
+      if (destroyed || typeof cb !== 'function') return () => {};
+      stepListeners.add(cb);
+      return () => stepListeners.delete(cb);
+    },
     async resume() { if (ctx.state === 'suspended') await ctx.resume(); },
     async suspend() { if (ctx.state === 'running') await ctx.suspend(); },
     destroy() {
       if (destroyed) return;
       destroyed = true;
+      stepListeners.clear();
       decks.forEach((d) => d.stop());
       scheduler.stop();
       nodes.forEach((n) => n.disconnect());

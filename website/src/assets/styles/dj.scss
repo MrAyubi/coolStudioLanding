@@ -145,6 +145,8 @@ $dj-platter: fluid(140px, 220px);
     }
 
     // Vinyl: grooves, a coloured label and a marker so rotation is visible.
+    // visuals.js spins the label (the marker hangs off it); the platter itself
+    // stays still so its offset shadow doesn't orbit.
     &__platter {
         position: relative;
         display: flex;
@@ -158,21 +160,15 @@ $dj-platter: fluid(140px, 220px);
         background:
             repeating-radial-gradient(circle, #111 0 2px, #1c1c1c 2px 4px);
         box-shadow: 0 0 0 4px var(--accent), $dj-shadow;
+    }
 
-        &::after {
-            content: "";
-            position: absolute;
-            top: 6%;
-            left: 50%;
-            width: 4px;
-            height: 22%;
-            margin-left: -2px;
-            border-radius: 2px;
-            background: $white-vintage;
-        }
+    // Beat pulse on the first step of each bar (off with reduced motion).
+    &__platter--pulse {
+        animation: dj-pulse 0.3s ease-out;
     }
 
     &__platter-label {
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -184,6 +180,20 @@ $dj-platter: fluid(140px, 220px);
         font-family: $dj-display;
         font-size: fluid(16px, 24px);
         color: $font-dark;
+
+        // Marker on the vinyl, between the rim and the label. The label is 36%
+        // of the platter, so -72% / 60% of it sit at about 6% / 22% of the platter.
+        &::after {
+            content: "";
+            position: absolute;
+            top: -72%;
+            left: 50%;
+            width: 4px;
+            height: 60%;
+            margin-left: -2px;
+            border-radius: 2px;
+            background: $white-vintage;
+        }
     }
 
     // ── Transport: play + track ────────────────────────────────────────────────
@@ -551,6 +561,16 @@ $dj-platter: fluid(140px, 220px);
 
     to {
         opacity: 0.4;
+    }
+}
+
+@keyframes dj-pulse {
+    from {
+        box-shadow: 0 0 0 10px var(--accent), 0 0 28px 6px var(--accent), $dj-shadow;
+    }
+
+    to {
+        box-shadow: 0 0 0 4px var(--accent), $dj-shadow;
     }
 }
 
