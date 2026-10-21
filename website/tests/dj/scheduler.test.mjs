@@ -127,11 +127,19 @@ test('10 s jump re-anchors; nothing in the past, bounded catch-up', () => {
   for (const st of added) assert.ok(st.time >= 10.2 - EPS);
 });
 
-test('late steps within maxCatchUp are never emitted in the past', () => {
+test('late steps within maxCatchUp are skipped, never emitted in the past', () => {
   const { ctx, steps, s } = harness();
   s.start();
   const n = steps.length;
-  ctx.currentTime = 0.2; // next step 0.175 is already past but within catch-up
+  assert.equal(n, 1);
+  ctx.currentTime = 0.2; // step 1 (0.175) is past but within catch-up; step 2 (0.3) is outside the window
   s.tick();
-  for (const st of steps.slice(n)) assert.ok(st.time >= 0.2 - EPS);
+  assert.equal(steps.length, n);
+  assert.equal(s.nextStepIndex, 2);
+  ctx.currentTime = 0.25;
+  s.tick();
+  const added = steps.slice(n);
+  assert.equal(added.length, 1);
+  assert.equal(added[0].index, 2);
+  assert.ok(Math.abs(added[0].time - 0.3) < EPS);
 });
