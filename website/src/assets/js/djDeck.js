@@ -42,7 +42,36 @@ function retryResume() {
   engine.resume().catch((err) => console.warn('Audio could not start yet:', err));
 }
 
-async function start(root) {
+// On touch the overlay can hide while the finger is still down, and the
+// compatibility click would then land on the mixer control underneath. Swallow
+// that one click; give up 500 ms after the pointer lifts (or 5 s as a fallback)
+// so a later genuine click is never eaten.
+function swallowStartClick() {
+  let timer;
+  const done = () => {
+    clearTimeout(timer);
+    document.removeEventListener('click', onClick, true);
+    document.removeEventListener('pointerup', onUp, true);
+    document.removeEventListener('pointercancel', onUp, true);
+  };
+  const onClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    done();
+    retryResume(); // this click may be the gesture iOS needs to unlock audio
+  };
+  const arm = (ms) => {
+    clearTimeout(timer);
+    timer = setTimeout(done, ms);
+  };
+  const onUp = () => arm(500);
+  document.addEventListener('click', onClick, true);
+  document.addEventListener('pointerup', onUp, true);
+  document.addEventListener('pointercancel', onUp, true);
+  arm(5000);
+}
+
+async function start(root, fromPointer = false) {
   if (failed) return;
   if (engine) {
     retryResume(); // second trigger: never a second engine
@@ -56,6 +85,7 @@ async function start(root) {
     showUnsupported();
     return;
   }
+  if (fromPointer) swallowStartClick();
   window.__djEngine = engine; // dev aid for debugging; later code doesn't import from here
   console.info('[dj] engine created');
 
@@ -84,7 +114,7 @@ function initDeck() {
   const startButton = root.querySelector('.dj__start');
   const onPointer = (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    start(root);
+    start(root, true);
   };
   startButton.addEventListener('pointerdown', onPointer);
   startButton.addEventListener('click', () => start(root));

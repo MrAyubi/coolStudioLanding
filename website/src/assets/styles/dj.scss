@@ -308,6 +308,11 @@ $dj-platter: fluid(140px, 220px);
         border: 3px solid $dj-line;
         border-radius: 4px;
         background: #0d0f11;
+
+        // Master meter sits beside the scope, so it matches the scope's height.
+        &--master {
+            min-height: 0;
+        }
     }
 
     // ── Layer pads ─────────────────────────────────────────────────────────────
@@ -424,6 +429,14 @@ $dj-platter: fluid(140px, 220px);
             top: 8px;
             left: 6px;
         }
+    }
+
+    // Master output: waveform scope + master level meter.
+    &__master-out {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        width: 100%;
     }
 
     &__scope {
