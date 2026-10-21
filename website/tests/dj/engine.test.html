@@ -256,6 +256,26 @@ async function run() {
     return (p > 0.01 && p <= 1) || `peak=${p}`;
   });
 
+  await check('suspend stops the grid, resume restarts it', async () => {
+    const { engine } = setup(createEngine, 0.5);
+    engine.decks[0].play();
+    engine.drop();
+    await engine.suspend();
+    const hidden = engine._debug.timers;
+    const playing = engine.decks[0].isPlaying;
+    // An unrendered OfflineAudioContext can't resume; the grid restarts first.
+    await engine.resume().catch(() => {});
+    const shown = engine._debug.timers;
+    await engine.resume().catch(() => {}); // a second resume never adds a timer
+    const again = engine._debug.timers;
+    engine.decks[0].stop();
+    await engine.suspend();
+    await engine.resume().catch(() => {});
+    const stopped = engine._debug.timers; // nothing playing: no restart
+    return (hidden === 0 && playing && shown === 1 && again === 1 && stopped === 0)
+      || `hidden=${hidden} playing=${playing} shown=${shown} again=${again} stopped=${stopped}`;
+  });
+
   await check('destroy leaves zero timers', async () => {
     const { engine } = setup(createEngine, 0.5);
     engine.decks[0].play();

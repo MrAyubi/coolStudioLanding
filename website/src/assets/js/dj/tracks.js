@@ -20,7 +20,7 @@ export const TRACKS = [
     style: "House",
     suggestedBpm: 124,
     layers: {
-      drums: drums("k - h - k s h - k - h - k s h h"),
+      drums: drums("k - h - ks - h - k - h - ks - h h"),
       bass: notes("0 - - 0 - - 0 - 2 - - 2 - - 1 -"),
       chords: chords("0,2,4 - - - - - 0,2,4 - 1,3,5 - - - - - - -"),
       lead: notes("- - 7 - - 5 - - - - 8 - 7 - - -"),

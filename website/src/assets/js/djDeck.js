@@ -14,8 +14,10 @@ import { startVisuals } from './dj/visuals.js';
 const IGNORED_START_KEYS = ['Tab', 'Escape', 'Shift', 'Control', 'Alt', 'Meta'];
 const DEFAULT_TRACKS = { a: 'house', b: 'breaks' };
 const DEFAULT_BPM = 120;
-// Global shortcuts stay out of the way of focused form controls and sliders.
-const SHORTCUT_IGNORE = 'button, select, input, textarea, [role="slider"], .dj__xy';
+// Global shortcuts stay out of the way of focused form controls. Sliders and
+// the XY pad are not excluded: they only own the arrow/paging keys, which the
+// shortcut handler never acts on, so Space still works after touching a knob.
+const SHORTCUT_IGNORE = 'button, select, input, textarea';
 const CROSSFADER_INSET = 14; // half the 28px handle in dj.scss: its centre's travel
 const UNSUPPORTED_TEXT = "Your browser can't play this. Try a recent Chrome, Firefox or Safari.";
 
@@ -216,8 +218,13 @@ async function start(root, fromPointer = false) {
     return;
   }
   if (fromPointer) swallowStartClick();
-  window.__djEngine = engine; // dev aid for debugging; later code doesn't import from here
-  console.info('[dj] engine created');
+  // Interruptions (iOS calls, other audio) can stop the context while the page
+  // stays visible; try to get it running again.
+  engine.ctx.onstatechange = retryResume;
+  if (process.env.NODE_ENV !== 'production') {
+    window.__djEngine = engine; // dev aid for debugging; later code doesn't import from here
+    console.info('[dj] engine created');
+  }
   wireControls(root);
   startVisuals(engine, root); // its loop starts once the mixer is shown
 
@@ -258,10 +265,14 @@ function initDeck() {
     document.addEventListener(type, retryResume, { passive: true });
   });
 
+  // Serialise hide/show: each transition waits for the previous one and reads
+  // the visibility when it runs, so a quick hide/show can't end suspended.
+  let transition = Promise.resolve();
   document.addEventListener('visibilitychange', () => {
     if (!engine) return;
-    const change = document.hidden ? engine.suspend() : engine.resume();
-    change.catch((err) => console.warn('Audio could not change state:', err));
+    transition = transition
+      .then(() => (document.hidden ? engine.suspend() : engine.resume()))
+      .catch((err) => console.warn('Audio could not change state:', err));
   });
 }
 

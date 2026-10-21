@@ -263,6 +263,7 @@ export function createEngine(opts = {}) {
   ib.xf.gain.value = crossfadeGains(0.5).b;
 
   let destroyed = false;
+  let gridSuspended = false; // suspend() stopped a running grid
   const engine = {
     ctx,
     decks,
@@ -294,8 +295,24 @@ export function createEngine(opts = {}) {
       stepListeners.add(cb);
       return () => stepListeners.delete(cb);
     },
-    async resume() { if (ctx.state === 'suspended') await ctx.resume(); },
-    async suspend() { if (ctx.state === 'running') await ctx.suspend(); },
+    // Hiding stops the grid (no timer runs while hidden; a drop in progress is
+    // cancelled and restored, as on stop) but keeps decks playing, so resume can
+    // restart it from step 0. iOS can leave the context 'interrupted', so resume
+    // anything that isn't running or closed.
+    async resume() {
+      if (gridSuspended && !destroyed) {
+        gridSuspended = false;
+        if (!scheduler.running && decks.some((d) => d.isPlaying)) scheduler.start();
+      }
+      if (ctx.state !== 'running' && ctx.state !== 'closed') await ctx.resume();
+    },
+    async suspend() {
+      if (scheduler.running) {
+        gridSuspended = true;
+        stopGrid();
+      }
+      if (ctx.state === 'running') await ctx.suspend();
+    },
     destroy() {
       if (destroyed) return;
       destroyed = true;

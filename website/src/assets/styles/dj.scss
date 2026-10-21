@@ -268,12 +268,16 @@ $dj-platter: fluid(140px, 220px);
         grid-template-columns: repeat(auto-fit, minmax(#{$dj-knob}, 1fr));
         gap: 12px 8px;
         justify-items: center;
+        // The strip stretches this grid to the meter's height; keep the rows
+        // packed at the top so labels sit right under their knobs.
+        align-content: start;
         min-width: 0;
     }
 
     &__control {
         display: grid;
         justify-items: center;
+        align-content: start;
         gap: 6px;
     }
 
@@ -551,6 +555,12 @@ $dj-platter: fluid(140px, 220px);
 
     .dj__xy {
         width: min(100%, 320px);
+    }
+
+    // Five knobs share ~280 px: tighter labels so FILTER and HIGH don't touch.
+    .dj__label {
+        font-size: 9px;
+        letter-spacing: 0.02em;
     }
 }
 
