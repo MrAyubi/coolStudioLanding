@@ -66,6 +66,64 @@ $dj-platter: fluid(140px, 220px);
         color: $dj-accent-b;
     }
 
+    // ── "Rotate your phone" overlay ────────────────────────────────────────────
+    // Only shown on touch phones held upright (see the media query at the end);
+    // rotating hides it by itself, "Continue anyway" hides it for the session.
+    &__rotate {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 20;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 0 16px;
+        background: $font-dark;
+        text-align: center;
+    }
+
+    &__rotate-icon {
+        width: 44px;
+        height: 76px;
+        margin-bottom: 28px;
+        border: 4px solid $yelliw-vintage;
+        border-radius: 10px;
+        box-shadow: 4px 4px 0 $retro-red;
+        animation: dj-rotate 2.4s ease-in-out infinite;
+    }
+
+    &__rotate-title {
+        margin: 0;
+        font-family: $dj-display;
+        font-size: 22px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: $yelliw-vintage;
+        text-shadow: 3px 3px 0 $retro-red;
+    }
+
+    &__rotate-text {
+        margin: 12px 0 28px;
+        font-size: 15px;
+        color: $white-vintage;
+    }
+
+    &__rotate-skip {
+        padding: 12px 20px;
+        border: 2px solid $dj-accent-b;
+        border-radius: 8px;
+        background: transparent;
+        color: $dj-accent-b;
+        font-family: $dj-display;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
     // ── Mixer layout: deck A | centre | deck B ─────────────────────────────────
     &__mixer {
         display: grid;
@@ -130,8 +188,10 @@ $dj-platter: fluid(140px, 220px);
         --accent: #{$dj-accent-b};
     }
 
+    // Keeps its own height but sits on the decks' bottom edge.
     &__centre {
         grid-area: centre;
+        align-self: end;
         --accent: #{$yelliw-vintage};
     }
 
@@ -366,8 +426,13 @@ $dj-platter: fluid(140px, 220px);
         color: $white-vintage;
     }
 
+    // Fixed three-digit box so going from 100 to 99 BPM doesn't shift the knob.
     &__tempo-bpm {
+        display: inline-block;
+        width: 3ch;
         font-size: fluid(18px, 26px);
+        font-variant-numeric: tabular-nums;
+        text-align: right;
         color: $yelliw-vintage;
     }
 
@@ -561,6 +626,25 @@ $dj-platter: fluid(140px, 220px);
     .dj__label {
         font-size: 9px;
         letter-spacing: 0.02em;
+    }
+}
+
+// Touch phones held upright: ask for landscape until they rotate or skip.
+@media (max-width: $bp-phone) and (orientation: portrait) and (pointer: coarse) {
+    .dj:not(.dj--rotate-dismissed) .dj__rotate {
+        display: flex;
+    }
+}
+
+@keyframes dj-rotate {
+    0%,
+    25% {
+        transform: rotate(0deg);
+    }
+
+    55%,
+    100% {
+        transform: rotate(-90deg);
     }
 }
 

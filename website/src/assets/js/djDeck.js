@@ -239,9 +239,35 @@ async function start(root, fromPointer = false) {
   root.querySelector('.dj__title')?.focus();
 }
 
+// The overlay itself is shown by CSS (touch phone held upright). "Continue
+// anyway" hides it for the rest of the session; rotating hides it by itself.
+const ROTATE_DISMISSED_KEY = 'dj:rotate-dismissed';
+
+function initRotatePrompt(root) {
+  const dismiss = () => root.classList.add('dj--rotate-dismissed');
+  try {
+    if (sessionStorage.getItem(ROTATE_DISMISSED_KEY)) dismiss();
+  } catch (e) {
+    // Storage blocked: the prompt just shows again next visit.
+  }
+
+  const skip = root.querySelector('.dj__rotate-skip');
+  if (!skip) return;
+  skip.addEventListener('click', () => {
+    dismiss();
+    try {
+      sessionStorage.setItem(ROTATE_DISMISSED_KEY, '1');
+    } catch (e) {
+      // ignore
+    }
+  });
+}
+
 function initDeck() {
   const root = document.querySelector('.dj');
   if (!root) return;
+
+  initRotatePrompt(root);
 
   if (!(window.AudioContext || window.webkitAudioContext)) {
     showUnsupported();
