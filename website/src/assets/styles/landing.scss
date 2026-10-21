@@ -1,5 +1,10 @@
  @import 'base.scss';
 
+ // The hero's side-by-side layout ("Very Creative Cool Studio" next to the logo) needs
+ // about 700px; below that the text runs into the logo and off the screen. So the hero
+ // keeps its phone layout (logo centered, text hidden) up to here, past $bp-phone.
+ $bp-hero-stacked: 700px;
+
  .landing {
      position: relative;
      width: 100%;
@@ -17,7 +22,13 @@
          height: 60vh;
      }
 
-     @media (max-width: 430px) {
+     // On short tablet screens (landscape iPad, phones held sideways) 60vh is too little
+     // room: the "Art" definition at the bottom got cut off. Phones (stacked hero) are fine.
+     @media (min-width: #{$bp-hero-stacked + 1px}) and (max-width: 1024px) {
+         min-height: 640px;
+     }
+
+     @media (max-width: #{$bp-hero-stacked}) {
          height: 70vh;
          justify-content: end;
      }
@@ -74,7 +85,7 @@
              }
          }
 
-         @media (max-width: 430px) {
+         @media (max-width: #{$bp-phone}) {
              display: none;
 
              & {
@@ -208,7 +219,7 @@
              //       6px 6px 0px $deep-green;
          }
 
-         @media (max-width: 430px) {
+         @media (max-width: #{$bp-phone}) {
              margin-top: 24px;
              left: 2rem;
              top: 5%;
@@ -244,7 +255,7 @@
 
          @media (max-width: 768px) {}
 
-         @media (max-width: 430px) {
+         @media (max-width: #{$bp-hero-stacked}) {
              left: 50%;
              transform: translateX(-50%);
              top: 53%;
@@ -315,9 +326,8 @@
 
          }
 
-         @media (max-width: 430px) {
+         @media (max-width: #{$bp-hero-stacked}) {
              display: none;
-             ;
              left: 2rem;
              top: 5%;
 
@@ -371,7 +381,7 @@
      z-index: 1;
      scale: 1.1;
 
-     @media (max-width: 430px) {
+     @media (max-width: #{$bp-phone}) {
          scale: 1.3;
 
      }
@@ -385,7 +395,7 @@
      bottom: 0;
      scale: 1.1;
 
-     @media (max-width: 430px) {
+     @media (max-width: #{$bp-phone}) {
          scale: 1.1;
 
      }
@@ -401,9 +411,10 @@
      top: 60%;
      width: 50%;
 
-     @media (max-width: 430px) {
+     // Same breakpoint as the hero above it, or the centered phone logo lands on "Art".
+     @media (max-width: #{$bp-hero-stacked}) {
          top: 5%;
-         width: 100%;
+         width: 90%; // left: 5% + 90% leaves the same 5% margin on the right
 
      }
 
@@ -413,25 +424,17 @@
          display: flex;
          align-items: center;
          justify-content: left;
-         font-size: 6rem; // however big you want the opening "ART" to read
+         font-size: fluid(64px, 96px); // however big you want the opening "ART" to read
          font-weight: 700;
          visibility: hidden; // measurable, but never painted or interactive
          pointer-events: none;
-
-         @media (max-width: 430px) {
-             font-size: 4rem;
-         }
      }
 
      &__word {
          display: flex;
          justify-content: left;
-         font-size: 6rem; // final "strategy" size
+         font-size: fluid(64px, 96px); // final "strategy" size, same as the ghost above
          font-weight: 700;
-
-         @media (max-width: 430px) {
-             font-size: 4rem;
-         }
 
      }
 
@@ -453,11 +456,7 @@
          position: relative;
          margin-top: 1.5rem;
          text-align: left;
-         font-size: 32px;
-
-         @media (max-width: 430px) {
-             font-size: 1rem;
-         }
+         font-size: fluid(16px, 32px);
 
      }
 
@@ -496,7 +495,7 @@
          height: 6%;
 
 
-         @media(max-width: 430px) {
+         @media(max-width: #{$bp-phone}) {
              width: 30%;
              height: 6%;
              position: absolute;
@@ -530,6 +529,7 @@
          position: relative;
 
          display: flex;
+         flex-direction: column;
          align-items: center;
          justify-content: center;
 
@@ -542,6 +542,7 @@
          flex-direction: column;
          align-items: center;
          gap: 8px;
+         margin-block: auto; // centered in the space above the tagline
 
          a {
              font-family: "verycool", sans-serif;
@@ -562,12 +563,10 @@
          }
      }
 
+     // In the normal flow below the links (not absolutely positioned at the bottom),
+     // so on short screens, like a phone held sideways, the links can't slide under it.
      &__tagline {
-         position: absolute;
-         left: 50%;
-         bottom: 40px;
-
-         transform: translateX(-50%);
+         margin-top: 2rem;
 
          width: 100%;
          text-align: center;
@@ -600,8 +599,6 @@
          }
 
          &__tagline {
-             bottom: 25px;
-
              font-size: clamp(1.8rem, 8vw, 3rem);
          }
      }

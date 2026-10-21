@@ -51,14 +51,11 @@
     h1 {
         font-family: 'cartoonistKooky', sans-serif;
         font-weight: 900;
-        font-size: 5vw;
+        // 5vw like before on desktop, but never smaller than the phone size (2rem).
+        font-size: clamp(2rem, 5vw, 8rem);
         font-style: italic;
         text-transform: uppercase;
         color: $text-color;
-
-        @media (max-width:430px) {
-            font-size: 2rem;
-        }
     }
 
     &--pulse {

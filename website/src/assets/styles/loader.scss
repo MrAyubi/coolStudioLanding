@@ -203,7 +203,8 @@
     // VERY SMALL SCREENS
     // =====================================================
 
-    @media (max-width: 430px) {
+    // 480px: same as $bp-phone in base.scss
+    @media (max-width: 480px) {
 
         &__logo {
             width: 42vw;

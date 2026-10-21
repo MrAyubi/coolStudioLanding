@@ -14,7 +14,7 @@
      p {
          margin: 1rem 0;
 
-         @media(max-width:430px) {
+         @media(max-width:#{$bp-phone}) {
              margin: 0;
          }
 
@@ -26,16 +26,12 @@
      font-family: 'cartoonistKooky';
      padding: 2rem 0;
 
-     @media(max-width: 430px) {
+     @media(max-width: #{$bp-phone}) {
          text-align: center;
      }
 
      h1 {
-         font-size: 64px;
-
-         @media(max-width: 430px) {
-             font-size: 32px;
-         }
+         font-size: fluid(32px, 64px);
      }
 
 
@@ -87,7 +83,7 @@
      width: 100%;
      margin-top: 3rem;
 
-     @media(max-width: 430px) {
+     @media(max-width: #{$bp-phone}) {
          margin-top: 0;
          margin-bottom: 2rem;
      }
@@ -98,7 +94,7 @@
  #affogato {
      width: 50%;
 
-     @media(max-width: 430px) {
+     @media(max-width: #{$bp-phone}) {
          width: 100%;
      }
  }
@@ -110,7 +106,7 @@
          width: 500px;
      }
 
-     @media(max-width: 430px) {
+     @media(max-width: #{$bp-phone}) {
          width: 100%;
      }
  }
@@ -121,7 +117,7 @@
      width: fit-content;
      margin: 0 auto;
 
-     @media (max-width:430px) {
+     @media (max-width:#{$bp-phone}) {
          overflow: unset;
          margin-bottom: 3rem;
      }
@@ -153,7 +149,7 @@
          transform: translateY(85%); // pushed fully below view
          transition: transform 0.2s ease;
 
-         @media (max-width:430px) {
+         @media (max-width:#{$bp-phone}) {
              bottom: 3%;
              padding: 12px;
              font-size: 12px;

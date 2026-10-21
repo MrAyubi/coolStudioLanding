@@ -3,7 +3,8 @@ const section = document.querySelector(".offer-split");
 if (section) {
     const panels = [...section.querySelectorAll(".offer-split__panel")];
     const divider = section.querySelector(".offer-split__divider");
-    const isMobile = () => window.matchMedia("(max-width: 430px)").matches;
+    // Same as $bp-phone in base.scss.
+    const isMobile = () => window.matchMedia("(max-width: 480px)").matches;
 
     const updateDivider = () => {
         if (!section.classList.contains("has-active")) {

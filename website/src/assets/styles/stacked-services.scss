@@ -16,7 +16,7 @@
      ========================================================= */
 
   >h1 {
-    font-size: 4rem;
+    font-size: fluid(32px, 64px);
     margin: 2rem 0;
   }
 
@@ -109,6 +109,8 @@
     // so the whole row is clickable and the cursor doesn't flip between arrow and hand.
     .service-card__title {
       margin: 0;
+
+      font-size: fluid(16px, 24px);
 
       text-shadow: 2px 2px #282828;
 
@@ -225,7 +227,7 @@
 
       margin: 0;
 
-      font-size: 5rem;
+      font-size: fluid(32px, 80px);
       font-weight: 600;
 
       text-shadow: 3px 3px #282828;
@@ -332,18 +334,8 @@
       border-bottom-width: 10px;
 
 
-      .service-card__title {
-        font-size: 1.8rem;
-      }
-
-
       .service-card__description {
         font-size: 1rem;
-      }
-
-
-      .service-card__description h1 {
-        font-size: 3rem;
       }
     }
   }
@@ -389,14 +381,12 @@
      PHONE
      ========================================================= */
 
-  @media (max-width: 430px) {
+  @media (max-width: #{$bp-phone}) {
 
     padding: 1rem;
 
 
     >h1 {
-      font-size: 2rem;
-
       margin: 1.5rem 0;
     }
 
@@ -404,16 +394,6 @@
     .service-card {
 
       border-bottom-width: 8px;
-
-
-      .service-card__title {
-        font-size: 16px;
-      }
-
-
-      .service-card__description h1 {
-        font-size: 2rem;
-      }
     }
   }
 }

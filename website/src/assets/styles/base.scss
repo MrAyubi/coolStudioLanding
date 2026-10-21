@@ -1,3 +1,24 @@
+@use "sass:math";
+
+// =========================================================
+// RESPONSIVE HELPERS
+// =========================================================
+
+// Phones up to this width get the phone layout. 480px covers every current phone,
+// including the big ones (iPhone Pro Max / Plus are 430-440px wide).
+// offerSplit.js has the same value in a matchMedia() call: keep them in sync.
+$bp-phone: 480px;
+
+// fluid($min, $max): a size that grows smoothly with the screen width, from $min on a
+// 400px-wide phone to $max on a 1440px-wide desktop, and never goes outside that range.
+// Use it for headings so in-between screens get in-between sizes instead of jumping.
+// Both values must be in px.
+@function fluid($min, $max, $from: 400px, $to: 1440px) {
+    $slope: math.div($max - $min, $to - $from);
+    $base: $min - $slope * $from;
+    @return clamp(#{$min}, #{$base} + #{$slope * 100vw}, #{$max});
+}
+
 @font-face {
     font-family: "streetOfRage";
     src: url("../fonts/streets-of-rage-2-3-cyr.woff2") format("woff2");
