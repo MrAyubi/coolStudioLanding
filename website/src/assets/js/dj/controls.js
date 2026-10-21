@@ -3,7 +3,12 @@
 // module; everything touching the DOM lives inside the bind functions.
 
 const DRAG_RANGE = 150; // px of vertical drag that sweeps a knob end to end
-const DOUBLE_TAP_MS = 300;
+// A press is a tap if it barely moved and was short; a double tap is a second
+// press soon after a tap's release, near where the tap was.
+const TAP_MAX_MOVE = 4; // px
+const TAP_MAX_MS = 250;
+const DOUBLE_TAP_GAP_MS = 300; // from the tap's release to the next pointerdown
+const DOUBLE_TAP_MAX_DIST = 10; // px between the two presses
 const STEP_KEYS = ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'PageUp', 'PageDown', 'Home', 'End'];
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
@@ -34,11 +39,21 @@ export function stepValue(value, key, step = 0.05) {
   return next === undefined ? value : round(clamp01(next));
 }
 
+// prev: the last completed press { x, y, upTime, moved, duration } (or null);
+// next: the new pointerdown { x, y, time }. Times share one clock (e.timeStamp).
+export function isDoubleTap(prev, next) {
+  if (!prev || prev.moved > TAP_MAX_MOVE || prev.duration > TAP_MAX_MS) return false;
+  const gap = next.time - prev.upTime;
+  if (gap < 0 || gap > DOUBLE_TAP_GAP_MS) return false;
+  return Math.hypot(next.x - prev.x, next.y - prev.y) <= DOUBLE_TAP_MAX_DIST;
+}
+
 const hasModifier = (e) => e.ctrlKey || e.metaKey || e.altKey;
 
 // One pointer at a time, captured so a release outside the element (or the
-// window) still ends the drag. Returns an unbind function.
-function trackPointer(el, onStart, onMove) {
+// window) still ends the drag. onEnd(e, released) runs once per drag;
+// `released` is false for a cancel or lost capture. Returns an unbind function.
+function trackPointer(el, onStart, onMove, onEnd = () => {}) {
   let id = null;
   const down = (e) => {
     if (id !== null || (e.pointerType === 'mouse' && e.button !== 0)) return;
@@ -49,14 +64,19 @@ function trackPointer(el, onStart, onMove) {
     try {
       el.setPointerCapture(id);
     } catch (err) {
-      // The pointer may already be gone; the drag then ends on pointerup.
+      // The pointer is already gone. Without capture a release outside the
+      // element would never reach us and `id` would block every later press.
+      id = null;
+      onEnd(e, false);
     }
   };
   const move = (e) => {
     if (e.pointerId === id) onMove(e);
   };
   const end = (e) => {
-    if (e.pointerId === id) id = null;
+    if (e.pointerId !== id) return;
+    id = null;
+    onEnd(e, e.type === 'pointerup');
   };
   const listeners = {
     pointerdown: down,
@@ -78,7 +98,8 @@ export function bindKnob(el, opts) {
   let value = round(clamp01(opts.value));
   let startValue = value;
   let startY = 0;
-  let lastTap = -Infinity;
+  let press = null; // the press in progress: { x, y, time, moved }
+  let lastTap = null; // the last completed press, for isDoubleTap
 
   const render = () => {
     el.setAttribute('aria-valuenow', String(value));
@@ -92,6 +113,9 @@ export function bindKnob(el, opts) {
     render();
     onChange(value);
   };
+  const trackMove = (e) => {
+    if (press) press.moved = Math.max(press.moved, Math.hypot(e.clientX - press.x, e.clientY - press.y));
+  };
   const fromX = (e) => {
     const rect = el.getBoundingClientRect();
     return positionToValue(e.clientX, rect.left + inset, rect.width - 2 * inset);
@@ -100,19 +124,31 @@ export function bindKnob(el, opts) {
   const unbindPointer = trackPointer(
     el,
     (e) => {
-      const now = Date.now();
-      if (now - lastTap < DOUBLE_TAP_MS) {
-        lastTap = -Infinity;
+      const next = { x: e.clientX, y: e.clientY, time: e.timeStamp };
+      const double = isDoubleTap(lastTap, next);
+      lastTap = null;
+      if (double) {
         set(defaultValue);
         return false;
       }
-      lastTap = now;
+      press = { ...next, moved: 0 };
       if (axis === 'x') set(fromX(e));
       startValue = value;
       startY = e.clientY;
       return true;
     },
-    (e) => set(axis === 'x' ? fromX(e) : dragToValue(startValue, startY, e.clientY)),
+    (e) => {
+      trackMove(e);
+      set(axis === 'x' ? fromX(e) : dragToValue(startValue, startY, e.clientY));
+    },
+    (e, released) => {
+      if (released && press) {
+        trackMove(e);
+        const { x, y, time, moved } = press;
+        lastTap = { x, y, upTime: e.timeStamp, moved, duration: e.timeStamp - time };
+      }
+      press = null;
+    },
   );
   const onKey = (e) => {
     if (hasModifier(e) || !STEP_KEYS.includes(e.key)) return;

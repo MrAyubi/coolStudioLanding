@@ -4,6 +4,7 @@ import {
   dragToValue,
   stepValue,
   positionToValue,
+  isDoubleTap,
 } from "../../src/assets/js/dj/controls.js";
 
 test("dragToValue maps a vertical drag to a clamped 0–1 value", () => {
@@ -40,4 +41,33 @@ test("positionToValue maps a pointer position along a track", () => {
   assert.equal(positionToValue(50, 100, 200), 0);
   assert.equal(positionToValue(400, 100, 200), 1);
   assert.equal(positionToValue(150, 100, 0), 0); // zero-size track
+});
+
+// prev: the last completed press { x, y, upTime, moved, duration }; next: a pointerdown { x, y, time }.
+const tap = (over = {}) => ({ x: 100, y: 100, upTime: 1000, moved: 0, duration: 80, ...over });
+const down = (over = {}) => ({ x: 100, y: 100, time: 1150, ...over });
+
+test("isDoubleTap: two quick taps at the same spot", () => {
+  assert.equal(isDoubleTap(tap(), down()), true);
+  assert.equal(isDoubleTap(tap(), down({ x: 106, y: 106 })), true); // within 10 px
+});
+
+test("isDoubleTap: quick presses 40 px apart are not a double tap", () => {
+  assert.equal(isDoubleTap(tap(), down({ x: 140 })), false);
+});
+
+test("isDoubleTap: a drag followed by a quick tap is not a double tap", () => {
+  assert.equal(isDoubleTap(tap({ moved: 20 }), down()), false);
+});
+
+test("isDoubleTap: a long press is not a tap", () => {
+  assert.equal(isDoubleTap(tap({ duration: 400 }), down()), false);
+});
+
+test("isDoubleTap: taps 400 ms apart are not a double tap", () => {
+  assert.equal(isDoubleTap(tap(), down({ time: 1400 })), false);
+});
+
+test("isDoubleTap: no previous tap", () => {
+  assert.equal(isDoubleTap(null, down()), false);
 });
