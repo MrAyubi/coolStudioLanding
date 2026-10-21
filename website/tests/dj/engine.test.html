@@ -12,13 +12,38 @@ const SR = 44100;
 // Fake timer: the harness drives ticks itself via ctx.suspend().
 const fakeTimers = () => ({ setTimer: () => ({}), clearTimer: () => {} });
 
-function setup(createEngine, seconds, so = {}) {
+// Seeded Math.random so two renders of the same patch match sample for sample.
+function seedRandom(seed) {
+  const orig = Math.random;
+  Math.random = () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  return () => { Math.random = orig; };
+}
+
+// events: [[seconds, (engine) => void]] run mid-render (before that quantum's tick).
+function setup(createEngine, seconds, so = {}, events = []) {
   const ctx = new OfflineAudioContext(2, Math.round(SR * seconds), SR);
   const engine = createEngine({ audioContext: ctx, schedulerOptions: { lookahead: 0.2, ...fakeTimers(), ...so } });
+  const at = new Map(); // render-quantum frame -> { fns, tick }
+  const slot = (t) => {
+    const q = Math.floor((t * SR) / 128) * 128;
+    if (!at.has(q)) at.set(q, { fns: [], tick: false });
+    return at.get(q);
+  };
   // Tick the scheduler every 0.1 s of render time.
-  for (let t = 0.1; t < seconds - 0.05; t += 0.1) {
-    ctx.suspend(t).then(() => { engine._debug.tick(); ctx.resume(); });
-  }
+  for (let t = 0.1; t < seconds - 0.05; t += 0.1) slot(t).tick = true;
+  events.forEach(([t, fn]) => slot(t).fns.push(fn));
+  at.forEach((s, q) => {
+    ctx.suspend(q / SR).then(() => {
+      s.fns.forEach((fn) => fn(engine));
+      if (s.tick) engine._debug.tick();
+      ctx.resume();
+    });
+  });
   return { ctx, engine };
 }
 
@@ -108,6 +133,54 @@ async function run() {
     // Steps 0-1 precede the drop (lookahead 0.2), drop covers ~0.3-2.3 s at 120 BPM.
     const during = peak(buf, 0.8, 2.2), after = peak(buf, 2.5, 3.9);
     return (during < 0.005 && after > 0.05) || `during=${during} after=${after}`;
+  });
+
+  await check('stopping right after drop() does not leave drums+bass muted', async () => {
+    // Tick at 0.2 s consumes the drop (cut scheduled for the 0.3 s step); stop at 0.25 s, play at 0.65 s.
+    const { ctx, engine } = setup(createEngine, 3, {}, [
+      [0.25, (e) => e.decks[0].stop()],
+      [0.65, (e) => e.decks[0].play()],
+    ]);
+    muteAllBut(engine.decks[0], ['drums', 'bass']);
+    engine.decks[0].play();
+    engine.drop();
+    const buf = await ctx.startRendering();
+    const after = peak(buf, 1.0, 2.9);
+    const flags = engine.decks[0].isLayerMuted('drums') || engine.decks[0].isLayerMuted('bass');
+    return (after > 0.05 && !flags) || `after=${after} mutedFlags=${flags}`;
+  });
+
+  await check('filter re-enable after LP sweep is transparent (no stale cutoff)', async () => {
+    const render = async (events) => {
+      const restore = seedRandom(42);
+      try {
+        const { ctx, engine } = setup(createEngine, 1.8, {}, events);
+        engine.decks[0].play();
+        return await ctx.startRendering();
+      } finally {
+        restore();
+      }
+    };
+    const ref = await render([]);
+    const swept = await render([
+      [0.05, (e) => e.decks[0].setFilter(-1)],
+      [0.45, (e) => e.decks[0].setFilter(0)],
+      [1.299, (e) => e.decks[0].setFilter(-0.05)], // just before the 1.3 s hat
+    ]);
+    // High band (> ~3 kHz) over the 1.3 s hat: a stale 200 Hz cutoff would strip its attack.
+    const hp = (buf) => {
+      const a = Math.exp((-2 * Math.PI * 3000) / SR), d = buf.getChannelData(0);
+      const out = new Float32Array(d.length);
+      let lp = 0;
+      for (let i = 0; i < d.length; i++) { lp = (1 - a) * d[i] + a * lp; out[i] = d[i] - lp; }
+      return out;
+    };
+    // Energy, not waveform diff: the filters' phase shift is fine, a lost high band is not.
+    const a = hp(ref), b = hp(swept);
+    let ea = 0, eb = 0;
+    for (let i = Math.floor(1.297 * SR); i < 1.33 * SR; i++) { ea += a[i] ** 2; eb += b[i] ** 2; }
+    const ratio = Math.sqrt(eb / ea);
+    return (ea > 0 && ratio > 0.8 && ratio < 1.25) || `high-band rms ratio=${ratio.toFixed(3)}`;
   });
 
   await check('play/stop x20 leaves one scheduler timer', async () => {

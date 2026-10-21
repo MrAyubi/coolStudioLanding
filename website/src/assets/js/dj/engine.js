@@ -6,7 +6,9 @@ import { noteToHz, clampBpm, stepDuration, crossfadeGains, sweepToFilter, eqToDb
 
 const TAU = 0.05;
 const GATE_TAU = 0.02;
-const DROP_TAU = 0.005;
+const LAYER_TAU = 0.015; // layer mute + drop: fast enough to land on the beat
+const DROP_LEAD = 0.01; // restore this long before the re-entry step
+const EDGE = { lowpass: 20000, highpass: 20 }; // transparent cutoffs
 const DROP_STEPS = 16;
 const DROP_LAYERS = ['drums', 'bass'];
 const FEEDBACK = 0.35;
@@ -55,9 +57,15 @@ export function createEngine(opts = {}) {
   feedback.gain.value = FEEDBACK; // < 1 so the echo loop decays
   reverb.buffer = reverbImpulse(ctx);
   mix.connect(limiter);
-  mix.connect(delaySend).connect(delay).connect(feedback).connect(delay);
+  // No connect() chaining: it returns undefined on prefixed webkitAudioContext (Safari 14.0).
+  mix.connect(delaySend);
+  delaySend.connect(delay);
+  delay.connect(feedback);
+  feedback.connect(delay);
   delay.connect(limiter);
-  mix.connect(reverbSend).connect(reverb).connect(limiter);
+  mix.connect(reverbSend);
+  reverbSend.connect(reverb);
+  reverb.connect(limiter);
   limiter.connect(masterAnalyser);
   limiter.connect(opts.destination || ctx.destination);
 
@@ -73,7 +81,19 @@ export function createEngine(opts = {}) {
     const low = node(ctx.createBiquadFilter());
     const mid = node(ctx.createBiquadFilter());
     const high = node(ctx.createBiquadFilter());
-    const sweep = node(ctx.createBiquadFilter());
+    // Sweep: dry path plus one fixed-type filter per direction, crossfaded with gains,
+    // so the sweep never rewires or flips a filter type under signal.
+    const dry = node(ctx.createGain());
+    const sweeps = {};
+    ['lowpass', 'highpass'].forEach((t) => {
+      const f = node(ctx.createBiquadFilter());
+      const wet = node(ctx.createGain());
+      f.type = t;
+      f.frequency.value = EDGE[t];
+      wet.gain.value = 0;
+      f.connect(wet);
+      sweeps[t] = { f, wet };
+    });
     const gate = node(ctx.createGain());
     const gain = node(ctx.createGain());
     const xf = node(ctx.createGain());
@@ -85,8 +105,6 @@ export function createEngine(opts = {}) {
     mid.Q.value = 0.9;
     high.type = 'highshelf';
     high.frequency.value = 4000;
-    sweep.type = 'lowpass';
-    sweep.frequency.value = 20000;
     gate.gain.value = 0;
     gain.gain.value = 0.8;
     LAYERS.forEach((l) => {
@@ -94,12 +112,18 @@ export function createEngine(opts = {}) {
       layerGains[l].connect(low);
       muted[l] = false;
     });
-    low.connect(mid).connect(high).connect(gate);
-    sweep.connect(gate);
+    low.connect(mid);
+    mid.connect(high);
+    high.connect(dry);
+    dry.connect(gate);
+    Object.values(sweeps).forEach(({ f, wet }) => {
+      high.connect(f);
+      wet.connect(gate);
+    });
     gate.connect(gain);
     gain.connect(analyser);
-    gain.connect(xf).connect(mix);
-    let sweepOn = false;
+    gain.connect(xf);
+    xf.connect(mix);
     let playing = false;
 
     const deck = {
@@ -126,16 +150,13 @@ export function createEngine(opts = {}) {
       setFilter(v) {
         if (!fin(v)) return;
         const { type, freq } = sweepToFilter(v);
-        const on = type !== 'off';
-        if (on) {
-          sweep.type = type;
-          set(sweep.frequency, freq);
-        }
-        if (on !== sweepOn) {
-          high.disconnect();
-          high.connect(on ? sweep : gate);
-          sweepOn = on;
-        }
+        set(dry.gain, type === 'off' ? 1 : 0);
+        // Inactive filters fade out and glide back to their transparent edge,
+        // so a later re-enable starts open instead of from a stale cutoff.
+        Object.entries(sweeps).forEach(([t, { f, wet }]) => {
+          set(wet.gain, t === type ? 1 : 0);
+          set(f.frequency, t === type ? freq : EDGE[t]);
+        });
       },
       setLayerMuted(layer, m) {
         if (!(layer in muted)) return;
@@ -144,7 +165,7 @@ export function createEngine(opts = {}) {
         if (dropLayer && dropActive()) return; // applied when the drop restores
         // A restore may already be scheduled; never insert a change before it.
         const at = dropLayer ? Math.max(ctx.currentTime, dropUntil) : ctx.currentTime;
-        set(layerGains[layer].gain, m ? 0 : 1, at, DROP_TAU);
+        set(layerGains[layer].gain, m ? 0 : 1, at, LAYER_TAU);
       },
       isLayerMuted(layer) { return !!muted[layer]; },
     };
@@ -174,10 +195,16 @@ export function createEngine(opts = {}) {
     return deck;
   }
 
-  function setDropGains(value, time) {
+  // value null = restore each layer's user mute state. cancel drops any cut/restore
+  // still queued in the future (e.g. a drop cut scheduled up to one lookahead ahead).
+  function setDropGains(value, time, cancel = false) {
     decks.forEach((d) => {
       const { layerGains, muted } = internals.get(d);
-      DROP_LAYERS.forEach((l) => set(layerGains[l].gain, value === null ? (muted[l] ? 0 : 1) : value, time, DROP_TAU));
+      DROP_LAYERS.forEach((l) => {
+        const g = layerGains[l].gain;
+        if (cancel) g.cancelScheduledValues(time);
+        set(g, value === null ? (muted[l] ? 0 : 1) : value, time, LAYER_TAU);
+      });
     });
   }
 
@@ -191,7 +218,7 @@ export function createEngine(opts = {}) {
     const dropping = dropRemaining > 0;
     decks.forEach((d) => d.isPlaying && internals.get(d).trigger(i, time, sd, dropping));
     if (dropping && --dropRemaining === 0) {
-      dropUntil = time + sd;
+      dropUntil = time + sd - DROP_LEAD;
       setDropGains(null, dropUntil);
     }
   }
@@ -213,11 +240,11 @@ export function createEngine(opts = {}) {
 
   function stopGrid() {
     scheduler.stop();
-    if (dropActive()) {
+    if (dropActive() || dropUntil > ctx.currentTime) {
       dropPending = false;
       dropRemaining = 0;
       dropUntil = 0;
-      setDropGains(null, ctx.currentTime);
+      setDropGains(null, ctx.currentTime, true);
     }
   }
 
@@ -261,7 +288,14 @@ export function createEngine(opts = {}) {
       decks.forEach((d) => d.stop());
       scheduler.stop();
       nodes.forEach((n) => n.disconnect());
-      if (owned) ctx.close().catch(() => {});
+      if (owned) {
+        try {
+          const p = ctx.close();
+          if (p && p.catch) p.catch(() => {});
+        } catch (e) {
+          // already closed
+        }
+      }
     },
     _debug: { get timers() { return timers; }, tick: () => scheduler.tick() },
   };
