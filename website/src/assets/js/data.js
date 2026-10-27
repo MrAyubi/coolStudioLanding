@@ -62,6 +62,18 @@ let players_select_data = {
         ],
         bio: "Ex-boxer. Current director. He hooks viewers in 3 seconds, just like he used to hook jaws. Don't worry, he's only dangerous on the timeline now.",
         gif: gifs.aminGif
+    },
+    maziar: {
+        name: "MAZIAR",
+        skills: [
+            { name: 'Code Wizardry', score: 3 },
+            { name: 'Debugging', score: 3 },
+            { name: 'Coffee Intake', score: 3 },
+            { name: 'Haircuts', score: 1 },
+            { name: 'Patience', score: 2 }
+        ],
+        bio: "Hasn't seen a barber since the last framework war.<br/>Speaks fluent terminal. If it compiles, it's because he stared at it long enough.",
+        gif: gifs.maziarGif
     }
 
 }

@@ -150,7 +150,7 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
         margin-bottom: auto;
 
 
-        // When stacked, a 5-column grid keeps every portrait on one row; columns
+        // When stacked, a 6-column grid keeps every portrait on one row; columns
         // shrink below their max on narrow screens (e.g. Galaxy S23 at 384px) instead of wrapping.
         @media #{$stacked} {
             display: grid;
@@ -168,14 +168,14 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
         }
 
         @media #{$phone} {
-            grid-template-columns: repeat(5, minmax(0, 59px));
+            grid-template-columns: repeat(6, minmax(0, 59px));
             gap: 2px;
             margin-bottom: 1rem;
             margin-top: 2rem;
         }
 
         @media #{$tablet-portrait} {
-            grid-template-columns: repeat(5, minmax(0, 94px));
+            grid-template-columns: repeat(6, minmax(0, 94px));
             gap: 8px;
             margin-top: 1rem;
             margin-bottom: 0;

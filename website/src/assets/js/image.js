@@ -6,6 +6,7 @@ import asmaGif from "url:../gifs/asma.gif"
 import nimaGif from "url:../gifs/nima.gif"
 import mohebGif from "url:../gifs/mamad.gif"
 import aminGif from "url:../gifs/amin.gif"
+import maziarGif from "url:../gifs/maziar.gif"
 
 import snake_1 from "url:../images/snake/1.png"
 import snake_2 from "url:../images/snake/2.png"
@@ -22,7 +23,7 @@ import snake_11 from "url:../images/snake/11.png"
 
 
 const gifs = {
-    mamarezaGif, asmaGif, nimaGif, mohebGif, aminGif
+    mamarezaGif, asmaGif, nimaGif, mohebGif, aminGif, maziarGif
 
 }
 
