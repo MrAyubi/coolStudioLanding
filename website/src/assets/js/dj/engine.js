@@ -2,7 +2,7 @@
 import { createScheduler } from './scheduler.js';
 import { getTrack, LAYERS } from './tracks.js';
 import * as synth from './synth.js';
-import { noteToHz, clampBpm, stepDuration, crossfadeGains, sweepToFilter, eqToDb } from './music.js';
+import { noteToHz, clampBpm, stepDuration, crossfadeGains, sweepToFilter, eqToDb, swingOffset } from './music.js';
 
 const TAU = 0.05;
 const GATE_TAU = 0.02;
@@ -172,8 +172,10 @@ export function createEngine(opts = {}) {
     };
     // Grid-facing internals stay off the public Deck object.
     internals.set(deck, { layerGains, muted, xf, analyser, trigger });
-    function trigger(i, time, sd, dropping) {
+    function trigger(i, gridTime, sd, dropping) {
       const track = getTrack(trackId);
+      // Each deck swings its own track; the shared grid itself stays straight.
+      const time = gridTime + swingOffset(i, track.swing, sd);
       LAYERS.forEach((l) => {
         if (muted[l] || (dropping && DROP_LAYERS.includes(l))) return;
         const s = track.layers[l][i];
@@ -182,6 +184,8 @@ export function createEngine(opts = {}) {
           if (s.includes('k')) synth.kick(ctx, dest, time);
           if (s.includes('s')) synth.snare(ctx, dest, time);
           if (s.includes('h')) synth.hat(ctx, dest, time);
+          if (s.includes('c')) synth.clap(ctx, dest, time);
+          if (s.includes('p')) synth.perc(ctx, dest, time);
         } else if (s === null) {
           return;
         } else if (l === 'bass') {

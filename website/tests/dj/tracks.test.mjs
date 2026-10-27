@@ -13,10 +13,13 @@ test("all presets are valid", () => {
   for (const t of TRACKS) assert.deepEqual(validateTrack(t), [], t.id);
 });
 
-test("ids are unique and match the six styles", () => {
+test("ids are unique and cover the original six plus eight new genres", () => {
   const ids = TRACKS.map((t) => t.id);
   assert.equal(new Set(ids).size, ids.length);
-  assert.deepEqual([...ids].sort(), ["ambient", "breaks", "dub", "electro", "house", "minimal"]);
+  assert.deepEqual([...ids].sort(), [
+    "afrobeat", "ambient", "breaks", "disco", "dub", "electro", "hiphop",
+    "house", "latin", "lofi", "minimal", "synthwave", "techno", "trance",
+  ]);
   assert.deepEqual(LAYERS, ["drums", "bass", "chords", "lead"]);
 });
 
@@ -57,4 +60,36 @@ test("validateTrack flags missing layer, bad chord step, non-integer degree", ()
 test("getTrack returns undefined for unknown ids", () => {
   assert.equal(getTrack("nope"), undefined);
   assert.equal(getTrack("house").id, "house");
+});
+
+test("drum steps accept clap (c) and percussion (p)", () => {
+  const t = clone(TRACKS[0]);
+  t.layers.drums[0] = "kc";
+  t.layers.drums[1] = "p";
+  assert.deepEqual(validateTrack(t), []);
+});
+
+test("swing is optional and must be between 0 and 0.35", () => {
+  const t = clone(TRACKS[0]);
+  delete t.swing;
+  assert.deepEqual(validateTrack(t), []);
+  t.swing = 0.2;
+  assert.deepEqual(validateTrack(t), []);
+  for (const bad of [-0.1, 0.5, "0.2", NaN]) {
+    t.swing = bad;
+    assert.ok(validateTrack(t).some((m) => /swing/.test(m)), String(bad));
+  }
+});
+
+test("the swung genres actually swing and the original six stay straight", () => {
+  for (const id of ["hiphop", "lofi", "afrobeat"]) assert.ok(getTrack(id).swing > 0, id);
+  for (const id of ["house", "breaks", "dub", "ambient", "electro", "minimal"]) {
+    assert.ok(!getTrack(id).swing, id);
+  }
+});
+
+test("latin and afrobeat use the percussion voice, hip-hop and disco use the clap", () => {
+  const uses = (id, ch) => getTrack(id).layers.drums.some((s) => s.includes(ch));
+  assert.ok(uses("latin", "p") && uses("afrobeat", "p"));
+  assert.ok(uses("hiphop", "c") && uses("disco", "c"));
 });

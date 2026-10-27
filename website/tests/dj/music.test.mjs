@@ -7,6 +7,8 @@ import {
   crossfadeGains,
   sweepToFilter,
   eqToDb,
+  swingOffset,
+  SWING_MAX,
 } from "../../src/assets/js/dj/music.js";
 
 test("noteToHz maps scale degrees and octaves", () => {
@@ -50,4 +52,19 @@ test("eqToDb maps -24..+6 dB", () => {
   assert.equal(eqToDb(-1), -24);
   assert.equal(eqToDb(1), 6);
   assert.equal(eqToDb(0), 0);
+});
+
+test("swingOffset delays only odd 16ths by swing x step", () => {
+  assert.equal(SWING_MAX, 0.35);
+  assert.equal(swingOffset(0, 0.2, 0.125), 0);
+  assert.equal(swingOffset(2, 0.2, 0.125), 0);
+  assert.ok(Math.abs(swingOffset(1, 0.2, 0.125) - 0.025) < 1e-12);
+  assert.ok(Math.abs(swingOffset(15, 0.2, 0.125) - 0.025) < 1e-12);
+});
+
+test("swingOffset clamps swing and treats missing or bad values as straight", () => {
+  assert.ok(Math.abs(swingOffset(1, 0.9, 0.1) - 0.035) < 1e-12);
+  assert.equal(swingOffset(1, -0.2, 0.1), 0);
+  assert.equal(swingOffset(1, undefined, 0.1), 0);
+  assert.equal(swingOffset(1, NaN, 0.1), 0);
 });

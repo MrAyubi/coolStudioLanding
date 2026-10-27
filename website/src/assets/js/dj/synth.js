@@ -74,6 +74,30 @@ export function hat(ctx, dest, time) {
   noiseVoice(ctx, dest, time, { type: 'highpass', freq: 7000, q: 0.7, peak: 0.25, dur: 0.06 });
 }
 
+// Clap: three quick noise bursts then a short tail, like hands that don't
+// quite land together.
+export function clap(ctx, dest, time) {
+  [0, 0.011, 0.022].forEach((t) => {
+    noiseVoice(ctx, dest, time + t, { type: 'bandpass', freq: 1200, q: 1.2, peak: 1.2, dur: 0.03 });
+  });
+  noiseVoice(ctx, dest, time + 0.033, { type: 'bandpass', freq: 1100, q: 0.9, peak: 1.05, dur: 0.16 });
+}
+
+// Percussion: a conga-like tuned skin with a short noise slap on top.
+export function perc(ctx, dest, time) {
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(330, time);
+  osc.frequency.exponentialRampToValueAtTime(240, time + 0.06);
+  const g = env(ctx, time, 0.5, 0.22);
+  osc.connect(g);
+  g.connect(dest);
+  osc.start(time);
+  osc.stop(time + 0.24);
+  cleanup(osc, [osc, g]);
+  noiseVoice(ctx, dest, time, { type: 'highpass', freq: 3000, q: 0.7, peak: 0.12, dur: 0.02 });
+}
+
 export function bass(ctx, dest, time, hz, dur) {
   const osc = ctx.createOscillator();
   osc.type = 'sawtooth';

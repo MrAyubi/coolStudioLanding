@@ -20,6 +20,14 @@ export function stepDuration(bpm) {
   return 60 / clampBpm(bpm) / 4;
 }
 
+// Swing pushes every second 16th later by `swing` of a step (0 = straight).
+export const SWING_MAX = 0.35;
+
+export function swingOffset(stepIndex, swing, stepDur) {
+  if (stepIndex % 2 === 0 || !Number.isFinite(swing)) return 0;
+  return clamp(swing, 0, SWING_MAX) * stepDur;
+}
+
 export function crossfadeGains(pos) {
   const p = clamp(pos, 0, 1);
   return { a: Math.cos((p * Math.PI) / 2), b: Math.sin((p * Math.PI) / 2) };
