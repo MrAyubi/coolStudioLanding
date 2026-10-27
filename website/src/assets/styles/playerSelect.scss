@@ -115,7 +115,46 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
     }
 
     &__card {
+        position: relative; // anchors the padlock of a locked card
         width: fit-content;
+
+        &--locked {
+            .player-select__image {
+                filter: grayscale(1) brightness(0.25);
+
+                // No "pick me" flicker for a player you can't pick.
+                &:hover {
+                    animation: none;
+                }
+            }
+
+            .player-select-img-acctive {
+                filter: grayscale(1) brightness(0.55);
+            }
+        }
+    }
+
+    &__lock {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 28px;
+        color: #f6db1b;
+        text-shadow: 0 2px 0 #771108;
+        pointer-events: none; // clicks go through to the portrait
+
+        @media #{$tablet-landscape} {
+            font-size: 22px;
+        }
+
+        @media #{$tablet-portrait} {
+            font-size: 24px;
+        }
+
+        @media #{$phone} {
+            font-size: 14px;
+        }
     }
 
     // &__card {
@@ -247,6 +286,12 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
         &--full-body-image {
             width: 250px;
             height: auto;
+
+            // Locked player: the GIF plays as a dark silhouette. Pure black would vanish
+            // on the black screen, so it's lifted to grey with a faint gold rim.
+            &.is-locked img {
+                filter: brightness(0) invert(0.18) drop-shadow(0 0 6px rgba(246, 219, 27, 0.45));
+            }
 
             @media #{$stacked} {
                 margin: 0 auto;
@@ -432,4 +477,27 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
 
 .player-select-img-acctive {
     filter: brightness(1.5);
+}
+
+// Clicking a locked player: a quick "access denied" shake.
+.player-select-img-denied {
+    animation: player-select-denied 0.4s ease-in-out;
+}
+
+@keyframes player-select-denied {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-4px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(4px);
+    }
 }

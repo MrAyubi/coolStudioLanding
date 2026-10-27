@@ -12,7 +12,30 @@ const starList = document.querySelector(".stats-stars");
 const bioBox = document.querySelector(".player-select__info--bio p");
 // const playerNameResponsive = document.querySelector(".player-select__card--name--responsive span")
 const playerNameDesktop = document.querySelector(".player-select-descktop-name span")
+const fullBodyBox = document.querySelector(".player-select__info--full-body-image");
 let prv_img;
+
+const LOCKED_BIO = "Coming soon.<br/>Keep playing to unlock.";
+
+function isLocked(img) {
+    const player_info = players_select_data[img.dataset.name];
+    return Boolean(player_info && player_info['locked']);
+}
+
+// Padlock over every locked portrait, driven by the `locked` flag in data.js.
+images.forEach(img => {
+    if (!isLocked(img)) return;
+    const card = img.closest(".player-select__card");
+    card.classList.add("player-select__card--locked");
+    card.insertAdjacentHTML("beforeend", '<i class="fa-solid fa-lock player-select__lock" aria-hidden="true"></i>');
+    img.alt = "Locked player";
+});
+
+function shake(img) {
+    img.classList.remove("player-select-img-denied");
+    void img.offsetWidth; // restart the animation on repeated clicks
+    img.classList.add("player-select-img-denied");
+}
 
 function injectPlayerInputs(img) {
     let playerName;
@@ -28,22 +51,32 @@ function injectPlayerInputs(img) {
 
     img.classList.toggle("player-select-img-acctive");
     const player_info = players_select_data[playerName]
+    const locked = Boolean(player_info['locked']);
     let player_stats = ``;
     let player_stats_star = ``;
     fullBodyImage.src = player_info['gif'];
-    bioBox.innerHTML = player_info['bio'];
+    // A locked player's GIF still plays, but as a black silhouette.
+    fullBodyBox.classList.toggle("is-locked", locked);
+    bioBox.innerHTML = locked ? LOCKED_BIO : player_info['bio'];
     // playerNameResponsive.innerHTML = player_info['name']
-    playerNameDesktop.innerHTML = player_info['name']
+    playerNameDesktop.innerHTML = locked ? "???" : player_info['name']
 
     player_info['skills'].forEach(skill => {
+        if (locked) {
+            player_stats += `<li><span>???</span></li>`;
+            player_stats_star += `<li>${'<i class="fa-regular fa-star"></i>'.repeat(3)}</li>`;
+            return;
+        }
         player_stats += `<li><span>${skill['name']}</span></li>`;
         player_stats_star += `<li>${'<i class="fa-solid fa-star"></i>'.repeat(skill['score'])}</li>`;
     })
     statList.innerHTML = player_stats
     starList.innerHTML = player_stats_star
+    if (locked) shake(img);
     prv_img = img;
 }
-injectPlayerInputs(images[0]);
+// Open on the first player that isn't locked.
+injectPlayerInputs([...images].find(img => !isLocked(img)) || images[0]);
 
 images.forEach(img => {
     img.addEventListener("click", function () {
