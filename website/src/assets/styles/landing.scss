@@ -430,6 +430,35 @@
          pointer-events: none;
      }
 
+     // Sits after "ART" in the ghost row; visible even though the row itself is hidden.
+     &__hint {
+         visibility: visible;
+         align-self: center;
+         margin-left: 0.6em;
+         font-size: fluid(14px, 22px);
+         font-weight: 400;
+         letter-spacing: 0.15em;
+         text-transform: uppercase;
+         white-space: nowrap;
+
+         i {
+             margin-left: 0.3em;
+             animation: art-morph-hint-bounce 1.2s ease-in-out infinite;
+         }
+     }
+
+     @keyframes art-morph-hint-bounce {
+
+         0%,
+         100% {
+             transform: translateY(0);
+         }
+
+         50% {
+             transform: translateY(6px);
+         }
+     }
+
      &__word {
          display: flex;
          justify-content: left;
