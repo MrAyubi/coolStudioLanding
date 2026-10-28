@@ -410,6 +410,17 @@ $dj-platter: fluid(140px, 220px);
             color: $white-vintage;
             filter: saturate(0.4);
         }
+
+        // The track has no such layer: greyed out and not pressable.
+        &:disabled {
+            background: transparent;
+            border-style: dashed;
+            box-shadow: none;
+            color: rgba($white-vintage, 0.35);
+            filter: none;
+            cursor: not-allowed;
+            transform: none;
+        }
     }
 
     // ── Centre column ──────────────────────────────────────────────────────────
