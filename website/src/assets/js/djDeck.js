@@ -4,7 +4,7 @@
 // slider plumbing lives in dj/controls.js, the platters, meters and scope in
 // dj/visuals.js; this file exports nothing.
 import { createEngine } from './dj/engine.js';
-import { TRACKS, KINDS, getTrack, layersWithSound } from './dj/tracks.js';
+import { TRACKS } from './dj/tracks.js';
 import { BPM_MIN, BPM_MAX } from './dj/music.js';
 import { bindKnob, bindXY } from './dj/controls.js';
 import { startVisuals } from './dj/visuals.js';
@@ -12,13 +12,7 @@ import { startVisuals } from './dj/visuals.js';
 // Keys that shouldn't start the deck (focus navigation, modifiers, and Esc,
 // which browsers don't count as a user gesture).
 const IGNORED_START_KEYS = ['Tab', 'Escape', 'Shift', 'Control', 'Alt', 'Meta'];
-// A full song on deck A and a melody on deck B, so the first mix already fits.
-const DEFAULT_TRACKS = { a: 'house', b: 'trance' };
-const KIND_GROUPS = {
-  beat: 'Beats · drums + bass',
-  melody: 'Melodies · chords + lead',
-  full: 'Full songs',
-};
+const DEFAULT_TRACKS = { a: 'house', b: 'breaks' };
 const DEFAULT_BPM = 120;
 // Global shortcuts stay out of the way of focused form controls. Sliders and
 // the XY pad are not excluded: they only own the arrow/paging keys, which the
@@ -72,18 +66,11 @@ function wireDeck(section, deck) {
   syncPlay();
 
   const select = section.querySelector('.dj__track-select');
-  const pads = section.querySelectorAll('.dj__pad[data-layer]');
-  // A pad for a layer the track doesn't have would do nothing, so disable it.
-  const syncTrack = () => {
-    deck.setTrack(select.value);
-    const sounding = layersWithSound(getTrack(deck.trackId));
-    pads.forEach((pad) => { pad.disabled = !sounding.includes(pad.dataset.layer); });
-  };
-  syncTrack();
-  select.addEventListener('change', syncTrack);
+  deck.setTrack(select.value);
+  select.addEventListener('change', () => deck.setTrack(select.value));
 
   // Pads: lit = layer playing; pressed (per their "Mute …" labels) = muted.
-  pads.forEach((pad) => {
+  section.querySelectorAll('.dj__pad[data-layer]').forEach((pad) => {
     const { layer } = pad.dataset;
     const sync = () => pad.setAttribute('aria-pressed', String(deck.isLayerMuted(layer)));
     pad.addEventListener('click', () => {
@@ -170,16 +157,11 @@ function fillTrackSelects(root) {
   root.querySelectorAll('.dj__deck').forEach((deck) => {
     const select = deck.querySelector('.dj__track-select');
     if (!select) return;
-    KINDS.forEach((kind) => {
-      const group = document.createElement('optgroup');
-      group.label = KIND_GROUPS[kind];
-      TRACKS.filter((t) => t.kind === kind).forEach((track) => {
-        const option = document.createElement('option');
-        option.value = track.id;
-        option.textContent = `${track.name} · ${track.style} (${track.suggestedBpm})`;
-        group.appendChild(option);
-      });
-      select.appendChild(group);
+    TRACKS.forEach((track) => {
+      const option = document.createElement('option');
+      option.value = track.id;
+      option.textContent = `${track.name} · ${track.style} (${track.suggestedBpm})`;
+      select.appendChild(option);
     });
     select.value = DEFAULT_TRACKS[deck.dataset.deck];
   });
