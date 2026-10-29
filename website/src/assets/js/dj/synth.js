@@ -191,55 +191,6 @@ export function chord(ctx, dest, time, hzs, dur) {
   cleanup(oscs[0], [...oscs, filter, g]);
 }
 
-// Riser: white noise through a bandpass sweeping up while it swells, for the
-// build-up before a drop. Returns a handle so a cancelled drop can silence it.
-export function riser(ctx, dest, time, dur) {
-  const src = ctx.createBufferSource();
-  src.buffer = noiseBuffer(ctx);
-  src.loop = true;
-  const filter = ctx.createBiquadFilter();
-  filter.type = 'bandpass';
-  filter.Q.value = 2;
-  filter.frequency.setValueAtTime(300, time);
-  filter.frequency.exponentialRampToValueAtTime(8000, time + dur);
-  const g = ctx.createGain();
-  g.gain.setValueAtTime(0.0001, time);
-  g.gain.exponentialRampToValueAtTime(0.5, time + dur);
-  g.gain.setTargetAtTime(0.0001, time + dur, 0.01);
-  src.connect(filter);
-  filter.connect(g);
-  g.connect(dest);
-  src.start(time);
-  src.stop(time + dur + 0.08);
-  cleanup(src, [src, filter, g]);
-  return {
-    cancel(at) {
-      g.gain.cancelScheduledValues(at);
-      g.gain.setTargetAtTime(0.0001, at, 0.02);
-      try {
-        src.stop(at + 0.15);
-      } catch (e) {
-        // already stopped
-      }
-    },
-  };
-}
-
-// Impact: a deep boom plus a noise crash for the moment the drop lands.
-export function impact(ctx, dest, time) {
-  const osc = ctx.createOscillator();
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(90, time);
-  osc.frequency.exponentialRampToValueAtTime(32, time + 0.6);
-  const g = env(ctx, time, 0.5, 0.9);
-  osc.connect(g);
-  g.connect(dest);
-  osc.start(time);
-  osc.stop(time + 0.95);
-  cleanup(osc, [osc, g]);
-  noiseVoice(ctx, dest, time, { type: 'highpass', freq: 3000, q: 0.5, peak: 0.25, dur: 0.9 });
-}
-
 // Port of the dkton.at pluck.
 export function pluck(ctx, dest, time, hz) {
   const level = 0.26;

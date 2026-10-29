@@ -78,7 +78,6 @@ export function createEngine(opts = {}) {
   let dropPending = false;
   let dropRemaining = 0;
   let dropUntil = 0;
-  let riser = null; // handle of the build-up playing during a drop
   const dropActive = () => dropPending || dropRemaining > 0;
   const internals = new Map();
   const stepListeners = new Set(); // visuals: cb(stepIndex, time) per scheduled step
@@ -232,15 +231,12 @@ export function createEngine(opts = {}) {
       dropPending = false;
       dropRemaining = DROP_STEPS;
       setDropGains(0, time);
-      riser = synth.riser(ctx, mix, time, DROP_STEPS * sd);
     }
     const dropping = dropRemaining > 0;
     decks.forEach((d) => d.isPlaying && internals.get(d).trigger(i, time, sd, dropping));
     if (dropping && --dropRemaining === 0) {
       dropUntil = time + sd - DROP_LEAD;
       setDropGains(null, dropUntil);
-      synth.impact(ctx, mix, time + sd);
-      riser = null;
     }
     // A throwing listener must never break scheduling.
     stepListeners.forEach((cb) => {
@@ -274,10 +270,6 @@ export function createEngine(opts = {}) {
       dropRemaining = 0;
       dropUntil = 0;
       setDropGains(null, ctx.currentTime, true);
-    }
-    if (riser) {
-      riser.cancel(ctx.currentTime);
-      riser = null;
     }
   }
 
