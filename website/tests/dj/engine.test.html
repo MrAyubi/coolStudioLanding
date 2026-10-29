@@ -65,6 +65,22 @@ function lowEnergy(buf) {
   return e;
 }
 
+// Mono sum through `poles` cascaded one-pole filters, then peak/RMS over a window.
+function filtered(buf, type, hz, poles = 3) {
+  const a = 1 - Math.exp((-2 * Math.PI * hz) / SR);
+  const l = buf.getChannelData(0), r = buf.getChannelData(1);
+  let x = Float32Array.from(l, (v, i) => (v + r[i]) / 2);
+  for (let p = 0; p < poles; p++) {
+    const y = new Float32Array(x.length);
+    let lp = 0;
+    for (let i = 0; i < x.length; i++) { lp += a * (x[i] - lp); y[i] = type === 'low' ? lp : x[i] - lp; }
+    x = y;
+  }
+  return x;
+}
+const winPeak = (x, from, to) => { let p = 0; for (let i = Math.floor(from * SR); i < to * SR; i++) p = Math.max(p, Math.abs(x[i])); return p; };
+const winRms = (x, from, to) => { let e = 0, n = 0; for (let i = Math.floor(from * SR); i < to * SR; i++, n++) e += x[i] * x[i]; return Math.sqrt(e / n); };
+
 const muteAllBut = (deck, keep) =>
   ['drums', 'bass', 'chords', 'lead'].forEach((l) => deck.setLayerMuted(l, !keep.includes(l)));
 
@@ -131,8 +147,10 @@ async function run() {
     engine.drop(); // ignored during a drop
     const buf = await ctx.startRendering();
     // Steps 0-1 precede the drop (lookahead 0.2), drop covers ~0.3-2.3 s at 120 BPM.
-    const during = peak(buf, 0.8, 2.2), after = peak(buf, 2.5, 3.9);
-    return (during < 0.005 && after > 0.05) || `during=${during} after=${after}`;
+    // Measured below 120 Hz: the riser plays through the drop but lives up high.
+    const low = filtered(buf, 'low', 120);
+    const during = winPeak(low, 0.8, 2.2), after = winPeak(low, 2.5, 3.9);
+    return (during < after * 0.1 && after > 0.05) || `during=${during} after=${after}`;
   });
 
   await check('stopping right after drop() does not leave drums+bass muted', async () => {
@@ -181,6 +199,42 @@ async function run() {
     for (let i = Math.floor(1.297 * SR); i < 1.33 * SR; i++) { ea += a[i] ** 2; eb += b[i] ** 2; }
     const ratio = Math.sqrt(eb / ea);
     return (ea > 0 && ratio > 0.8 && ratio < 1.25) || `high-band rms ratio=${ratio.toFixed(3)}`;
+  });
+
+  await check('drop plays a rising build-up and lands an impact on re-entry', async () => {
+    const { ctx, engine } = setup(createEngine, 3.5);
+    muteAllBut(engine.decks[0], []); // deck runs the grid; only the riser and impact sound
+    engine.decks[0].play();
+    engine.drop();
+    const buf = await ctx.startRendering();
+    const x = filtered(buf, 'high', 20, 1);
+    // Drop spans ~0.3-2.3 s; the impact lands on the 2.3 s step.
+    const early = winRms(x, 0.4, 0.8), late = winRms(x, 1.8, 2.2), hit = winPeak(x, 2.3, 2.6);
+    return (late > early * 10 && late > 0.01 && hit > 0.1) || `early=${early} late=${late} impact=${hit}`;
+  });
+
+  await check('stopping during a drop silences the build-up', async () => {
+    const { ctx, engine } = setup(createEngine, 3.5, {}, [[1.2, (e) => e.decks[0].stop()]]);
+    muteAllBut(engine.decks[0], []);
+    engine.decks[0].play();
+    engine.drop();
+    const buf = await ctx.startRendering();
+    const after = peak(buf, 1.6, 3.4);
+    return after < 0.01 || `after stop peak=${after}`;
+  });
+
+  await check('kicks pump the chords (sidechain), but not when drums are muted', async () => {
+    const ratio = async (withDrums) => {
+      const { ctx, engine } = setup(createEngine, 1.6);
+      muteAllBut(engine.decks[0], withDrums ? ['drums', 'chords'] : ['chords']);
+      engine.decks[0].play();
+      const buf = await ctx.startRendering();
+      // House: chord at step 6 (0.8 s) rings through the kick on step 8 (1.05 s).
+      const hi = filtered(buf, 'high', 1000);
+      return winRms(hi, 1.065, 1.085) / winRms(hi, 0.98, 1.04);
+    };
+    const pumped = await ratio(true), plain = await ratio(false);
+    return (pumped < 0.7 && plain > 0.85) || `pumped=${pumped.toFixed(2)} plain=${plain.toFixed(2)}`;
   });
 
   await check('play/stop x20 leaves one scheduler timer', async () => {

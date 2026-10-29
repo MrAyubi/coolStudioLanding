@@ -12,6 +12,12 @@ const EDGE = { lowpass: 20000, highpass: 20 }; // transparent cutoffs
 const DROP_STEPS = 16;
 const DROP_LAYERS = ['drums', 'bass'];
 const FEEDBACK = 0.35;
+// Sidechain pump: bass and chords duck on every kick, then breathe back.
+const PUMP_DEPTH = 0.35; // gain at the bottom of the duck
+const PUMP_ATTACK = 0.004;
+const PUMP_HOLD = 0.03;
+const PUMP_RELEASE = 0.07;
+const PUMPED_LAYERS = ['bass', 'chords'];
 const fin = Number.isFinite;
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 
@@ -72,6 +78,7 @@ export function createEngine(opts = {}) {
   let dropPending = false;
   let dropRemaining = 0;
   let dropUntil = 0;
+  let riser = null; // handle of the build-up playing during a drop
   const dropActive = () => dropPending || dropRemaining > 0;
   const internals = new Map();
   const stepListeners = new Set(); // visuals: cb(stepIndex, time) per scheduled step
@@ -108,9 +115,11 @@ export function createEngine(opts = {}) {
     high.frequency.value = 4000;
     gate.gain.value = 0;
     gain.gain.value = 0.8;
+    const pump = node(ctx.createGain());
+    pump.connect(low);
     LAYERS.forEach((l) => {
       layerGains[l] = node(ctx.createGain());
-      layerGains[l].connect(low);
+      layerGains[l].connect(PUMPED_LAYERS.includes(l) ? pump : low);
       muted[l] = false;
     });
     low.connect(mid);
@@ -181,7 +190,11 @@ export function createEngine(opts = {}) {
         const s = track.layers[l][i];
         const dest = layerGains[l];
         if (l === 'drums') {
-          if (s.includes('k')) synth.kick(ctx, dest, time);
+          if (s.includes('k')) {
+            synth.kick(ctx, dest, time);
+            pump.gain.setTargetAtTime(PUMP_DEPTH, time, PUMP_ATTACK);
+            pump.gain.setTargetAtTime(1, time + PUMP_HOLD, PUMP_RELEASE);
+          }
           if (s.includes('s')) synth.snare(ctx, dest, time);
           if (s.includes('h')) synth.hat(ctx, dest, time);
           if (s.includes('c')) synth.clap(ctx, dest, time);
@@ -219,12 +232,15 @@ export function createEngine(opts = {}) {
       dropPending = false;
       dropRemaining = DROP_STEPS;
       setDropGains(0, time);
+      riser = synth.riser(ctx, mix, time, DROP_STEPS * sd);
     }
     const dropping = dropRemaining > 0;
     decks.forEach((d) => d.isPlaying && internals.get(d).trigger(i, time, sd, dropping));
     if (dropping && --dropRemaining === 0) {
       dropUntil = time + sd - DROP_LEAD;
       setDropGains(null, dropUntil);
+      synth.impact(ctx, mix, time + sd);
+      riser = null;
     }
     // A throwing listener must never break scheduling.
     stepListeners.forEach((cb) => {
@@ -258,6 +274,10 @@ export function createEngine(opts = {}) {
       dropRemaining = 0;
       dropUntil = 0;
       setDropGains(null, ctx.currentTime, true);
+    }
+    if (riser) {
+      riser.cancel(ctx.currentTime);
+      riser = null;
     }
   }
 

@@ -46,14 +46,16 @@ function noiseVoice(ctx, dest, time, { type, freq, q, peak, dur }) {
 export function kick(ctx, dest, time) {
   const osc = ctx.createOscillator();
   osc.type = 'sine';
-  osc.frequency.setValueAtTime(150, time);
-  osc.frequency.exponentialRampToValueAtTime(45, time + 0.12);
-  const g = env(ctx, time, 0.9, 0.38);
+  osc.frequency.setValueAtTime(165, time);
+  osc.frequency.exponentialRampToValueAtTime(42, time + 0.16);
+  const g = env(ctx, time, 0.72, 0.48);
   osc.connect(g);
   g.connect(dest);
   osc.start(time);
-  osc.stop(time + 0.4);
+  osc.stop(time + 0.5);
   cleanup(osc, [osc, g]);
+  // Click: the beater hitting the skin, so the kick cuts through a busy mix.
+  noiseVoice(ctx, dest, time, { type: 'highpass', freq: 2500, q: 0.7, peak: 0.18, dur: 0.012 });
 }
 
 export function snare(ctx, dest, time) {
@@ -98,31 +100,70 @@ export function perc(ctx, dest, time) {
   noiseVoice(ctx, dest, time, { type: 'highpass', freq: 3000, q: 0.7, peak: 0.12, dur: 0.02 });
 }
 
+// Soft-clip curve for the bass grit (tanh-shaped, computed once per context).
+const driveCache = new WeakMap();
+function driveCurve(ctx) {
+  let curve = driveCache.get(ctx);
+  if (!curve) {
+    curve = new Float32Array(1024);
+    for (let i = 0; i < curve.length; i++) {
+      const x = (i / (curve.length - 1)) * 2 - 1;
+      curve[i] = Math.tanh(3 * x) / Math.tanh(3);
+    }
+    driveCache.set(ctx, curve);
+  }
+  return curve;
+}
+
 export function bass(ctx, dest, time, hz, dur) {
-  const osc = ctx.createOscillator();
-  osc.type = 'sawtooth';
-  osc.frequency.setValueAtTime(hz, time);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, time);
+  g.gain.linearRampToValueAtTime(1, time + 0.01);
+  g.gain.setValueAtTime(1, time + Math.max(0.011, dur - 0.05));
+  g.gain.exponentialRampToValueAtTime(0.0001, time + dur + 0.05);
+  g.connect(dest);
+
+  // Grit: a driven saw through a closing lowpass.
+  const saw = ctx.createOscillator();
+  saw.type = 'sawtooth';
+  saw.frequency.setValueAtTime(hz, time);
+  const drive = ctx.createWaveShaper();
+  drive.curve = driveCurve(ctx);
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
   filter.Q.value = 4;
-  filter.frequency.setValueAtTime(Math.min(900, hz * 8), time);
-  filter.frequency.exponentialRampToValueAtTime(Math.max(120, hz * 2), time + dur);
-  const g = ctx.createGain();
-  g.gain.setValueAtTime(0.0001, time);
-  g.gain.linearRampToValueAtTime(0.35, time + 0.01);
-  g.gain.setValueAtTime(0.35, time + Math.max(0.011, dur - 0.05));
-  g.gain.exponentialRampToValueAtTime(0.0001, time + dur + 0.05);
-  osc.connect(filter);
-  filter.connect(g);
-  g.connect(dest);
-  osc.start(time);
-  osc.stop(time + dur + 0.08);
-  cleanup(osc, [osc, filter, g]);
+  filter.frequency.setValueAtTime(Math.min(1200, hz * 10), time);
+  filter.frequency.exponentialRampToValueAtTime(Math.max(140, hz * 2.5), time + dur);
+  const sawLevel = ctx.createGain();
+  sawLevel.gain.value = 0.2;
+  saw.connect(drive);
+  drive.connect(filter);
+  filter.connect(sawLevel);
+  sawLevel.connect(g);
+
+  // Sub: a pure sine at the same pitch for the weight you feel more than hear.
+  const sub = ctx.createOscillator();
+  sub.type = 'sine';
+  sub.frequency.setValueAtTime(hz, time);
+  const subLevel = ctx.createGain();
+  subLevel.gain.value = 0.32;
+  sub.connect(subLevel);
+  subLevel.connect(g);
+
+  [saw, sub].forEach((o) => {
+    o.start(time);
+    o.stop(time + dur + 0.08);
+  });
+  cleanup(saw, [saw, drive, filter, sawLevel, sub, subLevel, g]);
 }
 
+// Supersaw: five detuned saws per note for the wide, bright EDM pad.
+const SUPERSAW_DETUNE = [-14, -7, 0, 7, 14];
+
 export function chord(ctx, dest, time, hzs, dur) {
+  if (!hzs.length) return;
   const g = ctx.createGain();
-  const peak = 0.6 / Math.max(1, hzs.length * 2);
+  const peak = 0.75 / (hzs.length * SUPERSAW_DETUNE.length);
   const attack = Math.min(0.03, dur / 4);
   g.gain.setValueAtTime(0.0001, time);
   g.gain.linearRampToValueAtTime(peak, time + attack);
@@ -130,13 +171,13 @@ export function chord(ctx, dest, time, hzs, dur) {
   g.gain.exponentialRampToValueAtTime(0.0001, time + dur + 0.15);
   const filter = ctx.createBiquadFilter();
   filter.type = 'lowpass';
-  filter.frequency.value = 2200;
+  filter.frequency.value = 3600;
   filter.Q.value = 0.7;
   filter.connect(g);
   g.connect(dest);
   const oscs = [];
   hzs.forEach((hz) => {
-    [-6, 6].forEach((detune) => {
+    SUPERSAW_DETUNE.forEach((detune) => {
       const osc = ctx.createOscillator();
       osc.type = 'sawtooth';
       osc.frequency.value = hz;
@@ -147,7 +188,56 @@ export function chord(ctx, dest, time, hzs, dur) {
       oscs.push(osc);
     });
   });
-  if (oscs.length) cleanup(oscs[0], [...oscs, filter, g]);
+  cleanup(oscs[0], [...oscs, filter, g]);
+}
+
+// Riser: white noise through a bandpass sweeping up while it swells, for the
+// build-up before a drop. Returns a handle so a cancelled drop can silence it.
+export function riser(ctx, dest, time, dur) {
+  const src = ctx.createBufferSource();
+  src.buffer = noiseBuffer(ctx);
+  src.loop = true;
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.Q.value = 2;
+  filter.frequency.setValueAtTime(300, time);
+  filter.frequency.exponentialRampToValueAtTime(8000, time + dur);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, time);
+  g.gain.exponentialRampToValueAtTime(0.5, time + dur);
+  g.gain.setTargetAtTime(0.0001, time + dur, 0.01);
+  src.connect(filter);
+  filter.connect(g);
+  g.connect(dest);
+  src.start(time);
+  src.stop(time + dur + 0.08);
+  cleanup(src, [src, filter, g]);
+  return {
+    cancel(at) {
+      g.gain.cancelScheduledValues(at);
+      g.gain.setTargetAtTime(0.0001, at, 0.02);
+      try {
+        src.stop(at + 0.15);
+      } catch (e) {
+        // already stopped
+      }
+    },
+  };
+}
+
+// Impact: a deep boom plus a noise crash for the moment the drop lands.
+export function impact(ctx, dest, time) {
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(90, time);
+  osc.frequency.exponentialRampToValueAtTime(32, time + 0.6);
+  const g = env(ctx, time, 0.5, 0.9);
+  osc.connect(g);
+  g.connect(dest);
+  osc.start(time);
+  osc.stop(time + 0.95);
+  cleanup(osc, [osc, g]);
+  noiseVoice(ctx, dest, time, { type: 'highpass', freq: 3000, q: 0.5, peak: 0.25, dur: 0.9 });
 }
 
 // Port of the dkton.at pluck.

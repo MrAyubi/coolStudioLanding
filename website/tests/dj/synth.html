@@ -13,6 +13,8 @@ const voices = {
   hat: (c, d) => synth.hat(c, d, 0),
   clap: (c, d) => synth.clap(c, d, 0),
   perc: (c, d) => synth.perc(c, d, 0),
+  riser: (c, d) => synth.riser(c, d, 0, 0.8),
+  impact: (c, d) => synth.impact(c, d, 0),
   pluck: (c, d) => synth.pluck(c, d, 0, 440),
 };
 for (const hz of [55, 110, 165, 220]) {
