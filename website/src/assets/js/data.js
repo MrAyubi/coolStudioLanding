@@ -65,8 +65,6 @@ let players_select_data = {
     },
     maziar: {
         name: "MAZIAR",
-        // Locked players show a "???" card; delete this line to unlock him.
-        locked: true,
         skills: [
             { name: 'Code Wizardry', score: 3 },
             { name: 'Debugging', score: 3 },
