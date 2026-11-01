@@ -399,6 +399,13 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
                 margin-left: auto;
                 margin-right: auto;
                 min-height: auto;
+
+                // Narrow screens: let the bio wrap on its own. Each forced break would leave
+                // a mostly empty line, and the extra lines push the bio off the screen.
+                // Bios in data.js keep a space before every <br/> so words don't merge here.
+                br {
+                    display: none;
+                }
             }
 
             @media #{$phone} {

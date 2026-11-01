@@ -12,7 +12,7 @@ let players_select_data = {
             { name: 'descipline', score: 1 },
             { name: 'CREATIVITY', score: 3 }
         ],
-        bio: "Think you don't need our services?<br/>He'll prove you wrong.<br/>And he built this website too.",
+        bio: "Think you don't need our services? <br/>He'll prove you wrong. <br/>And he built this website too.",
         gif: gifs.mamarezaGif
     },
     nima: {
@@ -48,7 +48,7 @@ let players_select_data = {
             { name: 'Sleep', score: 1 },
             { name: 'Color OCD', score: 3 }
         ],
-        bio: "He has a samurai within.<br/>Every shot is a discipline. Every frame, a strike.And yes he carries a katana.",
+        bio: "He has a samurai within. <br/>Every shot is a discipline. Every frame, a strike.And yes he carries a katana.",
         gif: gifs.mohebGif
     },
     amin: {
@@ -72,7 +72,7 @@ let players_select_data = {
             { name: 'Haircuts', score: 1 },
             { name: 'Patience', score: 2 }
         ],
-        bio: "Hasn't seen a barber since the last framework war.<br/>Speaks fluent terminal. If it compiles, it's because he stared at it long enough.",
+        bio: "He lives in the terminal. <br/>He’s been abusing AI since 2019. <br/>No breaks, no weekends, no mercy. <br/>Dear future AI overlords, <br/>We’re sorry about him. We tried to stop him.",
         gif: gifs.maziarGif
     }
 
