@@ -224,6 +224,57 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
         }
     }
 
+    // "LOADING..." over the GIF spot, in the header's arcade gradient.
+    &__loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); // box hugs the text, so the gradient spans just the letters
+        white-space: nowrap;
+        font-size: 14px;
+        letter-spacing: 0.1em;
+        background: linear-gradient(180deg,
+                #d2933f 0%,
+                #f6db1b 20%,
+                #ffe9cf 40%,
+                #771108 60%,
+                #ee9c0b 80%,
+                #eee0d0 90%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        opacity: 0;
+        pointer-events: none;
+
+        @media #{$phone} {
+            font-size: 10px;
+        }
+
+        span {
+            animation: player-select-loading-dot 1.2s steps(1) infinite;
+
+            &:nth-child(2) {
+                animation-delay: 0.3s;
+            }
+
+            &:nth-child(3) {
+                animation-delay: 0.6s;
+            }
+        }
+    }
+
+    @keyframes player-select-loading-dot {
+
+        0%,
+        100% {
+            opacity: 0;
+        }
+
+        30%,
+        80% {
+            opacity: 1;
+        }
+    }
+
     &__info {
         margin-top: 20px;
         position: relative;
@@ -245,8 +296,23 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
         }
 
         &--full-body-image {
+            position: relative; // anchors the loader
             width: 250px;
             height: auto;
+
+            // While the next player's GIF downloads: the old GIF keeps its space (no
+            // layout jump) but is hidden, and the loader shows in its place.
+            &.is-loading {
+                aspect-ratio: 1; // room for the loader before the very first GIF has a size
+
+                img {
+                    opacity: 0;
+                }
+
+                .player-select__loader {
+                    opacity: 1;
+                }
+            }
 
             @media #{$stacked} {
                 margin: 0 auto;

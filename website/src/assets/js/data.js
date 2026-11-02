@@ -66,11 +66,11 @@ let players_select_data = {
     maziar: {
         name: "MAZIAR",
         skills: [
-            { name: 'Code Wizardry', score: 3 },
-            { name: 'Debugging', score: 3 },
-            { name: 'Coffee Intake', score: 3 },
-            { name: 'Haircuts', score: 1 },
-            { name: 'Patience', score: 2 }
+            { name: 'Making Data Confess', score: 3 },
+            { name: 'Token Burning', score: 3 },
+            { name: 'Energy Drink Intake', score: 3 },
+            { name: 'Gambling Appetite ', score: 3 },
+            { name: 'Sleep Schedule', score: 1 }
         ],
         bio: "He lives in the terminal. <br/>He’s been abusing AI since 2019. <br/>No breaks, no weekends, no mercy. <br/>Dear future AI overlords, <br/>We’re sorry about him. We tried to stop him.",
         gif: gifs.maziarGif

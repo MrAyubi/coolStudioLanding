@@ -12,7 +12,27 @@ const starList = document.querySelector(".stats-stars");
 const bioBox = document.querySelector(".player-select__info--bio p");
 // const playerNameResponsive = document.querySelector(".player-select__card--name--responsive span")
 const playerNameDesktop = document.querySelector(".player-select-descktop-name span")
+const fullBodyBox = fullBodyImage.parentElement;
 let prv_img;
+let gifRequest = 0;
+
+// Until a new GIF has loaded the browser keeps showing the previous one, so a slow
+// connection showed the wrong player. Hide it and show a loader in the meantime.
+function showPlayerGif(src) {
+    const request = ++gifRequest;
+    const done = () => {
+        // A later click may have asked for another GIF; only that one clears the loader.
+        if (request === gifRequest) fullBodyBox.classList.remove("is-loading");
+    };
+
+    fullBodyBox.classList.add("is-loading");
+    fullBodyImage.onload = done;
+    fullBodyImage.onerror = done;
+    fullBodyImage.src = src;
+
+    // Already in the cache: no loader flash.
+    if (fullBodyImage.complete && fullBodyImage.naturalWidth) done();
+}
 
 function injectPlayerInputs(img) {
     let playerName;
@@ -30,7 +50,7 @@ function injectPlayerInputs(img) {
     const player_info = players_select_data[playerName]
     let player_stats = ``;
     let player_stats_star = ``;
-    fullBodyImage.src = player_info['gif'];
+    showPlayerGif(player_info['gif']);
     bioBox.innerHTML = player_info['bio'];
     // playerNameResponsive.innerHTML = player_info['name']
     playerNameDesktop.innerHTML = player_info['name']
