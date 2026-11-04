@@ -65,6 +65,9 @@ let players_select_data = {
     },
     maziar: {
         name: "MAZIAR",
+        // Padlock on his portrait and this text over his GIF; delete both lines to unlock him.
+        locked: true,
+        unlockText: "PAY TO UNLOCK",
         skills: [
             { name: 'Making Data Confess', score: 3 },
             { name: 'Token Burning', score: 3 },

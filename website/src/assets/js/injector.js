@@ -13,8 +13,26 @@ const bioBox = document.querySelector(".player-select__info--bio p");
 // const playerNameResponsive = document.querySelector(".player-select__card--name--responsive span")
 const playerNameDesktop = document.querySelector(".player-select-descktop-name span")
 const fullBodyBox = fullBodyImage.parentElement;
+const unlockTextBox = fullBodyBox.querySelector(".player-select__locked-text");
 let prv_img;
 let gifRequest = 0;
+
+// Outline padlock, like a locked fighter on a game's select screen.
+const LOCK_ICON = `
+    <svg class="player-select__lock" viewBox="0 0 24 28" aria-hidden="true">
+        <path d="M6 12V8a6 6 0 0 1 12 0v4" fill="none" stroke="currentColor" stroke-width="2.4" />
+        <rect x="2.5" y="12" width="19" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2.4" />
+        <path d="M12 17v4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+    </svg>`;
+
+// Players flagged `locked` in data.js still open as normal, they just wear a padlock.
+images.forEach(img => {
+    const player_info = players_select_data[img.dataset.name];
+    if (!player_info || !player_info['locked']) return;
+    const card = img.closest(".player-select__card");
+    card.classList.add("player-select__card--locked");
+    card.insertAdjacentHTML("beforeend", LOCK_ICON);
+});
 
 // Until a new GIF has loaded the browser keeps showing the previous one, so a slow
 // connection showed the wrong player. Hide it and show a loader in the meantime.
@@ -51,6 +69,8 @@ function injectPlayerInputs(img) {
     let player_stats = ``;
     let player_stats_star = ``;
     showPlayerGif(player_info['gif']);
+    fullBodyBox.classList.toggle("is-locked", Boolean(player_info['locked']));
+    unlockTextBox.textContent = player_info['unlockText'] || "LOCKED";
     bioBox.innerHTML = player_info['bio'];
     // playerNameResponsive.innerHTML = player_info['name']
     playerNameDesktop.innerHTML = player_info['name']

@@ -115,7 +115,21 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
     }
 
     &__card {
+        position: relative; // anchors the padlock of a locked player
         width: fit-content;
+    }
+
+    // White outline padlock low on a locked portrait. Sized as a share of the card, so
+    // it scales with the thumbnails at every breakpoint without its own media queries.
+    &__lock {
+        position: absolute;
+        left: 50%;
+        bottom: 10%;
+        width: 34%;
+        transform: translateX(-50%);
+        color: #fff;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.9));
+        pointer-events: none; // clicks go through to the portrait
     }
 
     // &__card {
@@ -262,6 +276,90 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
         }
     }
 
+    // Banner over a locked player's GIF: a small tag above a blinking call to action.
+    &__locked {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 14%;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 6px;
+        background: rgba(0, 0, 0, 0.7);
+        border-top: 2px solid #f6db1b;
+        border-bottom: 2px solid #f6db1b;
+        text-align: center;
+        pointer-events: none;
+
+        @media #{$phone} {
+            gap: 4px;
+            padding: 6px 4px;
+        }
+    }
+
+    // Both banner lines stay on one line. Their sizes follow the GIF's own width rules
+    // (see &__info--full-body-image), so they fit however narrow the GIF gets.
+    &__locked-tag {
+        font-size: 11px;
+        letter-spacing: 0.15em;
+        white-space: nowrap;
+        color: #ffe9cf;
+
+        @media #{$tablet-portrait} {
+            font-size: clamp(7px, min(0.9vh, 1.5vw), 11px);
+        }
+
+        @media #{$tablet-landscape} {
+            font-size: clamp(7px, 0.75vw, 11px);
+        }
+
+        @media #{$phone} {
+            font-size: 8px;
+        }
+    }
+
+    &__locked-text {
+        font-size: 16px;
+        white-space: nowrap;
+        background: linear-gradient(180deg,
+                #d2933f 0%,
+                #f6db1b 20%,
+                #ffe9cf 40%,
+                #771108 60%,
+                #ee9c0b 80%,
+                #eee0d0 90%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: player-select-insert-coin 1.4s steps(1) infinite;
+
+        @media #{$tablet-portrait} {
+            font-size: clamp(9px, min(1.38vh, 2.35vw), 18px);
+        }
+
+        @media #{$tablet-landscape} {
+            font-size: clamp(9px, 1.15vw, 14px);
+        }
+
+        @media #{$phone} {
+            font-size: 11px;
+        }
+    }
+
+    // On for most of the beat, off briefly: an arcade "INSERT COIN" blink.
+    @keyframes player-select-insert-coin {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        75% {
+            opacity: 0;
+        }
+    }
+
     @keyframes player-select-loading-dot {
 
         0%,
@@ -302,8 +400,23 @@ $tablet-landscape: "(min-width: #{$bp-phone + 1px}) and (max-width: 1180px) and 
 
             // While the next player's GIF downloads: the old GIF keeps its space (no
             // layout jump) but is hidden, and the loader shows in its place.
+            // Locked player: the GIF plays dimmed under the "pay to unlock" banner.
+            &.is-locked {
+                img {
+                    filter: brightness(0.55);
+                }
+
+                .player-select__locked {
+                    display: flex;
+                }
+            }
+
             &.is-loading {
                 aspect-ratio: 1; // room for the loader before the very first GIF has a size
+
+                .player-select__locked {
+                    display: none; // the banner waits for the GIF, like the GIF itself
+                }
 
                 img {
                     opacity: 0;
