@@ -16,6 +16,7 @@ import "../styles/studioStory.scss"
 import "../styles/caseStudies.scss"
 import "../styles/sunShine.scss"
 import "../styles/offerSplit.scss"
+import "../styles/rubikScene.scss"
 
 
 

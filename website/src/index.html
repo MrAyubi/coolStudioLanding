@@ -650,6 +650,34 @@
                 <a href="studio-intro.html"></a>
             </div>
         </div>
+
+        <!-- Rubik's cube floating over a checkerboard floor, rebuilt in code from
+             rubick.mp4. rubikScene.scss draws the sky and clouds and spins the cube;
+             rubikScene.js draws the floor and the cube's faces. -->
+        <section class="rubik-scene">
+            <div class="rubik-scene__stage" aria-hidden="true">
+                <div class="rubik-scene__clouds"></div>
+                <div class="rubik-scene__floor"></div>
+                <div class="rubik-scene__haze"></div>
+                <div class="rubik-scene__shadow"></div>
+                <div class="rubik-cube">
+                    <div class="rubik-cube__bob">
+                        <div class="rubik-cube__tilt">
+                            <div class="rubik-cube__spin">
+                                <div class="rubik-cube__face" data-face="front"><div class="rubik-cube__shade"></div></div>
+                                <div class="rubik-cube__face" data-face="right"><div class="rubik-cube__shade"></div></div>
+                                <div class="rubik-cube__face" data-face="back"><div class="rubik-cube__shade"></div></div>
+                                <div class="rubik-cube__face" data-face="left"><div class="rubik-cube__shade"></div></div>
+                                <div class="rubik-cube__face" data-face="top"><div class="rubik-cube__shade"></div></div>
+                                <div class="rubik-cube__face" data-face="bottom"><div class="rubik-cube__shade"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rubik-scene__vignette"></div>
+            </div>
+            <p class="rubik-scene__caption">It's cool and it works</p>
+        </section>
         <!-- <section class="black-box">
         <div class="black-box__wrapper">
             <div class="cursor-light"></div>

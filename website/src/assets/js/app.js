@@ -10,6 +10,7 @@ import "./clients.js";
 import "./studioStory.js";
 import "./offerSplit.js";
 import "./loader.js";
+import "./rubikScene.js";
 
 import { initStackedServices } from "./stackedServices.js";
 import { initArtStrategyMorph } from "./gsapTut.js";

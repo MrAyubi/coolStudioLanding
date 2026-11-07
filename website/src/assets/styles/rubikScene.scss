@@ -1,0 +1,372 @@
+@use "sass:math";
+@import "./base.scss";
+
+// =========================================================
+// RUBIK'S CUBE SCENE
+// =========================================================
+// A hand-drawn Rubik's cube floating over a checkerboard floor under a cloudy sky,
+// rebuilt in code from rubick.mp4. The sky and clouds are drawn here; rubikScene.js
+// draws the floor (a flat SVG in perspective) and the cube's faces (on canvas), and the
+// cube is a CSS 3D box this file spins, tilts and bobs.
+//
+// Everything is laid out on the clip's 1280x720 frame: 1u (--u) is one pixel of that
+// frame, scaled to the section's height. The composition keeps its proportions at
+// every size, and wider or narrower screens just show more or less of the sides.
+
+.rubik-scene {
+    --scene-h: clamp(440px, 56.25vw, 92vh);
+    --u: calc(var(--scene-h) / 720);
+    // Where the floor's far edge meets the sky (rubikScene.js draws the floor to match).
+    --floor-edge: calc(415 * var(--u));
+
+    position: relative;
+    // Breathing room after the player-select TV frame above.
+    $gap: fluid(120px, 260px);
+    margin-top: $gap;
+
+    // 100u taller than the clip's frame: the extra floor at the bottom is where the
+    // scene fades out, below the cube's shadow.
+    height: calc(820 * var(--u));
+
+
+    // Sky down to the floor's far edge; transparent below it (painted by __stage).
+    --sky: linear-gradient(to bottom,
+            #123e88 0,
+            #194a92 calc(130 * var(--u)),
+            #2c60a2 calc(274 * var(--u)),
+            #4176ad calc(360 * var(--u)),
+            #6390b6 calc(var(--floor-edge) + 1px),
+            transparent calc(var(--floor-edge) + 1px));
+    // Blend into the page: the sky fades in from the dark at the top, and the floor
+    // fades back out at the bottom (eased, so there's no visible band).
+    --fade: linear-gradient(to bottom,
+            transparent 0,
+            rgba(0, 0, 0, 0.1) calc(30 * var(--u)),
+            rgba(0, 0, 0, 0.35) calc(65 * var(--u)),
+            rgba(0, 0, 0, 0.7) calc(100 * var(--u)),
+            #000 calc(150 * var(--u)),
+            #000 calc(650 * var(--u)),
+            rgba(0, 0, 0, 0.7) calc(700 * var(--u)),
+            rgba(0, 0, 0, 0.35) calc(745 * var(--u)),
+            rgba(0, 0, 0, 0.1) calc(785 * var(--u)),
+            transparent 100%);
+
+    // On phones the TV frame's image is scaled up 1.2x (playerSelect.scss), so it hangs
+    // 10% of the frame's height (max(100vh, 760px)) below the frame. Clear that too.
+    @media (max-width: #{$bp-phone}) {
+        margin-top: calc(#{$gap} + 0.1 * max(100vh, 760px));
+    }
+
+
+    // ---------- stage ----------
+    // Holds every picture layer, so the fade below can apply to them but not to the
+    // caption.
+
+    &__stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        // Sky down to the floor's far edge; transparent below it.
+        background: var(--sky);
+        -webkit-mask-image: var(--fade);
+        mask-image: var(--fade);
+    }
+
+
+    // ---------- caption ----------
+    // Pink, under the cube's shadow, with the scene's VHS fringe (cyan left, red right)
+    // and a dark edge so it reads on both the white tiles and the dark page.
+
+    &__caption {
+        position: absolute;
+        left: 50%;
+        top: calc(645 * var(--u));
+        transform: translateX(-50%);
+        width: max-content;
+        max-width: calc(100% - 32px); // wraps onto two lines on phones
+        margin: 0;
+        font-family: "cartoonistKooky", sans-serif;
+        font-size: clamp(34px, calc(78 * var(--u)), 104px);
+        line-height: 1.05;
+        text-align: center;
+        text-transform: uppercase;
+        color: #ff4fae;
+        text-shadow:
+            -0.045em 0 0 rgba(31, 200, 255, 0.75),
+            0.045em 0 0 rgba(255, 40, 80, 0.55),
+            0 0.05em 0 #1a0610,
+            0 0 0.4em rgba(0, 0, 0, 0.65);
+    }
+
+
+    // ---------- clouds ----------
+    // Three copies of one tileable band, slid left by exactly one copy and repeated,
+    // so the drift never jumps. The VHS colour fringe is drawn inside clouds.svg: a CSS
+    // filter on this wide, moving layer makes WebKit render it blurry.
+
+    &__clouds {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: calc(3 * 1920 * var(--u));
+        height: calc(400 * var(--u));
+        background: url("../images/rubik/clouds.svg") repeat-x 0 0 / auto 100%;
+        animation: rubik-clouds-drift 55s linear infinite;
+        will-change: transform;
+    }
+
+
+    // ---------- floor ----------
+    // A checkerboard seen in perspective, drawn by rubikScene.js as a flat SVG of white
+    // tiles with red/cyan fringes (the dark tiles are left see-through, so the page's
+    // dark background shows). The SVG is 6000u wide and centred: 1 SVG unit = 1u.
+
+    &__floor {
+        position: absolute;
+        top: 0;
+        left: calc(50% - 3000 * var(--u));
+        width: calc(6000 * var(--u));
+        height: calc(820 * var(--u));
+        pointer-events: none;
+
+        svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    // Far tiles fade into the sky's haze.
+    &__haze {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: calc(var(--floor-edge) - 1px);
+        height: calc(80 * var(--u));
+        background: linear-gradient(to bottom,
+                rgba(88, 136, 186, 0.9),
+                rgba(88, 136, 186, 0.4) 35%,
+                rgba(88, 136, 186, 0));
+        pointer-events: none;
+    }
+
+
+    // ---------- cube shadow ----------
+    // Shrinks and fades as the cube bobs up (same timing as .rubik-cube__bob).
+
+    &__shadow {
+        position: absolute;
+        left: calc(50% - 215 * var(--u));
+        top: calc(560 * var(--u));
+        width: calc(540 * var(--u));
+        height: calc(80 * var(--u));
+        background: radial-gradient(closest-side,
+                rgba(0, 8, 20, 0.62),
+                rgba(0, 8, 20, 0.38) 55%,
+                rgba(0, 8, 20, 0));
+        animation: rubik-shadow var(--rubik-bob) ease-in-out infinite alternate;
+        pointer-events: none;
+    }
+
+
+    // ---------- vignette ----------
+    // Darkens the sky's corners towards the page's tone, so the scene sits in the page.
+
+    &__vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse 75% 70% at 50% 48%, transparent 55%, rgba(10, 10, 10, 0.55) 100%);
+        pointer-events: none;
+    }
+
+
+    // ---------- pausing ----------
+    // rubikScene.js adds --paused while the scene is off screen. With reduced motion
+    // everything holds on its first frame: the cube at a three-quarter view.
+
+    &--paused,
+    &--paused * {
+        animation-play-state: paused !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        & * {
+            animation-play-state: paused !important;
+        }
+    }
+}
+
+
+// =========================================================
+// THE CUBE
+// =========================================================
+// .rubik-cube        sets the size, the camera and the colour fringe
+//   __bob            floats up and down
+//     __tilt         tips the top towards us, so the top face shows as in the clip
+//       __spin       turns around the vertical axis
+//         __face     six faces, each a canvas drawn by rubikScene.js
+//           __shade  darkens a side face as it turns away from the light
+
+.rubik-scene {
+    --rubik-spin: 7s; // one full turn (the clip turns a face every ~1.7s)
+    --rubik-bob: 1.8s; // one way; the bob goes up and back down in twice this
+}
+
+.rubik-cube {
+    --s: calc(270 * var(--u)); // edge length (matches the clip's cube seen face-on)
+
+    position: absolute;
+    left: calc(50% - 20 * var(--u) - var(--s) / 2);
+    top: calc(372 * var(--u) - var(--s) / 2);
+    width: var(--s);
+    height: var(--s);
+    // Mild perspective: the clip's vertical edges are nearly parallel.
+    perspective: calc(2400 * var(--u));
+    // Same VHS fringe as the clouds and floor.
+    filter:
+        drop-shadow(calc(2 * var(--u)) 0 0 rgba(255, 60, 120, 0.45))
+        drop-shadow(calc(-2 * var(--u)) 0 0 rgba(60, 210, 255, 0.35));
+    pointer-events: none;
+
+    &__bob,
+    &__tilt,
+    &__spin {
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+    }
+
+    &__bob {
+        animation: rubik-bob var(--rubik-bob) ease-in-out infinite alternate;
+    }
+
+    &__tilt {
+        transform: rotateX(-8deg); // just a strip of the top face, like the clip
+    }
+
+    &__spin {
+        animation: rubik-spin var(--rubik-spin) linear infinite;
+    }
+
+    &__face {
+        position: absolute;
+        inset: 0;
+        backface-visibility: hidden;
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        &[data-face="front"] {
+            transform: translateZ(calc(var(--s) / 2));
+        }
+
+        &[data-face="right"] {
+            transform: rotateY(90deg) translateZ(calc(var(--s) / 2));
+        }
+
+        &[data-face="back"] {
+            transform: rotateY(180deg) translateZ(calc(var(--s) / 2));
+        }
+
+        &[data-face="left"] {
+            transform: rotateY(-90deg) translateZ(calc(var(--s) / 2));
+        }
+
+        &[data-face="top"] {
+            transform: rotateX(90deg) translateZ(calc(var(--s) / 2));
+        }
+
+        &[data-face="bottom"] {
+            transform: rotateX(-90deg) translateZ(calc(var(--s) / 2));
+        }
+    }
+
+    &__shade {
+        position: absolute;
+        inset: 0;
+        background: #05070c;
+        opacity: 0;
+    }
+
+    // The four side faces share one shading animation, each a quarter turn apart.
+    // (Face i is face 0 shifted by i quarter turns, i.e. 3i/4 of a turn ahead.)
+    $sides: (front: 0, right: 1, back: 2, left: 3);
+
+    @each $face, $i in $sides {
+        &__face[data-face="#{$face}"] &__shade {
+            animation: rubik-shade var(--rubik-spin) linear infinite;
+            animation-delay: calc(var(--rubik-spin) * #{-0.75 * $i});
+        }
+    }
+
+    &__face[data-face="bottom"] &__shade {
+        opacity: 0.55;
+    }
+}
+
+
+// =========================================================
+// KEYFRAMES
+// =========================================================
+
+@keyframes rubik-clouds-drift {
+    to {
+        transform: translateX(calc(-1920 * var(--u)));
+    }
+}
+
+// Starts at a three-quarter view and turns right-to-left, like the clip.
+$rubik-start: -30deg;
+
+@keyframes rubik-spin {
+    from {
+        transform: rotateY($rubik-start);
+    }
+
+    to {
+        transform: rotateY($rubik-start - 360deg);
+    }
+}
+
+@keyframes rubik-bob {
+    from {
+        transform: translateY(calc(-7 * var(--u)));
+    }
+
+    to {
+        transform: translateY(calc(7 * var(--u)));
+    }
+}
+
+@keyframes rubik-shadow {
+    from {
+        transform: scale(0.9);
+        opacity: 0.75;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+// How dark the front face is through one turn. The light comes from the front left
+// (the floor shadow falls to the right): a face is brightest when it points at the
+// light and darkest when it points away. Faces turned away from us are hidden anyway.
+$rubik-light: -40deg;
+$rubik-steps: 24;
+
+@keyframes rubik-shade {
+    @for $k from 0 through $rubik-steps {
+        $t: math.div($k, $rubik-steps);
+        $facing: $rubik-start - 360deg * $t;
+        $lit: math.max(0, math.cos($facing - $rubik-light));
+
+        #{math.percentage($t)} {
+            opacity: 0.04 + 0.4 * (1 - $lit);
+        }
+    }
+}
